@@ -17,8 +17,8 @@ Six inference steps:
 1. Project — encode input text → normalized signal vector
 2. Inject — push signal into Φ, self-referential into Ψ, autonomy into Ω
 3. Propagate — run heptagram propagation on Φ/Ψ/Ω + guardian
-4. PTCA-seed — per-prime-node audit on all three PTCA cores
-5. PCTA-circle — guardian circle audit
+4. Seed-audit — per-prime-node audit on all three cores (ptcna.seed)
+5. Circle-audit — guardian circle audit (ptcna.circle)
 6. Coherence — weighted ring coherence → winner + confidence
 
 Backprop:
@@ -30,10 +30,10 @@ reward(winner, outcome) → nudge all three PTCA cores + guardian + memory flush
 # id: pcna_pcna
 #   module_name: pcna
 #   module_kind: engine
-#   summary: Six-ring PCNA inference engine (phi/psi/omega/theta/memory_l/memory_s) running project->inject->propagate->ptca-seed->pcta-circle->coherence, with RING_WEIGHTS scoring and numpy checkpointing.
+#   summary: Six-ring PCNA inference engine (phi/psi/omega/theta/memory_l/memory_s) running project->inject->propagate->seed-audit->circle-audit->coherence, with RING_WEIGHTS scoring and numpy checkpointing.
 #   owner: Erin Spencer
 #   public_surface: PCNAEngine, RING_WEIGHTS, WINNER_RINGS
-#   internal_surface: _tensor_to_b64, _b64_to_tensor, _CHECKPOINT_DIR, PCNAEngine._project, PCNAEngine._inject, PCNAEngine._propagate, PCNAEngine._ptca_seed_audit, PCNAEngine._pcta_circle_audit, PCNAEngine._coherence_score
+#   internal_surface: _tensor_to_b64, _b64_to_tensor, _CHECKPOINT_DIR, PCNAEngine._project, PCNAEngine._inject, PCNAEngine._propagate, PCNAEngine._seed_audit, PCNAEngine._circle_audit, PCNAEngine._coherence_score
 #   auth_boundary: none
 #   storage_boundary: write
 #   network_boundary: none
@@ -57,6 +57,11 @@ import numpy as np
 from .ptca_core import PTCACore
 from .memory_core import MemoryCore
 from .theta import ThetaTensor
+
+# Audit aggregation is owned by the seed and circle layers (auditing/timing
+# tensors); the neural engine orchestrates and delegates to them.
+from ..seed.audit import seed_audit
+from ..circle.audit import circle_audit
 
 
 def _tensor_to_b64(arr: np.ndarray) -> str:
@@ -219,30 +224,15 @@ class PCNAEngine:
         self.omega.propagate(steps=6)
         self.theta.propagate(steps=5)
 
-    def _ptca_seed_audit(self) -> dict:
+    def _seed_audit(self) -> dict:
+        # Seed-layer auditing is owned by ptcna.seed; the neural engine only
+        # supplies the cores and short-term memory to audit.
         cores = {"phi": self.phi, "psi": self.psi, "omega": self.omega}
-        result = {}
-        for name, core in cores.items():
-            audit = core.ptca_seed_audit()
-            result[f"{name}_nodes_audited"] = len(audit)
-            result[f"{name}_coherence"] = round(core.ring_coherence, 4)
-            result[f"{name}_top3"] = sorted(audit, key=lambda x: x["coherence"], reverse=True)[:3]
-            result[f"{name}_bottom3"] = sorted(audit, key=lambda x: x["coherence"])[:3]
-        result["memory_s_hub_avg"] = self.memory_s.state()["avg_hub"]
-        return result
+        return seed_audit(cores, self.memory_s)
 
-    def _pcta_circle_audit(self) -> dict:
-        g_audit = self.theta.pcta_circle_audit()
-        open_nodes = [n for n in g_audit if n["gate"]]
-        closed_nodes = [n for n in g_audit if not n["gate"]]
-        return {
-            "theta_nodes": len(g_audit),
-            "gates_open": len(open_nodes),
-            "gates_closed": len(closed_nodes),
-            "avg_circles": round(sum(n["circles"] for n in g_audit) / len(g_audit), 2),
-            "theta_coherence": round(float(self.theta.node_coherence.mean()), 4),
-            "memory_l_hub_avg": self.memory_l.state()["avg_hub"],
-        }
+    def _circle_audit(self) -> dict:
+        # Circle-layer auditing is owned by ptcna.circle.
+        return circle_audit(self.theta, self.memory_l)
 
     def _coherence_score(self, seed_audit: dict, circle_audit: dict) -> dict:
         ring_scores = {
@@ -269,8 +259,8 @@ class PCNAEngine:
         self._inject(signal)
         self._propagate()
 
-        seed_audit = self._ptca_seed_audit()
-        circle_audit = self._pcta_circle_audit()
+        seed_audit = self._seed_audit()
+        circle_audit = self._circle_audit()
         coherence = self._coherence_score(seed_audit, circle_audit)
 
         self.infer_count += 1
@@ -288,8 +278,8 @@ class PCNAEngine:
             "step1_project": {"signal_len": len(signal), "signal_mean": round(float(signal.mean()), 4)},
             "step2_inject": {"phi_n": 53, "psi_n": 53, "omega_n": 53, "memory_s_n": 17},
             "step3_propagate": {"phi_steps": 10, "psi_steps": 8, "omega_steps": 6, "theta_steps": 5},
-            "step4_ptca_seed": seed_audit,
-            "step5_pcta_circle": circle_audit,
+            "step4_seed": seed_audit,
+            "step5_circle": circle_audit,
             "step6_coherence": coherence,
             "coherence_score": coherence["weighted_coherence"],
             "winner": coherence["winner"],

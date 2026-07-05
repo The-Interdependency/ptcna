@@ -132,7 +132,7 @@ class PTCACore:
         self.tensor = np.clip(self.tensor + lr * gradient, 0.0, 1.0)
         self._recompute_coherence()
 
-    def ptca_seed_audit(self) -> list[dict]:
+    def seed_audit(self) -> list[dict]:
         results = []
         for i in range(self.n):
             hub_val = float(self.tensor[i, :, :, 6].mean())

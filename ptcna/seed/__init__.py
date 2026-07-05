@@ -44,6 +44,7 @@ from .compose import (
     seed_motion,
 )
 from .tensor import CircleTensor, Seed, SeedMotion
+from .audit import seed_audit
 
 __all__ = [
     "__version__",
@@ -56,6 +57,8 @@ __all__ = [
     "build_seed",
     "seed_motion",
     "heptagram_order",
+    # auditing (extracted from the neural engine)
+    "seed_audit",
     # constants / guard
     "NOMINAL_CIRCLES_PER_SEED",
     "HEPTAGRAM_VERTICES",

@@ -75,3 +75,17 @@ descriptive layer expansions.
 - **Confirm I should create `The-Interdependency/ptcna`** (outward action).
 - **Add `pcsa` to session scope** — I need the core-layer source to migrate it.
   (`pcna`, `pcta` already cloned.)
+
+## Status log
+
+- **2026-07-05 — circle/seed audit extraction (branch `claude/circle-extraction`).**
+  Aggregation moved out of the neural engine into the layers that own it:
+  `PCNAEngine._pcta_circle_audit` → `ptcna.circle.circle_audit`;
+  `PCNAEngine._ptca_seed_audit` → `ptcna.seed.seed_audit`. Primitive methods
+  renamed (`PTCACore.ptca_seed_audit` → `seed_audit`,
+  `ThetaTensor.pcta_circle_audit` → `circle_audit`); engine delegates; inference
+  step keys `step4_ptca_seed`/`step5_pcta_circle` → `step4_seed`/`step5_circle`.
+  All bare `ptca_`/`pcta_` audit prefixes gone (class name `PTCACore` still
+  pending its own rename). 146 tests pass.
+  - Still open: `PTCACore` class/file rename; interdependent-lib single-`ptcna`
+    rewiring; archive `pcna`/`pcta`/`pcsa`.
