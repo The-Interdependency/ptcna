@@ -2,7 +2,7 @@
 """
 Σ (Sigma) — Filesystem Observer Ring
 
-Wraps PTCACore to add file-content watching.
+Wraps RingCore to add file-content watching.
 Sigma injects coherence signals into the Ψ (psi) self-model ring
 whenever watched files change.
 
@@ -13,7 +13,7 @@ N=41, seed=41 — observer substrate
 # id: pcna_sigma
 #   module_name: sigma
 #   module_kind: engine
-#   summary: N=41 filesystem observer ring wrapping PTCACore; tracks watched file mtimes and drains content-changed events on a content_interval cadence, injecting coherence into Psi.
+#   summary: N=41 filesystem observer ring wrapping RingCore; tracks watched file mtimes and drains content-changed events on a content_interval cadence, injecting coherence into Psi.
 #   owner: Erin Spencer
 #   public_surface: SigmaRing, get_sigma, N, SEED
 #   internal_surface: _sigma, SigmaRing._core, SigmaRing._watched, SigmaRing._pending, SigmaRing._last_check
@@ -25,7 +25,7 @@ N=41, seed=41 — observer substrate
 #   tests: hmmm
 #   rollout: default_enabled
 #   rollback: remove import and call sites; callers already degrade gracefully if it raises
-#   requires: pcna_ptca_core
+#   requires: pcna_ring_core
 #   since: 2026-06-02
 #   unresolved: structural_interval is stored but never acted on (Known Issues)
 # === END MODULE_BUILD ===
@@ -36,7 +36,7 @@ from typing import Optional
 
 import numpy as np
 
-from .ptca_core import PTCACore
+from .ring_core import RingCore
 
 N = 41
 SEED = 41
@@ -45,10 +45,10 @@ DEFAULT_STRUCTURAL_INTERVAL = 30.0
 
 
 class SigmaRing:
-    """Filesystem-aware PTCACore ring. Drains file-change events on demand."""
+    """Filesystem-aware RingCore ring. Drains file-change events on demand."""
 
     def __init__(self):
-        self._core = PTCACore(name="sigma", symbol="Σ", role="observer", n=N, seed=SEED)
+        self._core = RingCore(name="sigma", symbol="Σ", role="observer", n=N, seed=SEED)
         self.content_interval: float = DEFAULT_CONTENT_INTERVAL
         self.structural_interval: float = DEFAULT_STRUCTURAL_INTERVAL
         self._resolution: int = 3
@@ -56,7 +56,7 @@ class SigmaRing:
         self._pending: list[str] = []
         self._last_check: float = 0.0
 
-    # --- PTCACore passthrough ---
+    # --- RingCore passthrough ---
 
     @property
     def tensor(self) -> Optional[np.ndarray]:

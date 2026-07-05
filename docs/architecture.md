@@ -89,3 +89,15 @@ descriptive layer expansions.
   pending its own rename). 146 tests pass.
   - Still open: `PTCACore` class/file rename; interdependent-lib single-`ptcna`
     rewiring; archive `pcna`/`pcta`/`pcsa`.
+
+- **2026-07-05 — PTCACore rename (branch `claude/ring-core-rename`).**
+  `neural/ptca_core.py` → `neural/ring_core.py`; class `PTCACore` → `RingCore`
+  (the phi/psi/omega prime-ring tensors). MODULE_BUILD id `pcna_ptca_core` →
+  `pcna_ring_core`; all imports/usages/`requires` edges updated. The neural
+  layer now carries **no `ptca` token**. 146 tests pass.
+  - Note: the core layer (ex-`pcsa`) still exposes `PTCATensor`/`PTCAInstance`
+    and the `ptca-lib` dist name — those name the *core layer* (which "was
+    PTCA"), so they are in the right layer, but a `core.*` rename is a possible
+    later cleanup if desired.
+  - Still open: interdependent-lib single-`ptcna` rewiring; archive
+    `pcna`/`pcta`/`pcsa`.

@@ -7,7 +7,7 @@
   - Gate control: coherence threshold per node
   - Phi injection mirror: node_coherence broadcast → Φ
 
-Architecturally unique — not parameterized like PTCACore.
+Architecturally unique — not parameterized like RingCore.
 Self-declares identity in state() as symbol="Θ", name="theta".
 """
 
