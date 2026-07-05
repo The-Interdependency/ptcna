@@ -2,7 +2,13 @@
 
 Every circle is itself a tensor. Non-differentiable (auditing/timing only).
 
-hmmm: this layer had no pre-consolidation repo. Its logic currently lives as
-`PCNAEngine._pcta_circle_audit` inside `ptcna.neural.pcna`; extraction into this
-module is a reconciliation TODO, tracked in docs/architecture.md.
+The circle-audit aggregation now lives here (`circle_audit`), extracted from the
+neural engine (`PCNAEngine._pcta_circle_audit`). The neural engine delegates to
+it. The circle *primitive* (`ThetaTensor.circle_audit`) still lives in
+`ptcna.neural.theta` — it operates on the neural theta tensor; promoting a
+standalone circle tensor type is a further reconciliation step (docs/architecture.md).
 """
+
+from .audit import circle_audit
+
+__all__ = ["circle_audit"]

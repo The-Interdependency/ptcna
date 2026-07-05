@@ -4,8 +4,10 @@ Neural tensors arranged as a back-propagating network (weights). Circle, seed,
 and core layers consume neural tensors as auditing/timing tensors; they do not
 differentiate. Migrated verbatim from The-Interdependency/pcna (core/).
 
-hmmm: `ptca_core.PTCACore` retains its pre-consolidation filename; the
-seed/circle audit helpers (`_ptca_seed_audit`, `_pcta_circle_audit`) inside
-`pcna.py` still carry bare layer prefixes and are slated to move to
-`ptcna.seed` / `ptcna.circle` during audit-logic reconciliation.
+The seed/circle audit aggregation has been extracted to `ptcna.seed.seed_audit`
+and `ptcna.circle.circle_audit`; the neural engine delegates to them.
+
+hmmm: `ptca_core.PTCACore` retains its pre-consolidation filename/class name;
+renaming it (it is the neural prime-ring tensor, not the core layer) is a
+remaining reconciliation step tracked in docs/architecture.md.
 """

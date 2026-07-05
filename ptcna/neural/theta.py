@@ -127,7 +127,7 @@ class ThetaTensor:
             "shards_distributed": N,
         }
 
-    def pcta_circle_audit(self) -> list[dict]:
+    def circle_audit(self) -> list[dict]:
         results = []
         for i in range(N):
             results.append({
