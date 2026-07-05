@@ -7,7 +7,7 @@ differentiate. Migrated verbatim from The-Interdependency/pcna (core/).
 The seed/circle audit aggregation has been extracted to `ptcna.seed.seed_audit`
 and `ptcna.circle.circle_audit`; the neural engine delegates to them.
 
-hmmm: `ptca_core.PTCACore` retains its pre-consolidation filename/class name;
-renaming it (it is the neural prime-ring tensor, not the core layer) is a
-remaining reconciliation step tracked in docs/architecture.md.
+The prime-ring tensor is `ring_core.RingCore` (the phi/psi/omega rings). It was
+renamed from the pre-consolidation `ptca_core.PTCACore` — it is a neural-layer
+object, not the core layer, so it no longer carries a `ptca` token.
 """

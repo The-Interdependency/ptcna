@@ -1,19 +1,19 @@
 # ratios: loc_comments=119:31 imports_exports=3:1 calls_definitions=33:11
 # 119:9
 """
-PTCACore — parameterized prime-ring tensor with heptagram propagation.
+RingCore — parameterized prime-ring tensor with heptagram propagation.
 Each instance self-declares: name, symbol, role, n, seed.
 Tensor shape: [N, DIMS=4, PHASES=7, HEPT_SITES=7]
 """
 
 # === MODULE_BUILD ===
-# id: pcna_ptca_core
-#   module_name: ptca_core
+# id: pcna_ring_core
+#   module_name: ring_core
 #   module_kind: engine
 #   summary: Base prime-ring tensor (shape [N,DIMS=4,PHASES=7,HEPT_SITES=7]) with heptagram Euler-step propagation and coherence = 1 - |ring - hub|_mean; substrate for Phi/Psi/Omega/Sigma.
 #   owner: Erin Spencer
-#   public_surface: PTCACore, DIMS, PHASES, HEPT_SITES
-#   internal_surface: _adj_distances, PTCACore._adjacents, _propagate_node, _recompute_coherence
+#   public_surface: RingCore, DIMS, PHASES, HEPT_SITES
+#   internal_surface: _adj_distances, RingCore._adjacents, _propagate_node, _recompute_coherence
 #   auth_boundary: none
 #   storage_boundary: none
 #   network_boundary: none
@@ -51,7 +51,7 @@ def _adj_distances(n: int) -> list[int]:
     return scaled
 
 
-class PTCACore:
+class RingCore:
     """
     Prime-ring PTCA core. Parameterized by (name, symbol, role, n, seed).
     Every instance self-declares its identity in state().

@@ -42,7 +42,7 @@ reward(winner, outcome) → nudge all three PTCA cores + guardian + memory flush
 #   tests: hmmm
 #   rollout: default_enabled
 #   rollback: remove import and call sites; checkpoints under .checkpoints/ can be deleted
-#   requires: pcna_ptca_core, pcna_memory_core, pcna_theta
+#   requires: pcna_ring_core, pcna_memory_core, pcna_theta
 #   since: 2026-06-02
 #   unresolved: none
 # === END MODULE_BUILD ===
@@ -54,7 +54,7 @@ import os
 import time
 import numpy as np
 
-from .ptca_core import PTCACore
+from .ring_core import RingCore
 from .memory_core import MemoryCore
 from .theta import ThetaTensor
 
@@ -93,9 +93,9 @@ class PCNAEngine:
 
     def __init__(self, phases: int = 7):
         self.phases = phases
-        self.phi = PTCACore(name="phi", symbol="Φ", role="cognitive", n=53, seed=53, phases=phases)
-        self.psi = PTCACore(name="psi", symbol="Ψ", role="self_model", n=53, seed=43, phases=phases)
-        self.omega = PTCACore(name="omega", symbol="Ω", role="autonomy", n=53, seed=47, phases=phases)
+        self.phi = RingCore(name="phi", symbol="Φ", role="cognitive", n=53, seed=53, phases=phases)
+        self.psi = RingCore(name="psi", symbol="Ψ", role="self_model", n=53, seed=43, phases=phases)
+        self.omega = RingCore(name="omega", symbol="Ω", role="autonomy", n=53, seed=47, phases=phases)
         self.memory_l = MemoryCore(n=19, seed=19, role="long_term", phases=phases)
         self.memory_s = MemoryCore(n=17, seed=17, role="short_term", phases=phases)
         self.theta = ThetaTensor(phases=phases)

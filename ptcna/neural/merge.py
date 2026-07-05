@@ -7,7 +7,7 @@ Instance Merge Protocol — three modes for multi-instance PCNA mesh.
   fork     — parent spawns child with copied state + noise; both continue
   converge — both exchange tensors via federated averaging; both continue
 
-Operates on PCNAEngine instances containing PTCACore + MemoryCore + GuardianTensor.
+Operates on PCNAEngine instances containing RingCore + MemoryCore + GuardianTensor.
 """
 
 # === MODULE_BUILD ===
@@ -26,14 +26,14 @@ Operates on PCNAEngine instances containing PTCACore + MemoryCore + GuardianTens
 #   tests: hmmm
 #   rollout: default_enabled
 #   rollback: remove import and call sites
-#   requires: pcna_ptca_core, pcna_pcna
+#   requires: pcna_ring_core, pcna_pcna
 #   since: 2026-06-02
 #   unresolved: fork() time-seeds its RNG — rapid calls may collide (Known Issues)
 # === END MODULE_BUILD ===
 
 import time
 import numpy as np
-from .ptca_core import PTCACore
+from .ring_core import RingCore
 from .pcna import PCNAEngine
 
 
@@ -41,7 +41,7 @@ def _fed_avg(a: np.ndarray, b: np.ndarray, alpha: float = 0.5) -> np.ndarray:
     return np.clip(alpha * a + (1.0 - alpha) * b, 0.0, 1.0)
 
 
-def _blend_core(dst: PTCACore, src: PTCACore, alpha: float):
+def _blend_core(dst: RingCore, src: RingCore, alpha: float):
     dst.tensor = _fed_avg(dst.tensor, src.tensor, alpha=1.0 - alpha)
     dst._recompute_coherence()
 
@@ -94,8 +94,8 @@ class InstanceMerge:
         noise = np.random.default_rng(int(time.time() * 1000) % 2**32)
 
         for attr in ("phi", "psi", "omega"):
-            p_core: PTCACore = getattr(parent, attr)
-            c_core: PTCACore = getattr(child, attr)
+            p_core: RingCore = getattr(parent, attr)
+            c_core: RingCore = getattr(child, attr)
             c_core.tensor = np.clip(
                 p_core.tensor + noise.normal(0, 0.02, p_core.tensor.shape), 0.0, 1.0
             )
@@ -126,8 +126,8 @@ class InstanceMerge:
     @staticmethod
     def converge(a: PCNAEngine, b: PCNAEngine, alpha: float = 0.5) -> dict:
         for attr in ("phi", "psi", "omega"):
-            core_a: PTCACore = getattr(a, attr)
-            core_b: PTCACore = getattr(b, attr)
+            core_a: RingCore = getattr(a, attr)
+            core_b: RingCore = getattr(b, attr)
             new_a = _fed_avg(core_a.tensor, core_b.tensor, alpha)
             new_b = _fed_avg(core_b.tensor, core_a.tensor, alpha)
             core_a.tensor = new_a
