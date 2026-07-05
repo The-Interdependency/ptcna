@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ptcna"
+version = "0.1.0"
+description = "Prime Tensor Circled Neural Architecture — one architecture, four layers (neural/circle/seed/core). Consolidates pcna, pcta, pcsa."
+readme = "README.md"
+license = { text = "MPL-2.0" }
+authors = [
+  { name = "Erin Patrick Spencer", email = "wayseer@interdependentway.org" },
+]
+requires-python = ">=3.10"
+# Neural layer uses numpy; circle/seed/core layers are stdlib-only.
+dependencies = ["numpy>=1.21"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "build", "twine"]
+
+[project.urls]
+Repository = "https://github.com/The-Interdependency/ptcna"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ptcna*"]
+
+[tool.pytest.ini_options]
+testpaths = ["ptcna"]
