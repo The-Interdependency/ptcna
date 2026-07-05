@@ -43,9 +43,10 @@ pytest                       # testpaths = ptcna
 
 ## Status
 
-Alpha, consolidation milestone 1: all four layers import; **142 tests pass**
-(seed/core/prime_core stdlib-only + neural under numpy). Reconciliation work
-(circle-layer extraction from neural, audit-helper renames) is tracked in
-`docs/architecture.md`.
+Alpha (`0.1.0`). All four layers import; **146 tests pass** (seed/core/prime_core
+stdlib-only + neural under numpy). Consolidation reconciliation is complete: the
+seed/circle audit was extracted into its layers and the neural prime-ring tensor
+was renamed `PTCACore` → `RingCore`, so no `ptca`/`pcta` token remains in the
+code. History and any remaining notes live in `docs/architecture.md`.
 
 License: MPL-2.0.
