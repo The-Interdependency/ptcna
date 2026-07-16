@@ -1,21 +1,22 @@
-# ratios: loc_comments=35:23 imports_exports=4:1 calls_definitions=1:0
-"""pcta — **PCTA: Prime Circled Tensor Architecture** (prime-tensor stack layer 2).
+# ratios: loc_comments=37:25 imports_exports=5:1 calls_definitions=1:0
+"""ptcna.seed — the seed layer: circles → seeds (formerly the standalone `pcta` repo).
 
 Covers circles carried by UCNS objects and composes them into **seeds**. It
-takes layer-1 (`pcna`) circle-tensors and organizes a **variable** number of
-circles into a seed (the seed is itself a tensor), producing structural
-**motion** that PTCA (layer 3) folds into cores and the inference cap (`zfae`,
-runtime in `a0`) ultimately consumes alongside pcna's trained weights.
+takes circle-tensors from the circle layer (`ptcna.circle`) and organizes a
+**variable** number of circles into a seed (the seed is itself a tensor),
+producing structural **motion** that the core layer (`ptcna.core`) folds into
+cores and the inference cap (`zfae`, runtime in `a0`) ultimately consumes
+alongside the neural layer's trained weights.
 
-  PCNA (tensors → circles, backprop) ─► circles ─► PCTA (circles → seeds)
-  ─► seeds ─► PTCA (seeds → core) ─► cores ─► a0(zfae) inference
+  neural (backprop) ─► circle (neural tensors → circles) ─► seed
+  (circles → seeds) ─► core (seeds → cores) ─► a0(zfae) inference
 
 Boundaries (canonical map: `The-Interdependency/interdependent-lib :
 docs/prime-tensor-stack.md` — cited, not imported):
   - **Composition counts are variable.** The only invariant is that every
     circle is a tensor and every seed is itself a tensor.
   - composition is **structural / non-differentiable**; back-propagation lives
-    only in layer 1 (`pcna`). Nothing here carries a gradient.
+    only in the neural layer (`ptcna.neural`). Nothing here carries a gradient.
   - naming another repo's terms transfers **no** theorem / proof / empirical
     status. The coherence-prime rule is *mirrored*, never imported.
 
@@ -67,4 +68,4 @@ __all__ = [
     "coherence_primes_up_to",
     "nth_coherence_prime",
 ]
-# ratios: loc_comments=35:23 imports_exports=4:1 calls_definitions=1:0
+# ratios: loc_comments=37:25 imports_exports=5:1 calls_definitions=1:0

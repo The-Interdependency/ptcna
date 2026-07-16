@@ -1,4 +1,4 @@
-"""Tests for pcta.constants — composition counts and the coherence-prime guard."""
+"""Tests for ptcna.seed.constants — composition counts and the coherence-prime guard."""
 from __future__ import annotations
 
 import unittest

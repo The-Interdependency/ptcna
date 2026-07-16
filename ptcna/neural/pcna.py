@@ -1,4 +1,4 @@
-# ratios: loc_comments=283:44 imports_exports=13:1 calls_definitions=91:15
+# ratios: loc_comments=267:49 imports_exports=15:1 calls_definitions=85:15
 # 295:27
 """
 PCNA Inference Engine — six-ring pipeline, all rings real.
@@ -361,4 +361,4 @@ class PCNAEngine:
             "echo_history": echo_history[-20:],
         }
 # 295:27
-# ratios: loc_comments=283:44 imports_exports=13:1 calls_definitions=91:15
+# ratios: loc_comments=267:49 imports_exports=15:1 calls_definitions=85:15
