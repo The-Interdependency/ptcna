@@ -4,8 +4,8 @@
 `compose_seed` is the structural ``⊠`` operator for layer 2. It is **purely
 structural**: it grafts circle-tensors into a seed carrier and assigns their
 heptagram anchor order. It creates no scalar and registers no autodiff node, so
-``∂(⊠)`` never appears on a tape (back-propagation lives only in layer 1,
-`pcna`). See `docs`/the stack canon for the boundary.
+``∂(⊠)`` never appears on a tape (back-propagation lives only in the neural
+layer, `ptcna.neural`). See `docs`/the stack canon for the boundary.
 """
 from __future__ import annotations
 
@@ -92,7 +92,7 @@ def build_seed(
 
 
 def seed_motion(seed: Seed) -> SeedMotion:
-    """Extract the structural **motion** a seed hands upward (toward PTCA's core
+    """Extract the structural **motion** a seed hands upward (toward the core
     composition and ultimately ZFAE inference).
 
     Returns the observable structure only — identity + star-polygon order — never

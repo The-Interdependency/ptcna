@@ -1,18 +1,18 @@
 # ratios: loc_comments=47:37 imports_exports=3:3 calls_definitions=6:10
-"""Layer-2 tensor objects: the opaque circle carrier and the seed it produces.
+"""Seed-layer tensor objects: the opaque circle carrier and the seed it produces.
 
-pcta consumes **circle-tensors** (layer-1 / `pcna` output — circles carried by
-UCNS objects, each itself a tensor) and organizes a **variable** number of them
-into a **seed**, which is itself a tensor. Both objects are *structural
-scaffold*: their geometry routes, it does not learn. Per the stack map,
-back-propagation lives only in layer 1 (`pcna`); nothing here ever appears on an
-autodiff tape, so ``requires_grad`` is always ``False``.
+The seed layer consumes **circle-tensors** (circle-layer output — circles
+carried by UCNS objects, each itself a tensor) and organizes a **variable**
+number of them into a **seed**, which is itself a tensor. Both objects are
+*structural scaffold*: their geometry routes, it does not learn. Per the stack
+map, back-propagation lives only in the neural layer (`ptcna.neural`); nothing
+here ever appears on an autodiff tape, so ``requires_grad`` is always ``False``.
 
-The circle's *internal* structure (its tensors, the layer-1 step) is `pcna`'s
-business; pcta treats a circle as an **opaque payload host** with a stable
-identity and an anchor position, and never inspects or mutates it. The number of
-circles per seed is not fixed — the only invariant is that every circle is a
-tensor and the seed is itself a tensor.
+The circle's *internal* structure (its tensors, the circle-layer step) is the
+circle layer's business; the seed layer treats a circle as an **opaque payload
+host** with a stable identity and an anchor position, and never inspects or
+mutates it. The number of circles per seed is not fixed — the only invariant is
+that every circle is a tensor and the seed is itself a tensor.
 """
 from __future__ import annotations
 
@@ -22,12 +22,12 @@ from typing import Any, List, Optional, Sequence, Tuple
 
 @dataclass(frozen=True)
 class CircleTensor:
-    """An opaque layer-1 circle, hosted as a payload by a seed.
+    """An opaque circle-layer circle, hosted as a payload by a seed.
 
-    `payload` is whatever layer 1 produced (a tensor / weights handle); pcta
-    carries it losslessly and never reads into it. `anchor` is the circle's
-    position within its seed (assigned by heptagram routing); `identity` is a
-    stable tag for provenance.
+    `payload` is whatever the layers below produced (a tensor / weights handle);
+    the seed layer carries it losslessly and never reads into it. `anchor` is the
+    circle's position within its seed (assigned by heptagram routing); `identity`
+    is a stable tag for provenance.
     """
 
     payload: Any
@@ -36,14 +36,14 @@ class CircleTensor:
 
     @property
     def requires_grad(self) -> bool:
-        # Geometry is non-differentiable scaffold; gradients live in pcna.
+        # Geometry is non-differentiable scaffold; gradients live in the neural layer.
         return False
 
 
 class Seed:
     """A seed tensor: a star-polygon grouping of a variable number of circles.
 
-    The seed is itself a tensor (it can be hosted by a layer-3 PTCA core exactly
+    The seed is itself a tensor (it can be hosted by a core-layer core exactly
     as a circle is hosted here). Its geometry — the anchor visitation order — is
     frozen structural scaffold produced by ``compose_seed``; it does not learn.
     """
@@ -89,7 +89,7 @@ class Seed:
 
 @dataclass(frozen=True)
 class SeedMotion:
-    """The structural **motion** a seed hands upward (to layer-3 PTCA core
+    """The structural **motion** a seed hands upward (to core-layer
     composition, and ultimately ZFAE inference).
 
     Formally, motion is the **Fickian flux** of the seed's composed field across
@@ -97,7 +97,7 @@ class SeedMotion:
     down its field gradient). This carrier captures the observable structure that
     flux rides on: the seed's identity and the star-polygon order its circles
     were routed in. It holds no weights and no autodiff gradient (those are
-    pcna's `weights`, a separate channel); the ``∇φ`` is the spatial field
+    the neural layer's `weights`, a separate channel); the ``∇φ`` is the spatial field
     gradient that drives diffusion, not a backprop gradient.
     """
 

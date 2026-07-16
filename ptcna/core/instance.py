@@ -17,7 +17,7 @@ Typical standalone usage
 ------------------------
 ::
 
-    from ptca.instance import PTCAInstance
+    from ptcna.core.instance import PTCAInstance
 
     inst = PTCAInstance(
         model_id="claude-sonnet-4-6",

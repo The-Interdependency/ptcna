@@ -10,7 +10,7 @@ Typical usage
 -------------
 ::
 
-    from ptca.provenance import build_block, hash_block, chain_hashes
+    from ptcna.core.provenance import build_block, hash_block, chain_hashes
 
     block = build_block(
         model_id="claude-sonnet-4-6",

@@ -1,25 +1,27 @@
-# ratios: loc_comments=69:90 imports_exports=3:3 calls_definitions=20:6
+# ratios: loc_comments=69:92 imports_exports=3:3 calls_definitions=20:6
 """Composition routing and the coherence-prime guard.
 
-`pcta` (**PCTA — Prime Circled Tensor Architecture**) is **layer 2** of the
-prime-tensor stack: it covers circles carried by UCNS objects and composes them
-into **seeds**. The single source of truth for the stack's role-and-boundary map
-is `The-Interdependency/interdependent-lib : docs/prime-tensor-stack.md` — this
+`ptcna.seed` (formerly the standalone `pcta` repo — PCTA, Prime Circled Tensor
+Architecture) is the **seed layer** of the prime-tensor stack: it covers circles
+carried by UCNS objects and composes them into **seeds**. The single source of
+truth for the stack's role-and-boundary map is
+`The-Interdependency/interdependent-lib : docs/prime-tensor-stack.md` — this
 repo *cites* it and does not import it. No theorem / proof / empirical status
 moves between repos by naming these terms.
 
 What is canonical here:
-  - PCNA arranges tensors as **circles** (each circle is itself a tensor) in a
-    standard back-propagating neural architecture and offers those circles to
-    PCTA; **PCTA composes circles into seeds** (each seed is itself a tensor) and
-    offers those seeds to PTCA (Prime Tensor Core Architecture), which composes
-    seeds into **cores** for `a0(zfae)`.
+  - the neural layer (`ptcna.neural`, the only back-propagating layer) produces
+    neural tensors; the circle layer (`ptcna.circle`) divides them into
+    **circles** (each circle is itself a tensor) and offers those circles here;
+    **the seed layer composes circles into seeds** (each seed is itself a
+    tensor) and offers those seeds to the core layer (`ptcna.core`), which
+    composes seeds into **cores** for `a0(zfae)`.
   - **Composition counts are VARIABLE.** The number of circles in a seed is not
     fixed — the only invariant is that every circle is a tensor and every seed is
     itself a tensor. (`HEPTAGRAM_VERTICES` / `SEED_ROUTING_STEP` describe the
     routing *motif*, not a required circle count.)
   - The composition is **structural / non-differentiable** — back-propagation
-    lives ONLY in PCNA (layer 1). pcta organizes; it does not train.
+    lives ONLY in the neural layer. The seed layer organizes; it does not train.
 
 "Motion" — the structural / phase-harmonic output a seed hands upward — is
 formally the **Fickian gradient flux** ``J = −D ∇φ`` (Fick's first law:
@@ -33,10 +35,10 @@ import threading
 from typing import List
 
 # === MODULE_BUILD ===
-# id: pcta_constants
+# id: seed_constants
 #   module_name: constants
 #   module_kind: engine
-#   summary: layer-2 heptagram routing motif and the recursive coherence-prime guard (composition counts are variable)
+#   summary: seed-layer heptagram routing motif and the recursive coherence-prime guard (composition counts are variable)
 #   owner: Erin Patrick Spencer
 #   public_surface: NOMINAL_CIRCLES_PER_SEED, SEED_ROUTING_STEP, HEPTAGRAM_VERTICES, is_coherence_prime, coherence_primes_up_to, nth_coherence_prime
 #   internal_surface: _build_coherence_up_to, _is_prime, _prime_factors
@@ -46,10 +48,10 @@ from typing import List
 #   user_data_boundary: none
 #   admin_only: false
 #   tests: tests.test_constants
-#   rollout: default_enabled (imported by pcta.compose via pcta.__init__)
+#   rollout: default_enabled (imported by seed.compose via ptcna.seed.__init__)
 #   rollback: none (greenfield module; revert the file)
 #   requires: coherence_primes (mirrored from interdependent_lib, NOT imported — importing the aggregator would invert the dependency graph)
-#   since: 2026-06-05 (greenfield scaffold of the layer-2 seed package)
+#   since: 2026-06-05 (greenfield scaffold of the seed package, pre-consolidation `pcta`)
 #   unresolved: none (PCTA acronym, variable-count rule, and "motion" = Fickian flux J = −D ∇φ all resolved by maintainer)
 # === END MODULE_BUILD ===
 
@@ -64,8 +66,8 @@ NOMINAL_CIRCLES_PER_SEED: int = 7  # nominal heptagram base case; NOT a hard lim
 # --- routing step ------------------------------------------------------------
 # {n/3} assigns the star-polygon anchor order over however many circles a seed
 # carries. For the nominal n=7 case this is the {7/3} heptagram, mirroring
-# `PTCA/prime_core`'s SEED_ROUTING_STEP; the circle-level step ({7/2}, tensors ->
-# circle) belongs to layer 1 (`pcna`), not here.
+# `ptcna.core.prime_core`'s SEED_ROUTING_STEP; the circle-level step ({7/2},
+# tensors -> circle) belongs to the circle layer (`ptcna.circle`), not here.
 SEED_ROUTING_STEP: int = 3
 
 # --- coherence-prime ladder (consciousness primes) ---------------------------
@@ -79,7 +81,7 @@ SEED_ROUTING_STEP: int = 3
 #
 # CANON: the single source of truth for this sequence is
 #   interdependent_lib.coherence_primes  (The-Interdependency/interdependent-lib)
-# `pcta` cannot import it — interdependent-lib optionally depends on the leaf
+# `ptcna` cannot import it — interdependent-lib optionally depends on the leaf
 # libraries, so importing the aggregator here would invert the dependency graph.
 # The recursive algorithm is therefore mirrored verbatim; behaviour MUST match
 # canon, whose shared test oracle includes the p=4373 regression.
@@ -181,4 +183,4 @@ def nth_coherence_prime(n: int) -> int:
         if len(ladder) > n:
             return ladder[n]
         limit *= 2
-# ratios: loc_comments=69:90 imports_exports=3:3 calls_definitions=20:6
+# ratios: loc_comments=69:92 imports_exports=3:3 calls_definitions=20:6

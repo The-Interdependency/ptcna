@@ -1,20 +1,22 @@
-# ratios: loc_comments=54:25 imports_exports=8:1 calls_definitions=4:0
+# ratios: loc_comments=55:28 imports_exports=9:1 calls_definitions=4:0
 """
-ptca-lib — Prime Tensor Core Architecture
+ptcna.core — the core layer: seeds → cores (formerly the standalone `pcsa`
+repo / published `ptca-lib` dist; the PTCA* class names keep the layer's
+historical name).
 
-Zero-dependency pure-Python library implementing:
+Zero-dependency pure-Python layer implementing:
 
   * 53-prime-node × 9-sentinel × 8-phase × 7-slot tensor schema
   * Nine sentinel channels (S1_PROVENANCE … S9_AUDIT)
   * SHA-256 provenance hashing and chain verification
   * Exchange mechanics (delta, alpha, beta, gamma constants)
-  * PTCAInstance — a PTCA-aware stateful model session
+  * PTCAInstance — a core-layer-aware stateful model session
 
 Quick start
 -----------
 ::
 
-    from ptca import PTCAInstance
+    from ptcna.core import PTCAInstance
 
     inst = PTCAInstance(model_id="claude-sonnet-4-6", caller_id="user:alice")
     inst.push_context({"role": "user", "content": "Hello", "tokens": 5})
@@ -85,7 +87,7 @@ __all__ = [
     # version
     "__version__",
 ]
-# ratios: loc_comments=54:25 imports_exports=8:1 calls_definitions=4:0
 
 # prime_core: fiq/Fick-gated core substrate (migrated from pcsa/prime_core)
 from . import prime_core  # noqa: E402,F401
+# ratios: loc_comments=55:28 imports_exports=9:1 calls_definitions=4:0

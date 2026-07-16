@@ -1,4 +1,4 @@
-"""Tests for pcta.compose / pcta.tensor — the circles -> seed operator."""
+"""Tests for ptcna.seed.compose / ptcna.seed.tensor — the circles -> seed operator."""
 from __future__ import annotations
 
 import unittest

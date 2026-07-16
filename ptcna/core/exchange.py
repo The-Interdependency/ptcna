@@ -24,9 +24,9 @@ Typical usage
 -------------
 ::
 
-    from ptca.exchange import Exchange
-    from ptca.tensor import PTCATensor
-    from ptca.sentinels import SentinelState
+    from ptcna.core.exchange import Exchange
+    from ptcna.core.tensor import PTCATensor
+    from ptcna.core.sentinels import SentinelState
 
     tensor = PTCATensor()
     state  = SentinelState()

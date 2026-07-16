@@ -32,7 +32,7 @@ itself a tensor**.
 | neural | `The-Interdependency/pcna` (`core/`) | Prime Circular Neural Architecture |
 | seed | `The-Interdependency/pcta` | Prime Circled Tensor Architecture (circles → seeds) |
 | core | `The-Interdependency/pcsa` (`ptca/` + `prime_core/`) | Prime Tensor Core Architecture (was `PTCA`) |
-| circle | *new* (extraction target — see `docs/architecture.md`) | previously unnamed |
+| circle | *new* (audit extracted from the neural engine — see `docs/architecture.md`) | previously unnamed |
 
 ## Install & test
 

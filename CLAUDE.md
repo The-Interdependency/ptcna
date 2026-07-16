@@ -35,13 +35,13 @@ registry key/extra replaces the former `pcna`/`pcta`/`pcsa` entries). `pcea`
 ```text
 ptcna/
   __init__.py            exposes neural, circle, seed, core
-  neural/  (numpy)       pcna.py, ptca_core.py (PTCACore), tensor_engine, theta,
+  neural/  (numpy)       pcna.py, ring_core.py (RingCore), tensor_engine, theta,
                          sigma, merge, memory_core, topology, zeta, edcm, ...
-  circle/                extraction target (logic currently in neural.pcna)
-  seed/    (stdlib)      compose.py, tensor.py, constants.py
+  circle/                audit.py (circle_audit, extracted from the neural engine)
+  seed/    (stdlib)      compose.py, tensor.py, constants.py, audit.py (seed_audit)
   core/    (stdlib)      tensor, sentinels, exchange, instance, primes, provenance
     prime_core/          fiq.py (fiqs/Fick), core.py, constants.py
-docs/architecture.md     consolidation spec + reconciliation TODOs
+docs/architecture.md     consolidation spec + status log
 pyproject.toml           name=ptcna; deps=[numpy]; testpaths=ptcna
 ```
 
@@ -49,22 +49,32 @@ pyproject.toml           name=ptcna; deps=[numpy]; testpaths=ptcna
 
 ```bash
 pip install -e ".[dev]"
-pytest                   # 142 tests at consolidation milestone 1
+pytest                   # 146 tests pass (re-derive rather than trusting this count)
 ```
 
-## Migration status (hmmm — reconciliation TODOs)
+## Migration status
 
-- **Verbatim migration.** Each layer's code was moved with minimal edits: neural
-  and seed used relative imports (rename-safe); core's `ptca.*` absolute imports
-  were rewritten to relative. Test imports were repointed to `ptcna.<layer>`.
-- **Not yet done:**
-  - `circle/` is a stub; `_pcta_circle_audit` still lives in `neural/pcna.py`.
-  - `neural/ptca_core.py` keeps its old filename; the `_ptca_seed_audit` /
-    `_pcta_circle_audit` helpers still carry bare layer prefixes.
-  - pcna's `backend/` app server (llm/server/sms) was **not** migrated — it is
-    application infra, not architecture; its `test_edcm_engine.py` was dropped.
-  - interdependent-lib rewiring (single `ptcna` key/extra; rewrite
-    `docs/prime-tensor-stack.md`) is a follow-up in that repo.
-  - Source repos `pcna`, `pcta`, `pcsa` are to be archived after this lands.
+Consolidation is **complete** for the items an agent can land in this repo:
 
-Do not hand-wave these as done. Mark unknowns `hmmm`.
+- **Done:**
+  - Circle/seed audit extraction: `ptcna.circle.circle_audit` and
+    `ptcna.seed.seed_audit` own the aggregation; the neural engine delegates.
+  - `neural/ptca_core.py` → `neural/ring_core.py`; class `PTCACore` → `RingCore`.
+    The neural layer carries no `ptca` token.
+  - Seed layer re-identified as `ptcna.seed` (docstrings/metadata no longer
+    present it as the standalone `pcta` package); core-layer docs no longer
+    show `from ptca ...` imports or claim the `ptca-lib` dist identity.
+  - interdependent-lib rewiring landed in that repo (single `ptcna` registry
+    key/extra; `docs/prime-tensor-stack.md` rewritten around the 4-layer model).
+- **Deliberately kept:** core-layer public class names `PTCATensor` /
+  `PTCAInstance` (the layer "was PTCA"; they are in the right layer and are
+  published API — a `core.*` rename is possible later cleanup, not migration).
+- **Out of scope, not migrated:** pcna's `backend/` app server (llm/server/sms)
+  — application infra, not architecture; its `test_edcm_engine.py` was dropped.
+- **Remaining (maintainer actions, hmmm):**
+  - Archive the source repos `pcna`, `pcta`, `pcsa` on GitHub.
+  - Promoting a standalone circle tensor type (the circle *primitive*
+    `ThetaTensor.circle_audit` still operates on the neural theta tensor) is a
+    possible further reconciliation step — see `docs/architecture.md`.
+
+Do not hand-wave the remaining items as done. Mark unknowns `hmmm`.

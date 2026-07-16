@@ -101,3 +101,19 @@ descriptive layer expansions.
     later cleanup if desired.
   - Still open: interdependent-lib single-`ptcna` rewiring; archive
     `pcna`/`pcta`/`pcsa`.
+
+- **2026-07-16 — seed/core identity sweep (branch `claude/migration-completion-1cizrs`).**
+  The seed layer no longer presents itself as the standalone `pcta` package:
+  docstrings in `seed/{__init__,constants,tensor,compose}.py` and both seed
+  tests now identify as `ptcna.seed` (with `pcta` kept as provenance), layer
+  references updated from the old 3-layer numbering (layer 1 `pcna` / layer 3
+  `PTCA`) to the 4-layer module names (`neural`/`circle`/`seed`/`core`), and
+  MODULE_BUILD id `pcta_constants` → `seed_constants`. Core-layer docs dropped
+  the `ptca-lib` header identity and the stale `from ptca ...` import examples
+  (now `from ptcna.core ...`); public class names `PTCATensor`/`PTCAInstance`
+  are deliberately kept (right layer, published API). Ratios seals recomputed
+  repo-wide (fixed pre-existing drift on `neural/pcna.py` and a misplaced seal
+  on `core/__init__.py`). interdependent-lib rewiring is confirmed landed
+  upstream (single `ptcna` key/extra, rewritten `docs/prime-tensor-stack.md`,
+  sync-libs mirrors `ptcna`). 146 tests pass.
+  - Still open (maintainer): archive `pcna`/`pcta`/`pcsa` on GitHub.
