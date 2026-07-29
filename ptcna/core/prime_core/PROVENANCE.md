@@ -1,8 +1,19 @@
-> Relocated verbatim from `The-Interdependency/pcsa:prime_core/CLAUDE.md`
-> (pcsa@1f731d1) during the 2026-07-28 archival sweep. It predates the ptcna
-> consolidation: read `ptca-lib` / layer names below as historical (the code it
-> documents now lives here as `ptcna.core.prime_core`; the flat 4-D core is
-> `ptcna.core`). Preserved as design provenance for the stratified core.
+> **Design provenance, not operating instructions.** Relocated verbatim from
+> `The-Interdependency/pcsa:prime_core/CLAUDE.md` (pcsa@1f731d1) during the
+> 2026-07-28 archival sweep; it predates the ptcna consolidation. Where this
+> document disagrees with the repository's current facts, the root `CLAUDE.md`
+> and `docs/architecture.md` govern. In particular:
+>
+> - **Gradient invariant:** backprop lives only in `ptcna.neural`; core/fiq
+>   tensors are auditing/timing tensors. The "frozen gradient policy" below is
+>   the historical design statement that invariant descends from — do not read
+>   it as license to add gradient flow to the core layer.
+> - **Packaging:** this code now ships as `ptcna.core.prime_core` inside the
+>   `ptcna` distribution (`include = ["ptcna*"]`); the "not packaged for
+>   release" status below is historical.
+> - **Tests:** run `python -m pytest ptcna/core/prime_core` (or the full repo
+>   `pytest`); the unittest discovery paths below refer to the pre-relocation
+>   tree. Layer names (`ptca-lib`, `pcna`, `pcta`) are pre-consolidation.
 
 # CLAUDE.md — prime_core (PTCA three-stratum core)
 
