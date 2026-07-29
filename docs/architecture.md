@@ -117,3 +117,15 @@ descriptive layer expansions.
   upstream (single `ptcna` key/extra, rewritten `docs/prime-tensor-stack.md`,
   sync-libs mirrors `ptcna`). 146 tests pass.
   - Still open (maintainer): archive `pcna`/`pcta`/`pcsa` on GitHub.
+
+- **2026-07-28 — source repos archived (org archival sweep).**
+  `pcna`, `pcta`, and `pcsa` are archived on GitHub with tombstone READMEs
+  naming `ptcna` as successor. Before archival, supersession was verified
+  content-level (core/fiq files byte-identical; remaining diffs are the
+  recorded refactors above) and the only unique architecture content was
+  rescued into this repo (PR #6): `scripts/proof_check.py` (from pcna; a
+  relabeling-equivalence check on the n=7 circulants, not evidence for 7:3)
+  and `ptcna/core/prime_core/PROVENANCE.md` (from pcsa; historical design
+  notes, explicitly subordinate to the root gradient invariant). The
+  consolidation's maintainer actions are closed; the standalone circle-tensor
+  promotion remains the only open reconciliation item.
