@@ -71,8 +71,11 @@ Consolidation is **complete** for the items an agent can land in this repo:
   published API — a `core.*` rename is possible later cleanup, not migration).
 - **Out of scope, not migrated:** pcna's `backend/` app server (llm/server/sms)
   — application infra, not architecture; its `test_edcm_engine.py` was dropped.
+- **Done (2026-07-28 archival sweep):** the source repos `pcna`, `pcta`, `pcsa`
+  are archived on GitHub with tombstone READMEs pointing here. Unique content
+  was rescued first (`scripts/proof_check.py` from pcna;
+  `ptcna/core/prime_core/PROVENANCE.md` from pcsa — see PR #6).
 - **Remaining (maintainer actions, hmmm):**
-  - Archive the source repos `pcna`, `pcta`, `pcsa` on GitHub.
   - Promoting a standalone circle tensor type (the circle *primitive*
     `ThetaTensor.circle_audit` still operates on the neural theta tensor) is a
     possible further reconciliation step — see `docs/architecture.md`.
