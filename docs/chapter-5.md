@@ -134,12 +134,12 @@ structure, and two invariants — everything is a tensor; only the neural layer
 learns — small enough to memorize and strong enough to carry the layers
 above, where Chapter 6 will put the architecture to work.
 
-**hmmm — the predecessor repositories remain unarchived on the hosting
-platform, so the superseded names still resolve to live-looking sources and
-the consolidation's final act belongs to the maintainer, not to this repo;
-the circle layer owns its aggregation but the circle *primitive* still
-operates on a neural-layer tensor, so promoting a standalone circle tensor
-type is a possible further reconciliation, recorded and unclaimed; and the
-kept historical class names in the core layer are a standing choice, not a
-settled question — right layer, published API, revisitable, and marked here
-so that revisiting it starts from the record rather than from surprise.**
+The predecessor repositories are now archived, and the circle layer owns both
+its aggregation and the shared `CircleTensor` primitive. The kept historical
+class names in the core layer remain a standing compatibility choice — right
+layer, published API, revisitable, and recorded so that revisiting it starts
+from evidence rather than surprise.
+
+**hmmm — a reviewed PTCNA-specific UCNS higher-gonol producer profile does not
+yet exist, so UCNS integration remains typed and suspended; sustained-load
+behavior across the complete four-layer seam is still unfalsified.**

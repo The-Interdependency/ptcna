@@ -1,14 +1,25 @@
-"""Circle layer — auditing/timing tensors: neural tensors → circles.
+# ratios: loc_comments=9:8 imports_exports=4:1 calls_definitions=1:0
+"""Circle layer — non-differentiating neural-payload composition and audit.
 
-Every circle is itself a tensor. Non-differentiable (auditing/timing only).
+Usage:
 
-The circle-audit aggregation now lives here (`circle_audit`), extracted from the
-neural engine (`PCNAEngine._pcta_circle_audit`). The neural engine delegates to
-it. The circle *primitive* (`ThetaTensor.circle_audit`) still lives in
-`ptcna.neural.theta` — it operates on the neural theta tensor; promoting a
-standalone circle tensor type is a further reconciliation step (docs/architecture.md).
+    from ptcna.circle import compose_circle
+
+    circle = compose_circle(["neural:0", "neural:1"], identity="circle:0")
+
+``CircleTensor`` is the standalone structural output consumed by
+``ptcna.seed``. The existing theta audit remains available through
+``circle_audit``.
 """
 
 from .audit import circle_audit
+from .compose import compose_circle, star_polygon_order
+from .tensor import CircleTensor
 
-__all__ = ["circle_audit"]
+__all__ = [
+    "CircleTensor",
+    "compose_circle",
+    "star_polygon_order",
+    "circle_audit",
+]
+# ratios: loc_comments=9:8 imports_exports=4:1 calls_definitions=1:0

@@ -36,8 +36,8 @@ registry key/extra replaces the former `pcna`/`pcta`/`pcsa` entries). `pcea`
 ptcna/
   __init__.py            exposes neural, circle, seed, core
   neural/  (numpy)       pcna.py, ring_core.py (RingCore), tensor_engine, theta,
-                         sigma, merge, memory_core, topology, zeta, edcm, ...
-  circle/                audit.py (circle_audit, extracted from the neural engine)
+                         sigma, merge, memory_core, topology, zeta, scalar, ...
+  circle/                tensor.py, compose.py, audit.py
   seed/    (stdlib)      compose.py, tensor.py, constants.py, audit.py (seed_audit)
   core/    (stdlib)      tensor, sentinels, exchange, instance, primes, provenance
     prime_core/          fiq.py (fiqs/Fick), core.py, constants.py
@@ -49,7 +49,7 @@ pyproject.toml           name=ptcna; deps=[numpy]; testpaths=ptcna
 
 ```bash
 pip install -e ".[dev]"
-pytest                   # 146 tests pass (re-derive rather than trusting this count)
+pytest                   # all tests must pass; never hard-code a stale count
 ```
 
 ## Migration status
@@ -57,6 +57,16 @@ pytest                   # 146 tests pass (re-derive rather than trusting this c
 Consolidation is **complete** for the items an agent can land in this repo:
 
 - **Done:**
+  - One shared `ptcna.circle.CircleTensor` is used by circle, seed, and core
+    composition. Structural types are non-differentiating and composition
+    counts are variable.
+  - `ptcna.neural.NeuralScalar` is the sole reverse-mode scalar. The core
+    layer no longer owns a duplicate scalar/autodiff implementation.
+  - UCNS integration is a typed suspended boundary. Archived UCNS surfaces do
+    not activate it, and local identities make no UCNS representation claim.
+  - The shadow `ptcna.neural.edcm` module was removed. Zeta consumes an
+    explicitly injected external measurement provider or returns
+    `measurement_suspended`.
   - Circle/seed audit extraction: `ptcna.circle.circle_audit` and
     `ptcna.seed.seed_audit` own the aggregation; the neural engine delegates.
   - `neural/ptca_core.py` → `neural/ring_core.py`; class `PTCACore` → `RingCore`.
@@ -75,9 +85,10 @@ Consolidation is **complete** for the items an agent can land in this repo:
   are archived on GitHub with tombstone READMEs pointing here. Unique content
   was rescued first (`scripts/proof_check.py` from pcna;
   `ptcna/core/prime_core/PROVENANCE.md` from pcsa — see PR #6).
-- **Remaining (maintainer actions, hmmm):**
-  - Promoting a standalone circle tensor type (the circle *primitive*
-    `ThetaTensor.circle_audit` still operates on the neural theta tensor) is a
-    possible further reconciliation step — see `docs/architecture.md`.
+- **Remaining evidence boundary (`hmmm`):**
+  - A reviewed PTCNA-specific UCNS higher-gonol producer profile does not yet
+    exist.
+  - Sustained-load behavior across the complete four-layer seam remains
+    unfalsified.
 
 Do not hand-wave the remaining items as done. Mark unknowns `hmmm`.

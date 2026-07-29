@@ -1,138 +1,109 @@
-# ratios: loc_comments=72:32 imports_exports=2:3 calls_definitions=23:13
-"""fiq — the middle stratum object of a PTCA core.
+# ratios: loc_comments=29:58 imports_exports=4:3 calls_definitions=5:6
+"""Non-differentiating fiq payload host.
 
-    fiq  (n.)  the tensor holding the UCNS object.
-               · first iterative qualifier
-               · full isolated query
-               · "future idiot's question"
+A fiq preserves an ordered payload vector and carrier-local identity. It does
+not create scalar objects, inspect gradients, or participate in
+back-propagation. Neural-owned objects such as ``ptcna.neural.NeuralScalar``
+may travel inside the payload unchanged.
 
-A ``Fiq`` is the opaque-host graft of the three-stratum model (handoff §1.3):
-a scalar-tensor payload grafted into a UCNS carrier anchor. The carrier
-organizes; it does not interpret. Backprop stays sealed inside the scalar
-payload — the carrier geometry is non-differentiable scaffold (handoff §1.2).
+Usage:
 
-Gradient policy: differentiability descends to these payload scalars; the
-UCNS composition operator ``⊠`` never touches a Scalar, so no ``∂(⊠)`` node is
-ever registered on the autodiff tape.
+    from ptcna.core.prime_core import wrap_tensor_fiq
+
+    value = object()
+    fiq = wrap_tensor_fiq([value], anchor=0, identity="fiq:0")
+    assert fiq.payload[0] is value
+    assert fiq.requires_grad is False
 """
 from __future__ import annotations
 
-from typing import Callable, Iterable, List, Optional
+from collections.abc import Iterable
+from typing import Any, Optional
 
+# === MODULE_BUILD ===
+# id: ptcna_fiq_host
+#   module_name: fiq
+#   module_kind: schema
+#   summary: preserves opaque payload vectors inside a non-differentiating core timing host
+#   owner: Erin Spencer
+#   public_surface: Fiq, wrap_tensor_fiq
+#   internal_surface: Fiq._payload
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   tests: ptcna/core/prime_core/tests/test_fiq_opaque.py
+#   rollout: default enabled for prime-core construction
+#   rollback: remove prime-core construction and fiq exports
+#   requires: none
+#   since: 0.1.1
+#   unresolved: exact future UCNS carrier attachment
+# === END MODULE_BUILD ===
 
-class Scalar:
-    """Minimal reverse-mode autodiff scalar — the ONLY differentiable leaf type.
+# === CONTRACTS ===
+# id: fiq_payload_is_opaque_and_lossless
+#   given: arbitrary payload objects are wrapped in a fiq
+#   then: each retrieved payload element is the identical object supplied by the caller
+#   class: correctness
+#
+# id: fiq_never_owns_gradients
+#   given: a fiq carries neural-owned differentiable objects
+#   then: the fiq reports requires_grad false and exposes no backward operation or gradient state
+#   class: safety
+# === END CONTRACTS ===
 
-    Differentiability descends to these payload scalars (handoff §1.2). Only
-    scalar ops ('+', '*') ever create nodes; structural composition does not,
-    which is what keeps ``∂(⊠)`` off the hot path.
-    """
-
-    __slots__ = ("data", "grad", "_backward", "_prev", "_op")
-
-    def __init__(self, data: float, _children: Iterable["Scalar"] = (), _op: str = "") -> None:
-        self.data: float = float(data)
-        self.grad: float = 0.0
-        self._backward: Callable[[], None] = lambda: None
-        self._prev = tuple(_children)
-        self._op = _op  # '' leaf | '+' | '*' — only scalar ops, never '⊠'
-
-    def __add__(self, other: "Scalar | float") -> "Scalar":
-        other = other if isinstance(other, Scalar) else Scalar(other)
-        out = Scalar(self.data + other.data, (self, other), "+")
-
-        def _backward() -> None:
-            self.grad += out.grad
-            other.grad += out.grad
-
-        out._backward = _backward
-        return out
-
-    __radd__ = __add__
-
-    def __mul__(self, other: "Scalar | float") -> "Scalar":
-        other = other if isinstance(other, Scalar) else Scalar(other)
-        out = Scalar(self.data * other.data, (self, other), "*")
-
-        def _backward() -> None:
-            self.grad += other.data * out.grad
-            other.grad += self.data * out.grad
-
-        out._backward = _backward
-        return out
-
-    __rmul__ = __mul__
-
-    def backward(self) -> None:
-        """Reverse-mode accumulation in iterative topological order.
-
-        Iterative (explicit-stack) topo sort avoids Python's recursion limit on
-        the large, deep graphs a full core can produce.
-        """
-        topo: List["Scalar"] = []
-        visited = set()
-        stack: List[tuple] = [(self, False)]
-        while stack:
-            node, processed = stack.pop()
-            if processed:
-                topo.append(node)
-                continue
-            if id(node) in visited:
-                continue
-            visited.add(id(node))
-            stack.append((node, True))
-            for child in node._prev:
-                if id(child) not in visited:
-                    stack.append((child, False))
-        self.grad = 1.0
-        for node in reversed(topo):
-            node._backward()
-
-    def __repr__(self) -> str:  # pragma: no cover - debug aid
-        return f"Scalar(data={self.data:.6g}, grad={self.grad:.6g}, op={self._op!r})"
+# === BOUNDARIES ===
+# id: fiq_runtime_boundary
+#   summary: retains caller-provided object references in memory without inspecting content or touching external state
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   pii: none
+#   secrets: none
+#   owner: Erin Spencer
+#   since: 0.1.1
+# === END BOUNDARIES ===
 
 
 class Fiq:
-    """Opaque-host graft: a length-``d`` scalar payload at a UCNS carrier anchor.
-
-    'Opaque' means the host stores the payload verbatim and never interprets or
-    re-encodes it (the rejected 'encode' branch, handoff §1.3). Round-trips are
-    lossless: the payload retrieved equals the payload inserted.
-    """
+    """Opaque payload vector at one local circle input position."""
 
     __slots__ = ("anchor", "_payload", "identity")
 
-    def __init__(self, payload: List[Scalar], anchor: int, identity: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        payload: Iterable[Any],
+        anchor: int,
+        identity: Optional[str] = None,
+    ) -> None:
         self.anchor = anchor
-        self._payload = list(payload)  # opaque: stored verbatim, never inspected
+        self._payload = list(payload)
         self.identity = identity
 
     @property
-    def payload(self) -> List[Scalar]:
-        """Retrieve the hosted payload unchanged (lossless round-trip)."""
+    def payload(self) -> list[Any]:
         return self._payload
 
     @property
     def requires_grad(self) -> bool:
-        return True  # the payload is the differentiable leaf surface
-
-    def scalars(self) -> List[Scalar]:
-        return self._payload
+        return False
 
     def __len__(self) -> int:
         return len(self._payload)
 
 
 def wrap_tensor_fiq(
-    values: Iterable["Scalar | float"],
+    values: Iterable[Any],
     anchor: int,
     identity: Optional[str] = None,
 ) -> Fiq:
-    """Graft a raw scalar vector into a fiq as an opaque host (handoff §1.3).
+    """Host values unchanged; never lift them into a core-owned scalar type."""
 
-    Floats are lifted to ``Scalar`` leaves; existing ``Scalar`` objects are
-    hosted as-is. The carrier does not transform the values — it hosts them.
-    """
-    payload = [v if isinstance(v, Scalar) else Scalar(v) for v in values]
-    return Fiq(payload=payload, anchor=anchor, identity=identity)
-# ratios: loc_comments=72:32 imports_exports=2:3 calls_definitions=23:13
+    return Fiq(payload=values, anchor=anchor, identity=identity)
+
+
+__all__ = ["Fiq", "wrap_tensor_fiq"]
+# ratios: loc_comments=29:58 imports_exports=4:3 calls_definitions=5:6

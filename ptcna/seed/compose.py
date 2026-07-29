@@ -1,34 +1,77 @@
-# ratios: loc_comments=56:36 imports_exports=5:4 calls_definitions=21:4
+# ratios: loc_comments=48:80 imports_exports=6:4 calls_definitions=16:4
 """The layer-2 composition operator: circles -> seed.
 
 `compose_seed` is the structural ``⊠`` operator for layer 2. It is **purely
 structural**: it grafts circle-tensors into a seed carrier and assigns their
-heptagram anchor order. It creates no scalar and registers no autodiff node, so
+star-polygon anchor order. It creates no scalar and registers no autodiff node, so
 ``∂(⊠)`` never appears on a tape (back-propagation lives only in the neural
 layer, `ptcna.neural`). See `docs`/the stack canon for the boundary.
+
+Use ``compose_seed`` for already-formed circles or ``build_seed`` for raw opaque
+payloads. The result is local PTCNA structure and makes no UCNS claim.
 """
 from __future__ import annotations
 
 from math import gcd
-from typing import List, Optional, Sequence
+from typing import Optional, Sequence
 
+from ..circle import CircleTensor, compose_circle, star_polygon_order
 from .constants import HEPTAGRAM_VERTICES, SEED_ROUTING_STEP
-from .tensor import CircleTensor, Seed, SeedMotion
+from .tensor import Seed, SeedMotion
+
+# === MODULE_BUILD ===
+# module_id: ptcna.seed.compose
+# purpose: compose shared circle tensors into variable-width seed structure
+# inputs: CircleTensor sequence, routing step, optional identity
+# outputs: Seed, SeedMotion
+# nondeterminism: none
+# side_effects: none
+# public_surface: heptagram_order, compose_seed, build_seed, seed_motion
+# internal_deps: ptcna.circle, ptcna.seed.constants, ptcna.seed.tensor
+# external_deps: python standard library
+# rollout: default enabled
+# hmmm:
+#   unresolved: exact future UCNS higher-gonol producer composition law
+# === END MODULE_BUILD ===
+
+# === CONTRACTS ===
+# id: seed_composition_uses_shared_circle_type
+#   given: a non-empty sequence of ptcna.circle.CircleTensor objects
+#   then: compose_seed returns a Seed whose circles remain that shared type
+#
+# id: seed_composition_is_non_differentiating
+#   given: opaque payloads including neural scalars
+#   then: composition creates no gradient node and preserves payload references
+#
+# id: seed_composition_rejects_empty
+#   given: an empty circle sequence
+#   then: compose_seed raises ValueError
+# === END CONTRACTS ===
+
+# === BOUNDARIES ===
+# trust_zone: in_process
+# data_classification: opaque caller payloads
+# authn: none
+# authz: none
+# secrets: none
+# network_boundary: none
+# storage_boundary: none
+# user_data: opaque payload references supplied by caller
+# sandboxing: caller process
+# privileged_ops: none
+# abuse_cases: empty composition or labeling local routing as UCNS output
+# mitigations: non-empty validation and explicit local ownership language
+# unresolved: exact future UCNS producer profile and higher-gonol composition law
+# === END BOUNDARIES ===
 
 
-def heptagram_order(step: int, n: int = HEPTAGRAM_VERTICES) -> List[int]:
+def heptagram_order(step: int, n: int = HEPTAGRAM_VERTICES) -> list[int]:
     """Vertex visitation order of the ``{n/step}`` star polygon.
 
     For ``n = 7``: ``step 2 -> [0,2,4,6,1,3,5]``; ``step 3 -> [0,3,6,2,5,1,4]``.
     Requires ``gcd(step, n) == 1`` so every vertex is visited exactly once.
     """
-    if n <= 0:
-        raise ValueError("n must be positive")
-    if gcd(step, n) != 1:
-        raise ValueError(
-            f"{{{n}/{step}}} is not a single cycle: gcd({step}, {n}) != 1"
-        )
-    return [(step * i) % n for i in range(n)]
+    return star_polygon_order(step, n)
 
 
 def compose_seed(
@@ -60,10 +103,7 @@ def compose_seed(
     else:
         order = list(range(n))
     # Assign anchors: the i-th input circle lands at heptagram position order[i].
-    anchored: List[CircleTensor] = [
-        CircleTensor(payload=c.payload, anchor=order[i], identity=c.identity)
-        for i, c in enumerate(circles)
-    ]
+    anchored = [circle.with_anchor(order[index]) for index, circle in enumerate(circles)]
     return Seed(
         circles=anchored,
         routing_step=routing_step,
@@ -85,8 +125,8 @@ def build_seed(
     """
     prefix = f"{identity}." if identity else ""
     circles = [
-        CircleTensor(payload=p, identity=f"{prefix}c{i}")
-        for i, p in enumerate(payloads)
+        compose_circle([payload], identity=f"{prefix}c{index}")
+        for index, payload in enumerate(payloads)
     ]
     return compose_seed(circles, routing_step=routing_step, identity=identity)
 
@@ -106,4 +146,4 @@ def seed_motion(seed: Seed) -> SeedMotion:
         anchor_order=seed.anchor_order,
         circle_identities=tuple(c.identity for c in seed.circle_tensors()),
     )
-# ratios: loc_comments=56:36 imports_exports=5:4 calls_definitions=21:4
+# ratios: loc_comments=48:80 imports_exports=6:4 calls_definitions=16:4

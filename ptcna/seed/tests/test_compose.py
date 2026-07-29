@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import unittest
 
+from ptcna.circle import compose_circle
 from ptcna.seed import (
     CircleTensor,
     Seed,
@@ -30,7 +31,10 @@ class TestHeptagramOrder(unittest.TestCase):
 
 class TestComposeSeed(unittest.TestCase):
     def _circles(self, n=7):
-        return [CircleTensor(payload=f"w{i}", identity=f"c{i}") for i in range(n)]
+        return [
+            compose_circle([f"w{i}"], identity=f"c{i}")
+            for i in range(n)
+        ]
 
     def test_empty_rejected(self):
         with self.assertRaises(ValueError):
@@ -67,7 +71,10 @@ class TestComposeSeed(unittest.TestCase):
 
     def test_lossless_payload_roundtrip(self):
         seed = compose_seed(self._circles(7))
-        payloads = {c.identity: c.payload for c in seed.circles}
+        payloads = {
+            c.identity: c.tensor_payloads()[0]
+            for c in seed.circles
+        }
         self.assertEqual(payloads["c0"], "w0")
         self.assertEqual(payloads["c6"], "w6")
 

@@ -1,4 +1,4 @@
-# PTCNA Consolidation Spec (draft)
+# PTCNA Consolidation Spec
 
 **PTCNA** — *Prime Tensor Circled Neural Architecture*. One repository, one
 architecture, four layers. Supersedes the separate `pcna` / `pcta` / `pcsa`
@@ -127,5 +127,19 @@ descriptive layer expansions.
   relabeling-equivalence check on the n=7 circulants, not evidence for 7:3)
   and `ptcna/core/prime_core/PROVENANCE.md` (from pcsa; historical design
   notes, explicitly subordinate to the root gradient invariant). The
-  consolidation's maintainer actions are closed; the standalone circle-tensor
-  promotion remains the only open reconciliation item.
+  consolidation's maintainer actions were closed; at that point, standalone
+  circle-tensor promotion remained the only open reconciliation item.
+
+- **2026-07-29 — four-layer runtime reconciliation (`0.1.1`).**
+  `ptcna.circle.CircleTensor` became the single circle primitive shared by
+  circle, seed, and core composition. Reverse-mode scalar ownership moved to
+  `ptcna.neural.NeuralScalar`; circle/seed/fiq/core structures remain opaque,
+  non-differentiating hosts. Core composition now supports variable counts and
+  caller-supplied payload factories. UCNS activation fails closed through a
+  typed suspended status because the reviewed PTCNA-specific higher-gonol
+  producer profile is not available. The stale in-package EDCM shadow was
+  removed; Zeta accepts an injected external measurement provider and
+  otherwise reports `measurement_suspended`. The input commits and authority
+  boundaries are recorded in `docs/work-graphs/ptcna-0.1.1-inputs.json`.
+  Remaining `hmmm`: the UCNS producer-profile identity and sustained-load
+  behavior across the full seam.

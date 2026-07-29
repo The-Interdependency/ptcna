@@ -1,24 +1,37 @@
-# ratios: loc_comments=104:53 imports_exports=6:8 calls_definitions=27:21
-"""prime_core.core — the three-stratum PTCA core builder.
+# ratios: loc_comments=139:89 imports_exports=10:5 calls_definitions=28:11
+"""Compose fiqs through the shared circle and seed layers into a core.
 
-Stratification (handoff §1.1): scalar tensors are grafted into UCNS *circle*
-carriers as opaque ``Fiq`` hosts, and circles are grouped into epicyclic
-*seeds* (UCNS-in-UCNS). Routing IS the UCNS composition pattern, not an add-on:
+This module no longer defines duplicate ``Circle`` or ``Seed`` classes.
+``ptcna.circle.CircleTensor`` owns circles and ``ptcna.seed.Seed`` owns seeds.
+The core hosts those structural objects and remains non-differentiating.
 
-    {7/2} heptagram composes tensors -> circle   (CIRCLE_ROUTING_STEP)
-    {7/3} heptagram composes circles -> seed     (SEED_ROUTING_STEP)
+Usage:
 
-Gradient policy (handoff §1.2): differentiability descends through the scalar
-payloads; UCNS geometry (n_min, face state, anchor ordering) is
-non-differentiable scaffold. ``compose_circle`` / ``compose_seed`` are the
-structural ``⊠`` operator — they create no autodiff node, so ``∂(⊠)`` never
-appears on the tape.
+    from ptcna.core.prime_core import CoreSpec, build_core
+
+    core = build_core(CoreSpec(
+        seed_count=2,
+        circles_per_seed=2,
+        tensors_per_circle=2,
+        tensor_dim=3,
+    ))
+    assert core.requires_grad is False
+
+Pass a ``payload_factory`` when neural-owned payload objects are required. The
+factory owns their construction; PTCNA core composition carries them opaquely.
 """
 from __future__ import annotations
 
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from typing import List, Optional, Sequence
+from typing import Optional
 
+from ...circle import CircleTensor, compose_circle, star_polygon_order
+from ...seed import Seed, compose_seed
+from ...ucns_integration import (
+    UCNSIntegrationStatus,
+    ucns_integration_status,
+)
 from .constants import (
     CIRCLE_ROUTING_STEP,
     CIRCLES_PER_SEED,
@@ -29,43 +42,91 @@ from .constants import (
 )
 from .fiq import Fiq, wrap_tensor_fiq
 
-# UCNS-aware rule (handoff §2): when carrier construction touches UCNS identity,
-# prefer the A0-safe public boundary over raw factorization sentinels. The
-# binding of a real UCNSObject is the next step; until ucns is importable this
-# stays a deterministic local tag, and the attach point is marked here.
-try:  # pragma: no cover - import availability is environment-dependent
-    from ucns import a0_safe as _a0_safe  # noqa: F401
-except Exception:  # pragma: no cover
-    _a0_safe = None
+# === MODULE_BUILD ===
+# id: ptcna_prime_core_composition
+#   module_name: prime core composition
+#   module_kind: engine
+#   summary: composes opaque fiqs through the shared circle and seed types into a non-differentiating core
+#   owner: Erin Spencer
+#   public_surface: CoreSpec, Core, build_core, compose_circle, compose_seed, heptagram_order
+#   internal_surface: _local_fiq_identity
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   tests: ptcna/core/prime_core/tests/test_ptca_core_stratified.py
+#   rollout: default enabled with UCNS integration explicitly suspended
+#   rollback: remove prime-core exports; shared circle and seed layers remain available
+#   requires: ptcna_fiq_host, ptcna_circle_composition, ptcna_seed_composition, ptcna_ucns_integration
+#   since: 0.1.1
+#   unresolved: exact PTCNA-specific UCNS higher-gonol producer profile and sustained-load behavior
+# === END MODULE_BUILD ===
+
+# === CONTRACTS ===
+# id: prime_core_uses_shared_layer_types
+#   given: a core is built from a CoreSpec
+#   then: every circle is ptcna.circle.CircleTensor and every seed is ptcna.seed.Seed with no duplicate core-local layer types
+#   class: correctness
+#
+# id: prime_core_is_non_differentiating
+#   given: a core hosts payloads including neural-owned differentiable objects
+#   then: core, seed, circle, and fiq hosts report requires_grad false and core exposes no backward operation
+#   class: safety
+#
+# id: prime_core_ucns_is_suspended
+#   given: a core is built before a PTCNA-specific UCNS producer profile exists
+#   then: the core carries the typed inactive UCNS status and local identities make no UCNS claim
+#   class: safety
+#
+# id: prime_core_default_profile_is_stable
+#   given: build_core is called with the default CoreSpec
+#   then: the historical default profile contains 157 seeds, 7693 fiqs, and 407729 opaque payload values
+#   class: compatibility
+#
+# id: prime_core_payload_width_matches_spec
+#   given: a payload factory returns a vector whose length differs from tensor_dim
+#   then: build_core raises ValueError before constructing an invalid fiq
+#   class: safety
+#
+# id: prime_core_counts_are_positive
+#   given: any CoreSpec composition count is zero or negative
+#   then: CoreSpec raises ValueError naming the invalid field
+#   class: safety
+# === END CONTRACTS ===
+
+# === BOUNDARIES ===
+# id: prime_core_composition_runtime_boundary
+#   summary: performs deterministic in-memory composition and creates no network, storage, auth, user-data, or external package effect
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   pii: none
+#   secrets: none
+#   owner: Erin Spencer
+#   since: 0.1.1
+# === END BOUNDARIES ===
+
+PayloadFactory = Callable[[int, int, int, int, float], Sequence[object]]
 
 
-def heptagram_order(step: int, n: int = 7) -> List[int]:
-    """Vertex visitation order of the {n/step} star polygon.
+def heptagram_order(step: int, n: int = 7) -> list[int]:
+    """Compatibility name for the shared star-polygon order."""
 
-    For n = 7: step 2 -> [0,2,4,6,1,3,5]; step 3 -> [0,3,6,2,5,1,4]. Requires
-    gcd(step, n) == 1 so every vertex is visited exactly once.
-    """
-    return [(step * i) % n for i in range(n)]
+    return star_polygon_order(step, n)
 
 
-def _carrier_identity(*coords: int) -> str:
-    """Deterministic carrier identity tag (UCNS-aware attach point, handoff §2).
+def _local_fiq_identity(seed: int, circle: int, tensor: int) -> str:
+    """Return a PTCNA-local identity with no UCNS representation claim."""
 
-    When ucns is available this is where identity should route through
-    ``a0_safe`` rather than raw ``factor_search`` sentinels. Real UCNSObject
-    binding is deferred; this local tag keeps the scaffold runnable meanwhile.
-    """
-    return "fiq:" + ".".join(str(c) for c in coords)
+    return f"ptcna-local:fiq:{seed}.{circle}.{tensor}"
 
 
 @dataclass(frozen=True)
 class CoreSpec:
-    """Composition spec for a core. Defaults are the canon counts (handoff §1.1).
-
-    Parameterized so tests can build a small core for fast gradient checks and
-    so the seed count stays a tunable design choice (§6: design choice, not a
-    hard invariant).
-    """
+    """Variable composition counts for a core construction."""
 
     seed_count: int = SEED_COUNT
     circles_per_seed: int = CIRCLES_PER_SEED
@@ -73,6 +134,16 @@ class CoreSpec:
     tensor_dim: int = TENSOR_DIM
     circle_routing_step: int = CIRCLE_ROUTING_STEP
     seed_routing_step: int = SEED_ROUTING_STEP
+
+    def __post_init__(self) -> None:
+        for field_name in (
+            "seed_count",
+            "circles_per_seed",
+            "tensors_per_circle",
+            "tensor_dim",
+        ):
+            if getattr(self, field_name) <= 0:
+                raise ValueError(f"{field_name} must be positive")
 
     @property
     def tensor_leaves(self) -> int:
@@ -83,125 +154,114 @@ class CoreSpec:
         return self.tensor_leaves * self.tensor_dim
 
 
-class Circle:
-    """UCNS carrier hosting ``tensors_per_circle`` fiqs as opaque payloads.
+class Core:
+    """A non-differentiating core tensor composed from shared seed objects."""
 
-    Geometry (``n_min``, ``face_state``, ``anchor_order``) is non-differentiable
-    scaffold: it routes, it does not learn (handoff §1.2 / §4.4).
-    """
+    __slots__ = ("seeds", "spec", "ucns_status")
 
-    __slots__ = ("fiqs", "routing_step", "anchor_order", "n_min", "face_state", "identity")
-
-    def __init__(self, fiqs: Sequence[Fiq], routing_step: int, identity: Optional[str] = None) -> None:
-        self.fiqs: List[Fiq] = list(fiqs)
-        self.routing_step = routing_step
-        self.anchor_order = tuple(heptagram_order(routing_step, len(self.fiqs)))
-        self.n_min = len(self.fiqs)   # frozen scaffold
-        self.face_state = 0           # frozen scaffold
-        self.identity = identity
-
-    @property
-    def requires_grad(self) -> bool:
-        return False  # geometry never appears as a leaf (handoff §4.4)
-
-    def at(self, anchor: int) -> Fiq:
-        """Retrieve the fiq hosted at ``anchor`` (opaque, lossless round-trip)."""
-        for f in self.fiqs:
-            if f.anchor == anchor:
-                return f
-        raise KeyError(anchor)
-
-    def tensor_leaves(self) -> List[Fiq]:
-        return list(self.fiqs)
-
-
-class Seed:
-    """Epicyclic UCNS object (UCNS-in-UCNS): a grouping of circle carriers.
-
-    Like the circle, its geometry is frozen scaffold; structure ascends,
-    differentiability descends to the fiq payloads it ultimately contains.
-    """
-
-    __slots__ = ("circles", "routing_step", "anchor_order", "n_min", "face_state", "identity")
-
-    def __init__(self, circles: Sequence[Circle], routing_step: int, identity: Optional[str] = None) -> None:
-        self.circles: List[Circle] = list(circles)
-        self.routing_step = routing_step
-        self.anchor_order = tuple(heptagram_order(routing_step, len(self.circles)))
-        self.n_min = len(self.circles)
-        self.face_state = 0
-        self.identity = identity
+    def __init__(
+        self,
+        seeds: Sequence[Seed],
+        spec: CoreSpec,
+        *,
+        ucns_status: UCNSIntegrationStatus,
+    ) -> None:
+        self.seeds = list(seeds)
+        self.spec = spec
+        self.ucns_status = ucns_status
 
     @property
     def requires_grad(self) -> bool:
         return False
 
-    def tensor_leaves(self) -> List[Fiq]:
-        out: List[Fiq] = []
-        for c in self.circles:
-            out.extend(c.tensor_leaves())
-        return out
+    def tensor_leaves(self) -> list[Fiq]:
+        """Return hosted fiqs without inspecting their payload vectors."""
+
+        leaves: list[Fiq] = []
+        for seed in self.seeds:
+            for payload in seed.tensor_payloads():
+                if not isinstance(payload, Fiq):
+                    raise TypeError(
+                        "prime core circles must host Fiq payloads; "
+                        f"received {type(payload).__name__}"
+                    )
+                leaves.append(payload)
+        return leaves
 
 
-class Core:
-    """A full PTCA core: ``seed_count`` epicyclic seeds of circles of fiqs."""
+def build_core(
+    spec: Optional[CoreSpec] = None,
+    *,
+    init: float = 1.0,
+    payload_factory: Optional[PayloadFactory] = None,
+) -> Core:
+    """Build a complete local PTCNA core while UCNS remains suspended.
 
-    __slots__ = ("seeds", "spec")
-
-    def __init__(self, seeds: Sequence[Seed], spec: CoreSpec) -> None:
-        self.seeds: List[Seed] = list(seeds)
-        self.spec = spec
-
-    def tensor_leaves(self) -> List[Fiq]:
-        out: List[Fiq] = []
-        for s in self.seeds:
-            out.extend(s.tensor_leaves())
-        return out
-
-    def scalars(self):
-        out = []
-        for f in self.tensor_leaves():
-            out.extend(f.scalars())
-        return out
-
-
-def compose_circle(fiqs: Sequence[Fiq], *, routing_step: int = CIRCLE_ROUTING_STEP,
-                   identity: Optional[str] = None) -> Circle:
-    """{7/2} composition of tensors into a circle carrier (the ``⊠`` operator).
-
-    Structural only: grafts the fiqs into a carrier and routes them; it creates
-    no ``Scalar`` and therefore no ``∂(⊠)`` autodiff node.
+    ``payload_factory(seed, circle, tensor, tensor_dim, init)`` may return
+    neural-owned objects. When omitted, each fiq hosts plain floats.
     """
-    return Circle(fiqs, routing_step=routing_step, identity=identity)
 
-
-def compose_seed(circles: Sequence[Circle], *, routing_step: int = SEED_ROUTING_STEP,
-                 identity: Optional[str] = None) -> Seed:
-    """{7/3} epicyclic composition of circles into a seed (the ``⊠`` operator).
-
-    Structural only, like ``compose_circle`` — no autodiff node is registered.
-    """
-    return Seed(circles, routing_step=routing_step, identity=identity)
-
-
-def build_core(spec: Optional[CoreSpec] = None, *, init: float = 1.0) -> Core:
-    """Construct a stratified PTCA core.
-
-    Each fiq is grafted with a length-``tensor_dim`` scalar payload (opaque
-    host). Tensors compose into circles via {7/2} and circles into seeds via
-    {7/3}. ``init`` is the constant initial payload value (real initializers are
-    a downstream concern).
-    """
     spec = spec or CoreSpec()
-    seeds: List[Seed] = []
-    for s in range(spec.seed_count):
-        circles: List[Circle] = []
-        for c in range(spec.circles_per_seed):
-            fiqs: List[Fiq] = []
-            for t in range(spec.tensors_per_circle):
-                values = [init] * spec.tensor_dim
-                fiqs.append(wrap_tensor_fiq(values, anchor=t, identity=_carrier_identity(s, c, t)))
-            circles.append(compose_circle(fiqs, routing_step=spec.circle_routing_step))
-        seeds.append(compose_seed(circles, routing_step=spec.seed_routing_step))
-    return Core(seeds, spec)
-# ratios: loc_comments=104:53 imports_exports=6:8 calls_definitions=27:21
+    seeds: list[Seed] = []
+    for seed_index in range(spec.seed_count):
+        circles: list[CircleTensor] = []
+        for circle_index in range(spec.circles_per_seed):
+            fiqs: list[Fiq] = []
+            for tensor_index in range(spec.tensors_per_circle):
+                if payload_factory is None:
+                    values: Sequence[object] = [init] * spec.tensor_dim
+                else:
+                    values = payload_factory(
+                        seed_index,
+                        circle_index,
+                        tensor_index,
+                        spec.tensor_dim,
+                        init,
+                    )
+                    if len(values) != spec.tensor_dim:
+                        raise ValueError(
+                            "payload_factory returned "
+                            f"{len(values)} values; expected {spec.tensor_dim}"
+                        )
+                fiqs.append(
+                    wrap_tensor_fiq(
+                        values,
+                        anchor=tensor_index,
+                        identity=_local_fiq_identity(
+                            seed_index,
+                            circle_index,
+                            tensor_index,
+                        ),
+                    )
+                )
+            circles.append(
+                compose_circle(
+                    fiqs,
+                    routing_step=spec.circle_routing_step,
+                    identity=f"ptcna-local:circle:{seed_index}.{circle_index}",
+                )
+            )
+        seeds.append(
+            compose_seed(
+                circles,
+                routing_step=spec.seed_routing_step,
+                identity=f"ptcna-local:seed:{seed_index}",
+            )
+        )
+    return Core(seeds, spec, ucns_status=ucns_integration_status())
+
+
+Circle = CircleTensor
+
+__all__ = [
+    "PayloadFactory",
+    "CoreSpec",
+    "Core",
+    "Circle",
+    "Seed",
+    "build_core",
+    "compose_circle",
+    "compose_seed",
+    "heptagram_order",
+]
+# ratios: loc_comments=139:89 imports_exports=10:5 calls_definitions=28:11

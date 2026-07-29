@@ -1,9 +1,10 @@
-# ratios: loc_comments=69:92 imports_exports=3:3 calls_definitions=20:6
+# ratios: loc_comments=69:94 imports_exports=3:3 calls_definitions=20:6
 """Composition routing and the coherence-prime guard.
 
 `ptcna.seed` (formerly the standalone `pcta` repo — PCTA, Prime Circled Tensor
 Architecture) is the **seed layer** of the prime-tensor stack: it covers circles
-carried by UCNS objects and composes them into **seeds**. The single source of
+represented by the shared local `ptcna.circle.CircleTensor` and composes them
+into **seeds**. The single source of
 truth for the stack's role-and-boundary map is
 `The-Interdependency/interdependent-lib : docs/prime-tensor-stack.md` — this
 repo *cites* it and does not import it. No theorem / proof / empirical status
@@ -26,8 +27,9 @@ What is canonical here:
 "Motion" — the structural / phase-harmonic output a seed hands upward — is
 formally the **Fickian gradient flux** ``J = −D ∇φ`` (Fick's first law:
 structure diffuses down its field gradient). It is structural / non-differentiable
-(the ``∇φ`` is a field gradient, not an autodiff gradient). No stack `hmmm`
-remains.
+(the ``∇φ`` is a field gradient, not an autodiff gradient). A
+PTCNA-specific UCNS higher-gonol producer profile remains `hmmm`; local
+composition makes no UCNS claim.
 """
 from __future__ import annotations
 
@@ -183,4 +185,4 @@ def nth_coherence_prime(n: int) -> int:
         if len(ladder) > n:
             return ladder[n]
         limit *= 2
-# ratios: loc_comments=69:92 imports_exports=3:3 calls_definitions=20:6
+# ratios: loc_comments=69:94 imports_exports=3:3 calls_definitions=20:6

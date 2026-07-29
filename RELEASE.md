@@ -19,11 +19,18 @@ above is for the *checking/uploading* side.)
 ## 1. Pre-flight
 
 ```bash
-python -m pytest            # 146 tests must pass (neural layer needs numpy)
+python -m pytest            # all tests must pass (neural layer needs numpy)
+python scripts/check_contracts.py
+python .agents/skills/ratios/ratios_check.py --root ptcna --strict
+PYTHONPATH=.agents/skills python .agents/skills/msdmd/collect.py \
+  --root . --repo ptcna --out /tmp/ptcna_msdmd.ts
+cmp /tmp/ptcna_msdmd.ts ptcna_msdmd.ts
 ```
 
-- Bump `version` in `pyproject.toml` if this is not `0.1.0`.
+- Confirm `pyproject.toml` and `ptcna.__version__` both name `0.1.1`.
 - Confirm `LICENSE`, `README.md` present; README "Status" line current.
+- Confirm `ptcna/neural/edcm.py` is absent and the UCNS boundary remains typed
+  and suspended.
 
 ## 2. Build
 
@@ -61,11 +68,10 @@ a `~/.pypirc`. Never commit tokens.
 
 ## 5. Post-publish
 
-- Tag the release: `git tag v0.1.0 && git push origin v0.1.0`.
+- Tag the release: `git tag v0.1.1 && git push origin v0.1.1`.
 - Wire the extra into the aggregator: in `interdependent-lib`, add
-  `ptcna = ["ptcna>=0.1.0"]` to `[project.optional-dependencies]`, add it to
-  `all`, and note it in `docs/dependency-policy.md`. (Left undone until now
-  precisely because extras only pin published dists.)
+  `ptcna = ["ptcna>=0.1.1"]` to `[project.optional-dependencies]`, include it
+  in `all`, and note it in `docs/dependency-policy.md`.
 
 ## Notes
 

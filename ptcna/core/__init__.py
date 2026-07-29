@@ -63,7 +63,7 @@ from .sentinels import (
 )
 from .tensor import PTCATensor
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __all__ = [
     # constants
     "NODES", "SENTINELS", "PHASES", "SLOTS",

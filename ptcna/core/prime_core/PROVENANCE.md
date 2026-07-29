@@ -14,6 +14,10 @@
 > - **Tests:** run `python -m pytest ptcna/core/prime_core` (or the full repo
 >   `pytest`); the unittest discovery paths below refer to the pre-relocation
 >   tree. Layer names (`ptca-lib`, `pcna`, `pcta`) are pre-consolidation.
+> - **Current ownership:** `Scalar`, fixed seven-by-seven composition, and the
+>   UCNS carrier claims below are historical. Current code uses
+>   `ptcna.neural.NeuralScalar`, shared `ptcna.circle.CircleTensor`, variable
+>   composition counts, local identities, and a typed suspended UCNS boundary.
 
 # CLAUDE.md — prime_core (PTCA three-stratum core)
 
@@ -90,15 +94,15 @@ guard (5), routing steps (6). Stdlib `unittest` only — no pytest dependency.
     of truth is `interdependent_lib.coherence_primes`
     (The-Interdependency/interdependent-lib); prime_core mirrors it verbatim
     because importing the aggregator would invert the dependency graph.
-- **Validator absent.** `scripts/module_build_check.py` / `universal_parser.py`
-  (handoff §5) exist in no repo, so the MODULE_BUILD manifest was validated by
-  hand, not mechanically. Vendor them when a source appears.
-- **UCNS binding deferred.** `ucns` is not importable in this environment.
-  `core._carrier_identity` is the marked attach point where carrier identity
-  should route through `ucns.a0_safe` (never raw `factor_search` sentinels,
-  per the §2 UCNS-aware rule). Currently a deterministic local tag.
-- **Packaging.** `prime_core` is not yet added to `pyproject.toml`
-  (`include = ["ptca*"]`). Deliberate — keeps published `ptca-lib` untouched.
-  Decide packaging when prime_core is ready to ship.
+- **Validator resolved.** PTCNA vendors the bounded skill-lib collection and
+  collects MODULE_BUILD, CONTRACTS, CHECKS, and BOUNDARIES declarations into
+  `ptcna_msdmd.ts`.
+- **UCNS binding remains suspended.** The available UCNS source does not
+  expose the reviewed PTCNA-specific higher-gonol producer profile this layer
+  needs. Current code does not import archived `a0_safe`, `UCNSObject`, or
+  `factor_search` surfaces; it returns typed suspension and uses explicitly
+  local identities.
+- **Packaging resolved.** `prime_core` ships under
+  `ptcna.core.prime_core` in the `ptcna` distribution.
 - **Seam under load.** The descend/ascend split is the whole experiment;
   unfalsified until a core is actually trained.

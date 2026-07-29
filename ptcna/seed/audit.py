@@ -1,3 +1,4 @@
+# ratios: loc_comments=11:12 imports_exports=1:1 calls_definitions=9:1
 """Seed-layer auditing — circles → seeds.
 
 Auditing/timing only; non-differentiable. Extracted from the neural engine
@@ -26,3 +27,4 @@ def seed_audit(cores: dict, memory_s) -> dict:
         result[f"{name}_bottom3"] = sorted(audit, key=lambda x: x["coherence"])[:3]
     result["memory_s_hub_avg"] = memory_s.state()["avg_hub"]
     return result
+# ratios: loc_comments=11:12 imports_exports=1:1 calls_definitions=9:1

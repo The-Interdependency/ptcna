@@ -1,13 +1,14 @@
-# ratios: loc_comments=207:44 imports_exports=11:1 calls_definitions=73:18
+# ratios: loc_comments=241:76 imports_exports=11:1 calls_definitions=75:19
 # 198:61
 
 """
 
 ZetaEngine — Zeta Function Alpha Echo
 
-ZFAE passively learns from every energy provider response.
+ZFAE can learn from an explicitly supplied external measurement provider.
 
-Every assistant reply is evaluated by EDCM (no LLM), producing a coherence
+PTCNA does not implement EDCM. A caller-owned provider supplies metrics,
+producing a coherence
 
 score that drives PCNA phi/psi/omega reward backprop.
 
@@ -21,7 +22,8 @@ Naming: a0(zeta fun alpha echo) {provider}
 
 - echo = the feedback signal returned to the ring
 
-No external API calls. Runs non-blocking after every chat response.
+When no provider is configured, evaluation returns a typed suspended event and
+does not nudge the neural engine. PTCNA itself performs no external API calls.
 
 Resolution:
 
@@ -39,28 +41,62 @@ Example: global=3, /system=5 means system-root paths are observed at full depth.
 # id: pcna_zeta
 #   module_name: zeta
 #   module_kind: engine
-#   summary: ZFAE evaluator that scores each assistant response via EDCM (no LLM) and nudges PCNAEngine.phi, with per-directory resolution control and a module-level singleton.
+#   summary: ZFAE evaluator that consumes explicitly injected external metrics and nudges PCNAEngine.phi without implementing or importing EDCM.
 #   owner: Erin Spencer
 #   public_surface: ZetaEngine, _zeta_engine
 #   internal_surface: _get_default_pcna, ZetaEngine._coherence_from_metrics, ZetaEngine._sigma_nudge_factors, ZetaEngine._theta_gate_factor
 #   auth_boundary: none
 #   storage_boundary: none
-#   network_boundary: none
-#   user_data_boundary: none
+#   network_boundary: hmmm
+#   user_data_boundary: read
 #   admin_only: false
-#   tests: hmmm
+#   tests: ptcna/neural/tests/test_zeta.py
 #   rollout: default_enabled
 #   rollback: remove import and call sites
-#   requires: pcna_edcm, pcna_pcna, pcna_sigma
-#   since: 2026-06-02
-#   unresolved: none
+#   requires: pcna_pcna, pcna_sigma
+#   since: 0.1.1
+#   unresolved: callback network behavior belongs to the caller and is not introspectable by PTCNA
 # === END MODULE_BUILD ===
+
+# === CONTRACTS ===
+# id: zeta_requires_external_measurement_provider
+#   given: evaluate is called without an injected measurement provider
+#   then: a measurement_suspended event is returned and no neural nudge occurs
+#   class: safety
+#
+# id: zeta_never_imports_shadow_edcm
+#   given: evaluation runs with or without an injected provider
+#   then: PTCNA does not import or call ptcna.neural.edcm and treats supplied metrics as external evidence
+#   class: safety
+#
+# id: zeta_consumes_explicit_metrics
+#   given: an injected provider returns the required bounded metric mapping
+#   then: Zeta computes coherence, nudges Phi, and records an external_measurement event
+#   class: correctness
+# === END CONTRACTS ===
+
+# === BOUNDARIES ===
+# id: zeta_external_measurement_boundary
+#   summary: reads caller-supplied response text and invokes an injected callback whose network behavior is outside PTCNA authority
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: hmmm
+#   user_data_boundary: read
+#   admin_only: false
+#   pii: possible
+#   secrets: none
+#   owner: Erin Spencer
+#   since: 0.1.1
+# === END BOUNDARIES ===
 
 import time
 
 from collections import deque
+from collections.abc import Callable, Mapping
 
 from typing import Optional
+
+MetricProvider = Callable[[str, str], Mapping[str, float]]
 
 _DEFAULT_RESOLUTION = 3
 
@@ -75,19 +111,25 @@ class ZetaEngine:
 
     Non-LLM real-time learning engine with per-directory resolution control.
 
-    Evaluates each assistant response via EDCM and drives PCNA backprop.
+    Consumes caller-supplied measurements and drives PCNA backprop.
 
     """
 
     AGENT_NAME = "a0(zeta fun alpha echo)"
 
-    def __init__(self, buffer_size: int = 50):
+    def __init__(
+        self,
+        buffer_size: int = 50,
+        metric_provider: Optional[MetricProvider] = None,
+    ):
 
         self.echo_buffer: deque = deque(maxlen=buffer_size)
 
         self.eval_count = 0
 
         self.created_at = time.time()
+
+        self.metric_provider = metric_provider
 
         self.resolution_config: dict = {
 
@@ -96,6 +138,15 @@ class ZetaEngine:
             "directories": {},
 
         }
+
+    def set_metric_provider(
+        self,
+        metric_provider: Optional[MetricProvider],
+    ) -> None:
+
+        """Replace or suspend the caller-owned measurement provider."""
+
+        self.metric_provider = metric_provider
 
     def get_resolution(self, path: str = "") -> int:
 
@@ -247,17 +298,36 @@ class ZetaEngine:
 
         resolution = self.get_resolution(path)
 
+        if self.metric_provider is None:
+
+            event = {
+
+                "agent": self.AGENT_NAME,
+
+                "provider": provider,
+
+                "status": "measurement_suspended",
+
+                "reason": (
+                    "no external measurement provider configured; "
+                    "PTCNA does not implement EDCM"
+                ),
+
+                "resolution": resolution,
+
+                "path": path or None,
+
+                "ts": time.time(),
+
+            }
+
+            self.echo_buffer.append(event)
+
+            return event
+
         try:
 
-            from .edcm import compute_metrics
-
-            metrics = compute_metrics(
-
-                responses=[{"content": assistant_text}],
-
-                context=user_text,
-
-            )
+            metrics = dict(self.metric_provider(assistant_text, user_text))
 
             coherence = self._coherence_from_metrics(metrics)
 
@@ -286,6 +356,8 @@ class ZetaEngine:
                 "agent": self.AGENT_NAME,
 
                 "provider": provider,
+
+                "status": "external_measurement",
 
                 "coherence": coherence,
 
@@ -337,7 +409,27 @@ class ZetaEngine:
 
             print(f"[zfae:echo] error: {e}")
 
-            return {}
+            event = {
+
+                "agent": self.AGENT_NAME,
+
+                "provider": provider,
+
+                "status": "measurement_error",
+
+                "reason": str(e),
+
+                "resolution": resolution,
+
+                "path": path or None,
+
+                "ts": time.time(),
+
+            }
+
+            self.echo_buffer.append(event)
+
+            return event
 
     def set_sigma_resolution(self, level: int) -> dict:
 
@@ -479,4 +571,4 @@ def _get_default_pcna():
     return _default_pcna
 
 # 198:61
-# ratios: loc_comments=207:44 imports_exports=11:1 calls_definitions=73:18
+# ratios: loc_comments=241:76 imports_exports=11:1 calls_definitions=75:19
