@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ptcna"
-version = "0.1.0"
+version = "0.1.1"
 description = "Prime Tensor Circled Neural Architecture — one architecture, four layers (neural/circle/seed/core). Consolidates pcna, pcta, pcsa."
 readme = "README.md"
 license = "MPL-2.0"

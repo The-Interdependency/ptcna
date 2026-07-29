@@ -1,8 +1,8 @@
-# ratios: loc_comments=37:25 imports_exports=5:1 calls_definitions=1:0
-"""ptcna.seed — the seed layer: circles → seeds (formerly the standalone `pcta` repo).
+# ratios: loc_comments=38:26 imports_exports=6:1 calls_definitions=1:0
+"""ptcna.seed — the seed layer: circles → seeds (formerly standalone ``pcta``).
 
-Covers circles carried by UCNS objects and composes them into **seeds**. It
-takes circle-tensors from the circle layer (`ptcna.circle`) and organizes a
+Takes local circle-tensors from the circle layer (``ptcna.circle``) and
+organizes a
 **variable** number of circles into a seed (the seed is itself a tensor),
 producing structural **motion** that the core layer (`ptcna.core`) folds into
 cores and the inference cap (`zfae`, runtime in `a0`) ultimately consumes
@@ -22,11 +22,12 @@ docs/prime-tensor-stack.md` — cited, not imported):
 
 "Motion" (the structural output a seed hands upward) is formally the Fickian
 gradient flux ``J = −D ∇φ`` (Fick's first law) — structure diffusing down its
-field gradient; structural / non-differentiable. No stack `hmmm` remains.
+field gradient; structural / non-differentiable. UCNS integration remains
+explicitly suspended until a PTCNA-specific producer profile exists.
 """
 from __future__ import annotations
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Erin Patrick Spencer <wayseer@interdependentway.org>"
 __license__ = "MPL-2.0"
 
@@ -44,7 +45,8 @@ from .compose import (
     heptagram_order,
     seed_motion,
 )
-from .tensor import CircleTensor, Seed, SeedMotion
+from ..circle import CircleTensor
+from .tensor import Seed, SeedMotion
 from .audit import seed_audit
 
 __all__ = [
@@ -68,4 +70,4 @@ __all__ = [
     "coherence_primes_up_to",
     "nth_coherence_prime",
 ]
-# ratios: loc_comments=37:25 imports_exports=5:1 calls_definitions=1:0
+# ratios: loc_comments=38:26 imports_exports=6:1 calls_definitions=1:0

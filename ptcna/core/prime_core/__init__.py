@@ -1,15 +1,13 @@
-# ratios: loc_comments=45:13 imports_exports=4:1 calls_definitions=0:0
-"""prime_core — three-stratum PTCA core (tensor / circle / seed).
+# ratios: loc_comments=44:12 imports_exports=4:1 calls_definitions=1:0
+"""Prime-core composition using the shared PTCNA circle and seed layers.
 
 Public surface (handoff §2 MODULE_BUILD):
     build_core, CoreSpec
 
-The stratification: scalar ``Fiq`` payloads are grafted into UCNS *circle*
-carriers (opaque hosts) and composed into epicyclic *seeds*. Differentiability
-descends to the scalar payloads; UCNS geometry is non-differentiable scaffold.
-
-This package is independent of the published ``ptca-lib`` (flat 4-D tensor) and
-does not modify it.
+Fiqs host payload vectors opaquely. The core, seeds, circles, and fiqs are all
+non-differentiating. Neural-owned payloads may be supplied with
+``build_core(..., payload_factory=...)`` without moving gradient ownership out
+of ``ptcna.neural``. UCNS integration is explicitly suspended.
 """
 from __future__ import annotations
 
@@ -34,7 +32,7 @@ from .core import (
     compose_seed,
     heptagram_order,
 )
-from .fiq import Fiq, Scalar, wrap_tensor_fiq
+from .fiq import Fiq, wrap_tensor_fiq
 
 __all__ = [
     # public surface
@@ -45,7 +43,6 @@ __all__ = [
     "Seed",
     "Circle",
     "Fiq",
-    "Scalar",
     # composition
     "compose_circle",
     "compose_seed",
@@ -62,4 +59,4 @@ __all__ = [
     "SEED_ROUTING_STEP",
     "is_coherence_prime",
 ]
-# ratios: loc_comments=45:13 imports_exports=4:1 calls_definitions=0:0
+# ratios: loc_comments=44:12 imports_exports=4:1 calls_definitions=1:0

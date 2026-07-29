@@ -1,4 +1,4 @@
-# ratios: loc_comments=267:49 imports_exports=15:1 calls_definitions=85:15
+# ratios: loc_comments=266:78 imports_exports=15:1 calls_definitions=85:15
 # 295:27
 """
 PCNA Inference Engine — six-ring pipeline, all rings real.
@@ -39,13 +39,44 @@ reward(winner, outcome) → nudge all three PTCA cores + guardian + memory flush
 #   network_boundary: none
 #   user_data_boundary: none
 #   admin_only: false
-#   tests: hmmm
+#   tests: ptcna/neural/tests/test_pcna.py
 #   rollout: default_enabled
 #   rollback: remove import and call sites; checkpoints under .checkpoints/ can be deleted
 #   requires: pcna_ring_core, pcna_memory_core, pcna_theta
 #   since: 2026-06-02
 #   unresolved: none
 # === END MODULE_BUILD ===
+
+# === CONTRACTS ===
+# id: pcna_infer_reports_complete_six_step_pipeline
+#   given: non-empty input text is passed to PCNAEngine.infer
+#   then: the result reports project, inject, propagate, seed audit, circle audit, and coherence steps with a bounded confidence
+#   class: correctness
+#
+# id: pcna_checkpoint_round_trips_ring_state
+#   given: an engine saves a checkpoint and a compatible engine loads it
+#   then: all five persisted ring tensors are restored with the saved shapes and values
+#   class: correctness
+#
+# id: pcna_reward_updates_neural_and_timing_state
+#   given: a bounded outcome is passed to PCNAEngine.reward
+#   then: the neural rings and theta timing state are updated and one unambiguous memory flush result is reported
+#   class: correctness
+# === END CONTRACTS ===
+
+# === BOUNDARIES ===
+# id: pcna_checkpoint_runtime_boundary
+#   summary: performs local numpy checkpoint reads and writes under the configured checkpoint directory
+#   auth_boundary: none
+#   storage_boundary: write
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   pii: none
+#   secrets: none
+#   owner: Erin Spencer
+#   since: 0.1.1
+# === END BOUNDARIES ===
 
 import base64
 import hashlib
@@ -317,7 +348,6 @@ class PCNAEngine:
             "omega_coherence_after": round(self.omega.ring_coherence, 4),
             "theta_coherence_after": round(float(self.theta.node_coherence.mean()), 4),
             "theta_circles_after": [int(v) for v in self.theta.circle_count],
-            "theta_circles_after": [int(v) for v in self.theta.circle_count],
             "memory_l_flush_count": self.memory_l.flush_count,
             "memory_s_flush_count": self.memory_s.flush_count,
         }
@@ -361,4 +391,4 @@ class PCNAEngine:
             "echo_history": echo_history[-20:],
         }
 # 295:27
-# ratios: loc_comments=267:49 imports_exports=15:1 calls_definitions=85:15
+# ratios: loc_comments=266:78 imports_exports=15:1 calls_definitions=85:15

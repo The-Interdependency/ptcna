@@ -1,3 +1,4 @@
+# ratios: loc_comments=13:12 imports_exports=1:1 calls_definitions=4:1
 """Circle-layer auditing — neural tensors → circles.
 
 Auditing/timing only; non-differentiable. Extracted from the neural engine
@@ -28,3 +29,4 @@ def circle_audit(theta, memory_l) -> dict:
         "theta_coherence": round(float(theta.node_coherence.mean()), 4),
         "memory_l_hub_avg": memory_l.state()["avg_hub"],
     }
+# ratios: loc_comments=13:12 imports_exports=1:1 calls_definitions=4:1

@@ -43,12 +43,20 @@ pytest                       # testpaths = ptcna
 
 ## Status
 
-Alpha (`0.1.0`). All four layers import; **146 tests pass** (seed/core/prime_core
-stdlib-only + neural under numpy). Consolidation reconciliation is complete for
-the neural/circle/seed split: the seed/circle audit was extracted into its
-layers and the neural prime-ring tensor was renamed `PTCACore` → `RingCore`.
+Alpha (`0.1.1`). All four layers import and the repository test suite passes.
+The layer boundary is now executable rather than only descriptive:
+
+- `ptcna.circle.CircleTensor` is the one circle type used by circle, seed, and
+  core composition.
+- `ptcna.neural.NeuralScalar` is the only PTCNA type that owns reverse-mode
+  gradients; structural hosts carry it opaquely.
+- UCNS integration reports a typed `suspended` state and fails closed until a
+  reviewed PTCNA-specific higher-gonol producer profile exists.
+- EDCM remains an external authority. `ZetaEngine` accepts an explicitly
+  injected measurement provider; PTCNA contains no shadow EDCM module.
+
 The core layer still intentionally exposes PTCA-named public objects such as
-`PTCATensor` and `PTCAInstance`; those names now live in the correct layer.
-History and any remaining notes live in `docs/architecture.md`.
+`PTCATensor` and `PTCAInstance`; those names live in the correct layer.
+History and unresolved evidence boundaries live in `docs/architecture.md`.
 
 License: MPL-2.0.
