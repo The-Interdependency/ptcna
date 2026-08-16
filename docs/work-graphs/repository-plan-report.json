@@ -1,0 +1,168 @@
+{
+  "schema": "the-interdependency.repository-plan-report",
+  "version": "1.0.0",
+  "repository": "The-Interdependency/ptcna",
+  "contract": {
+    "repository": "The-Interdependency/skill-lib",
+    "path": "interdependent-work-graph/repository-plan-report.schema.json",
+    "version": "1.0.0",
+    "blob_sha": "9b347b2dff7692054b571602f30ee6d00c2e7265"
+  },
+  "source": {
+    "branch": "main",
+    "commit": "4509d33419aa25e6a9cfef415055e378b8f37edc",
+    "generated_at": "2026-08-15",
+    "note": "This report describes the executable PTCNA 0.1.1 runtime at the cited main commit plus the current repo-owned plan. Operational-shell and report-only maintenance do not upgrade runtime, mathematical, measurement, or architectural evidence standing."
+  },
+  "authority": {
+    "owns": [
+      "PTCNA neural, circle, seed, and core runtime definitions and implementation",
+      "PTCNA neural-only reverse-mode differentiation and structural host boundaries",
+      "PTCNA local composition, checkpoint, propagation, timing, and audit behavior",
+      "PTCNA producer-side integration boundaries and runtime evidence"
+    ],
+    "does_not_own": [
+      "UCNS mathematical representation canon, higher-gonol producer profiles, or proof status",
+      "EDCM measurement definitions, empirical validity, or result authority",
+      "METAPAT semantic authority",
+      "skill-lib organization-wide build and evidence doctrine",
+      "ZFAE repository authority outside the PTCNA-local implementation boundary"
+    ],
+    "non_transfer": [
+      "PTCNA runtime success does not establish UCNS mathematical validity",
+      "UCNS proof or representation status does not establish PTCNA learning efficacy",
+      "EDCM measurement results do not become PTCNA-owned evidence merely because a caller injects them",
+      "a functioning four-layer implementation does not establish that prime structure, current ring constants, or current weight topology are necessary or superior",
+      "suspended integration remains suspended until an exact producer contract is independently available and reviewed"
+    ]
+  },
+  "portfolio_role": {
+    "summary": "Own and test the executable neural/circle/seed/core architecture while keeping mathematical representation and measurement authorities external and fail-closed.",
+    "upstream_contract": "PTCNA consumes only explicitly authorized external producer or measurement contracts; absent contracts remain typed suspended states rather than inferred integrations.",
+    "downstream_contract": "PTCNA emits runtime behavior and state without transferring architectural necessity, UCNS proof status, or EDCM measurement validity to consumers.",
+    "reports_to": {
+      "repository": "The-Interdependency/skill-lib",
+      "skill": "interdependent-work-graph",
+      "relation": "repo-owned runtime and architecture-plan input; no authority transfer"
+    }
+  },
+  "status": {
+    "state": "active alpha runtime; architecture modernization suspended on upstream falsification",
+    "current_claim": "PTCNA 0.1.1 implements one four-layer runtime in which reverse-mode gradients are owned by the neural layer while circle, seed, and core remain non-differentiating structural hosts. UCNS higher-gonol integration is explicitly suspended, EDCM remains external, and no claim is established that the current prime/ring topology or learned weight path is necessary, superior, or the final architecture.",
+    "latest_main_milestone": {
+      "commit": "4509d33419aa25e6a9cfef415055e378b8f37edc",
+      "description": "merged the reconciled four-layer v0.1.1 runtime with one CircleTensor, neural-only reverse-mode scalar ownership, fail-closed UCNS integration, and external EDCM measurement injection"
+    }
+  },
+  "delivered": [
+    {
+      "surface": "four-layer PTCNA runtime",
+      "status": "implemented alpha runtime",
+      "boundary": "implementation demonstrates executable composition, not architectural necessity or superiority"
+    },
+    {
+      "surface": "neural-only reverse-mode differentiation",
+      "status": "implemented and tested runtime boundary",
+      "boundary": "circle, seed, core, fiq, and other structural hosts do not thereby gain mathematical or empirical standing"
+    },
+    {
+      "surface": "UCNS integration boundary",
+      "status": "typed suspended fail-closed adapter",
+      "boundary": "no PTCNA-specific higher-gonol producer profile is currently authorized or consumed"
+    },
+    {
+      "surface": "external measurement boundary",
+      "status": "implemented injected-provider contract",
+      "boundary": "PTCNA does not own EDCM measurement semantics or validity"
+    },
+    {
+      "surface": "0.1.1 cross-repository input manifest",
+      "status": "sealed historical coordination record",
+      "boundary": "its July producer identities are evidence for the 0.1.1 reconciliation only, not current stack identities"
+    }
+  ],
+  "active_frontier": [
+    "keep the operational shell aligned with current skill-lib doctrine and supported GitHub Actions runtimes without changing PTCNA architectural evidence standing",
+    "leave UCNS higher-gonol integration suspended while the UCNS-EDCM architectural reconstruction claim is under preregistered falsification",
+    "if the upstream reconstruction architecture survives, freeze a PTCNA experiment that compares UCNS-derived relational initialization or assignment against the current learned/hash-projected path and simpler matched baselines before replacing runtime architecture",
+    "if the upstream reconstruction architecture is falsified, deprecate dependent UCNS-specific PTCNA integration assumptions rather than repairing them inside PTCNA",
+    "resolve whether the embedded ZetaEngine remains a bounded PTCNA-local measurement-to-learning adapter or should be removed in favor of separate ZFAE authority before further Zeta development",
+    "test sustained-load and long-horizon state behavior only after the architecture under test and its authority boundaries are frozen"
+  ],
+  "next_actions": [
+    {
+      "action": "maintain the current four-layer runtime and fail-closed UCNS boundary while the UCNS-EDCM run-to-completion resolves the load-bearing reconstruction claim",
+      "owner": "The-Interdependency/ptcna",
+      "dependency": "do not introduce a PTCNA-specific UCNS producer profile or redesign weight topology before upstream architectural evidence is resolved"
+    },
+    {
+      "action": "on upstream survival, preregister the smallest decisive PTCNA architecture test comparing UCNS-derived relational initialization or assignment with the current implementation and simpler matched-information baselines",
+      "owner": "The-Interdependency/ptcna",
+      "dependency": "requires exact surviving UCNS identities, frozen construction rules, explicit EDCM measurement authority, and outcome criteria fixed before execution"
+    },
+    {
+      "action": "on upstream falsification, record and remove dependent UCNS-specific PTCNA architecture assumptions before further implementation",
+      "owner": "The-Interdependency/ptcna",
+      "dependency": "triggered only by a falsified load-bearing upstream claim with propagated downstream effect"
+    },
+    {
+      "action": "freeze the authority decision for the embedded ZetaEngine before modifying its learning role",
+      "owner": "The-Interdependency/ptcna",
+      "dependency": "requires comparison with the current ZFAE repository contract; unresolved authority must remain hmmm"
+    }
+  ],
+  "blocked": [
+    "activation of UCNS higher-gonol composition is blocked on an exact reviewed PTCNA-specific UCNS producer profile and on survival of the load-bearing upstream reconstruction architecture",
+    "replacement of current learned/hash-projected neural topology with UCNS-derived relational initialization is blocked until a preregistered comparison can be interpreted against simpler baselines",
+    "further architectural expansion is blocked from treating current prime constants, ring sizes, heptagram propagation, or hard-coded ring weights as established necessities",
+    "ZetaEngine ownership migration or expansion is blocked until the PTCNA-local versus separate-ZFAE authority boundary is frozen"
+  ],
+  "cross_repository_relations": [
+    {
+      "repository": "The-Interdependency/ucns",
+      "relation": "mathematical and relational producer candidate; PTCNA integration remains suspended until an exact reviewed producer profile and surviving architectural evidence exist",
+      "authority_transfer": false,
+      "proof_status_transfer": false
+    },
+    {
+      "repository": "The-Interdependency/edcm",
+      "relation": "external measurement authority whose explicitly injected outputs may influence PTCNA learning without becoming PTCNA-owned measurement claims",
+      "authority_transfer": false,
+      "measurement_status_transfer": false
+    },
+    {
+      "repository": "The-Interdependency/skill-lib",
+      "relation": "canonical build, evidence, skill propagation, and cross-repository coordination doctrine",
+      "authority_transfer": false
+    },
+    {
+      "repository": "The-Interdependency/interdependent-lib",
+      "relation": "downstream library consumer of the PTCNA package surface",
+      "authority_transfer": false
+    },
+    {
+      "repository": "The-Interdependency/zfae",
+      "relation": "separate repository whose authority relationship to the embedded PTCNA ZetaEngine must be resolved before further Zeta development",
+      "authority_transfer": false
+    }
+  ],
+  "machine_entrypoints": {
+    "repo_report": "docs/work-graphs/repository-plan-report.json",
+    "historical_stack_manifest": "docs/work-graphs/ptcna-0.1.1-inputs.json",
+    "system_overview": "README.md",
+    "architecture": "docs/architecture.md",
+    "neural_runtime": "ptcna/neural/pcna.py",
+    "ucns_boundary": "ptcna/ucns_integration.py",
+    "external_measurement_adapter": "ptcna/neural/zeta.py",
+    "quality_workflow": ".github/workflows/quality.yml"
+  },
+  "hmmm": [
+    "whether the UCNS-EDCM prime-view reconstruction architecture survives its run-to-completion adversarial program",
+    "the exact PTCNA-specific UCNS producer profile, if one remains justified after that program",
+    "whether UCNS-derived relational initialization or assignment outperforms the current implementation and simpler matched baselines",
+    "whether the current ring sizes, heptagram propagation, prime constants, and fixed ring weights contain irreducible useful structure or historical accident",
+    "the authority boundary and migration path between PTCNA's embedded ZetaEngine and The-Interdependency/zfae",
+    "sustained-load behavior across the complete four-layer seam",
+    "PyPI 0.1.1 publication artifact identity; the GitHub repository currently exposes no release record"
+  ]
+}
