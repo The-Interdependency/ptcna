@@ -1,6 +1,10 @@
 """Checks for the frozen critical-evaluation plan and receipt sealing."""
 
+import json
+from pathlib import Path
+
 from ptcna.critical_evaluation import _canonical_digest, load_frozen_plan
+from ptcna.evaluation import FALSIFIED, SURVIVED_NOT_PROVED
 
 # === CHECKS ===
 # id: check_ptcna_critical_plan_digest
@@ -13,7 +17,7 @@ from ptcna.critical_evaluation import _canonical_digest, load_frozen_plan
 #
 # id: check_ptcna_critical_result_digest
 #   proves: ptcna_critical_result_content_addressed
-#   call: self::test_result_digest_is_content_sensitive
+#   call: self::test_sealed_result_digest_and_independent_verdict_replay
 #   requires: python3
 #   timeout: 30
 #   mutates: none
@@ -34,8 +38,28 @@ def test_critical_plan_is_balanced_and_digest_locked() -> None:
     assert len(_canonical_digest(artifact)) == 64
 
 
-def test_result_digest_is_content_sensitive() -> None:
-    first = {"plan_digest": "a" * 64, "usefulness_status": "FALSIFIED"}
-    second = {"plan_digest": "a" * 64, "usefulness_status": "UNRESOLVED"}
-    assert _canonical_digest(first) == _canonical_digest(dict(first))
-    assert _canonical_digest(first) != _canonical_digest(second)
+def test_sealed_result_digest_and_independent_verdict_replay() -> None:
+    result_path = (
+        Path(__file__).resolve().parents[1]
+        / "data/ptcna-critical-result-v1.json"
+    )
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    recorded_digest = result.pop("result_digest")
+    assert _canonical_digest(result) == recorded_digest
+
+    plan, _ = load_frozen_plan()
+    receipt = result["receipt"]
+    target = receipt["target_accuracy"]
+    comparator = receipt["comparator_accuracy"]
+    usefulness = (
+        SURVIVED_NOT_PROVED
+        if target >= plan.minimum_target_accuracy
+        else FALSIFIED
+    )
+    superiority = (
+        SURVIVED_NOT_PROVED
+        if target - comparator >= plan.minimum_target_advantage_vs_fallback
+        else FALSIFIED
+    )
+    assert usefulness == receipt["usefulness_status"] == FALSIFIED
+    assert superiority == receipt["superiority_status"] == FALSIFIED

@@ -1444,7 +1444,7 @@ export default defineMsdmdCollection({
     {
       "block": "CHECKS",
       "fields": {
-        "call": "self::test_result_digest_is_content_sensitive",
+        "call": "self::test_sealed_result_digest_and_independent_verdict_replay",
         "cleanup": "none",
         "mutates": "none",
         "proves": "ptcna_critical_result_content_addressed",
@@ -2342,7 +2342,7 @@ export default defineMsdmdCollection({
       "kind": "calls",
       "source_block": "CHECKS",
       "source_id": "check_ptcna_critical_result_digest",
-      "to": "self::test_result_digest_is_content_sensitive"
+      "to": "self::test_sealed_result_digest_and_independent_verdict_replay"
     },
     {
       "from": "check_ptcna_critical_result_digest",
