@@ -10,12 +10,12 @@ then propagate from the canonical source.
 
 Installed skills:
 
-- `msdmd/`
-- `meta-module-build/`
-- `test-build/`
-- `risk-boundary-build/`
-- `ratios/`
-- `the-interdependency/`
-- `interdependent-work-graph/`
 - `canon/`
+- `interdependent-work-graph/`
+- `meta-module-build/`
+- `msdmd/`
+- `ratios/`
+- `risk-boundary-build/`
 - `skill-usage/`
+- `test-build/`
+- `the-interdependency/`
