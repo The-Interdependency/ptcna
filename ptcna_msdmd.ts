@@ -549,6 +549,67 @@ export default defineMsdmdCollection({
         "pii": "none",
         "secrets": "none",
         "since": "unreleased",
+        "storage_boundary": "write",
+        "summary": "reads the repository-owned frozen plan and writes one caller-selected local JSON result without network, authentication, secrets, or user data",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/critical_evaluation.py",
+      "id": "ptcna_critical_evaluation_local_receipt"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "evidence",
+        "given": "the checked-in critical evaluation plan is loaded",
+        "then": "its canonical EvaluationPlan digest must equal the independently stored frozen digest"
+      },
+      "file": "ptcna/critical_evaluation.py",
+      "id": "ptcna_critical_plan_digest_locked"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "evidence",
+        "given": "the frozen plan completes or reaches a frozen failure rule",
+        "then": "the serialized result names the plan digest, separate claim verdicts, and its own canonical result digest"
+      },
+      "file": "ptcna/critical_evaluation.py",
+      "id": "ptcna_critical_result_content_addressed"
+    },
+    {
+      "block": "MODULE_BUILD",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "internal_surface": "_artifact_path, _canonical_digest",
+        "module_kind": "experiment",
+        "module_name": "critical_evaluation",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "public_surface": "load_frozen_plan, execute_frozen_plan, main",
+        "requires": "ptcna_frozen_evaluation",
+        "rollback": "preserve plan and result receipts; remove executable wrapper without changing runtime",
+        "rollout": "execute only after the preregistration commit is merged",
+        "since": "unreleased",
+        "storage_boundary": "write",
+        "summary": "loads the immutable representative role-acquisition plan and seals its separate usefulness and superiority verdicts",
+        "tests": "ptcna/tests/test_critical_evaluation.py",
+        "unresolved": "outcome until the merged frozen plan is executed",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/critical_evaluation.py",
+      "id": "ptcna_critical_evaluation"
+    },
+    {
+      "block": "BOUNDARIES",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "pii": "none",
+        "secrets": "none",
+        "since": "unreleased",
         "storage_boundary": "none",
         "summary": "executes caller-supplied in-process backends and returns an in-memory receipt without persistence, network, authentication, user-data, or administrative effects",
         "user_data_boundary": "none"
@@ -571,7 +632,7 @@ export default defineMsdmdCollection({
       "fields": {
         "class": "evidence",
         "given": "either backend errors before completing the frozen workload",
-        "then": "evaluation stops and records the plan's preselected backend_error_status before any repair or criterion change"
+        "then": "evaluation stops and records the plan's preselected target/comparator failure propagation before any repair or criterion change"
       },
       "file": "ptcna/evaluation.py",
       "id": "ptcna_evaluation_propagates_backend_failure"
@@ -581,7 +642,7 @@ export default defineMsdmdCollection({
       "fields": {
         "class": "evidence",
         "given": "target and fallback complete the frozen workload",
-        "then": "training occurs before scoring and the terminal verdict is FALSIFIED or SURVIVED \u2014 not proved using only the plan's post-training accuracy and comparator-deficit thresholds"
+        "then": "training occurs before scoring and separate usefulness and superiority verdicts use only the frozen target-accuracy and target-advantage thresholds"
       },
       "file": "ptcna/evaluation.py",
       "id": "ptcna_evaluation_verdict_uses_frozen_thresholds"
@@ -1370,6 +1431,45 @@ export default defineMsdmdCollection({
     {
       "block": "CHECKS",
       "fields": {
+        "call": "self::test_critical_plan_is_balanced_and_digest_locked",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_critical_plan_digest_locked",
+        "requires": "python3",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_critical_evaluation.py",
+      "id": "check_ptcna_critical_plan_digest"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_result_digest_is_content_sensitive",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_critical_result_content_addressed",
+        "requires": "python3",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_critical_evaluation.py",
+      "id": "check_ptcna_critical_result_digest"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_comparator_failure_is_unresolved_and_parity_is_not_superiority",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_evaluation_propagates_backend_failure, ptcna_evaluation_verdict_uses_frozen_thresholds",
+        "requires": "python3",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_evaluation.py",
+      "id": "check_ptcna_comparator_failure_and_parity"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
         "call": "self::test_backend_failure_stops_with_preselected_status",
         "cleanup": "none",
         "mutates": "none",
@@ -1717,6 +1817,13 @@ export default defineMsdmdCollection({
       "kind": "owns",
       "source_block": "BOUNDARIES",
       "source_id": "prime_core_composition_runtime_boundary",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_critical_evaluation_local_receipt",
+      "kind": "owns",
+      "source_block": "BOUNDARIES",
+      "source_id": "ptcna_critical_evaluation_local_receipt",
       "to": "Erin Spencer"
     },
     {
@@ -2179,6 +2286,76 @@ export default defineMsdmdCollection({
       "kind": "requires",
       "source_block": "CHECKS",
       "source_id": "check_prime_core_ucns_scope",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_comparator_failure_and_parity",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_comparator_failure_and_parity",
+      "to": "self::test_comparator_failure_is_unresolved_and_parity_is_not_superiority"
+    },
+    {
+      "from": "check_ptcna_comparator_failure_and_parity",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_comparator_failure_and_parity",
+      "to": "ptcna_evaluation_propagates_backend_failure"
+    },
+    {
+      "from": "check_ptcna_comparator_failure_and_parity",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_comparator_failure_and_parity",
+      "to": "ptcna_evaluation_verdict_uses_frozen_thresholds"
+    },
+    {
+      "from": "check_ptcna_comparator_failure_and_parity",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_comparator_failure_and_parity",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_critical_plan_digest",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_critical_plan_digest",
+      "to": "self::test_critical_plan_is_balanced_and_digest_locked"
+    },
+    {
+      "from": "check_ptcna_critical_plan_digest",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_critical_plan_digest",
+      "to": "ptcna_critical_plan_digest_locked"
+    },
+    {
+      "from": "check_ptcna_critical_plan_digest",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_critical_plan_digest",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_critical_result_digest",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_critical_result_digest",
+      "to": "self::test_result_digest_is_content_sensitive"
+    },
+    {
+      "from": "check_ptcna_critical_result_digest",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_critical_result_digest",
+      "to": "ptcna_critical_result_content_addressed"
+    },
+    {
+      "from": "check_ptcna_critical_result_digest",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_critical_result_digest",
       "to": "python3"
     },
     {
@@ -2964,6 +3141,20 @@ export default defineMsdmdCollection({
       "source_block": "MODULE_BUILD",
       "source_id": "ptcna_contract_audit",
       "to": "vendored msdmd parser"
+    },
+    {
+      "from": "ptcna_critical_evaluation",
+      "kind": "owns",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_critical_evaluation",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_critical_evaluation",
+      "kind": "requires",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_critical_evaluation",
+      "to": "ptcna_frozen_evaluation"
     },
     {
       "from": "ptcna_fiq_host",

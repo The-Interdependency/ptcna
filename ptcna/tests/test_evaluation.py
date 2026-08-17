@@ -33,6 +33,14 @@ from ptcna.runtime import FALLBACK_BACKEND, PTCNA_BACKEND
 #   timeout: 30
 #   mutates: none
 #   cleanup: none
+#
+# id: check_ptcna_comparator_failure_and_parity
+#   proves: ptcna_evaluation_propagates_backend_failure, ptcna_evaluation_verdict_uses_frozen_thresholds
+#   call: self::test_comparator_failure_is_unresolved_and_parity_is_not_superiority
+#   requires: python3
+#   timeout: 30
+#   mutates: none
+#   cleanup: none
 # === END CHECKS ===
 
 
@@ -72,14 +80,14 @@ def _plan(**changes) -> EvaluationPlan:
             EvaluationCase("two", "two", "psi"),
         ),
         "minimum_target_accuracy": 1.0,
-        "maximum_target_deficit_vs_fallback": 0.0,
+        "minimum_target_advantage_vs_fallback": 0.0,
         "training_epochs": 0,
         "reward_outcome": 1.0,
         "repetitions": 1,
         "max_training_steps": 0,
         "max_case_evaluations": 2,
         "max_seconds": 10.0,
-        "backend_error_status": FALSIFIED,
+        "target_backend_error_status": FALSIFIED,
     }
     values.update(changes)
     return EvaluationPlan(**values)
@@ -112,9 +120,11 @@ def test_frozen_thresholds_produce_survival_and_falsification() -> None:
     falsified = evaluate(
         _plan(), target_factory=target_wrong, comparator_factory=fallback
     )
-    assert survived.status == SURVIVED_NOT_PROVED
+    assert survived.usefulness_status == SURVIVED_NOT_PROVED
+    assert survived.superiority_status == SURVIVED_NOT_PROVED
     assert survived.target_accuracy == 1.0
-    assert falsified.status == FALSIFIED
+    assert falsified.usefulness_status == FALSIFIED
+    assert falsified.superiority_status == FALSIFIED
     assert falsified.target_accuracy == 0.0
     assert falsified.comparator_accuracy == 1.0
 
@@ -129,7 +139,7 @@ def test_frozen_thresholds_produce_survival_and_falsification() -> None:
         target_factory=learning_target,
         comparator_factory=learning_fallback,
     )
-    assert learned.status == SURVIVED_NOT_PROVED
+    assert learned.usefulness_status == SURVIVED_NOT_PROVED
     assert learned.training_steps == 2
     assert learned.target_accuracy == 1.0
 
@@ -140,11 +150,35 @@ def test_backend_failure_stops_with_preselected_status() -> None:
         FALLBACK_BACKEND, {"one": "phi", "two": "psi"}
     )
     receipt = evaluate(
-        _plan(backend_error_status=FALSIFIED),
+        _plan(target_backend_error_status=FALSIFIED),
         target_factory=target,
         comparator_factory=fallback,
     )
-    assert receipt.status == FALSIFIED
+    assert receipt.usefulness_status == FALSIFIED
+    assert receipt.superiority_status == "UNRESOLVED"
     assert receipt.training_steps == 0
     assert receipt.case_evaluations == 0
-    assert receipt.failure_reason == "backend_error:RuntimeError"
+    assert receipt.failure_reason == "target_backend_error:RuntimeError"
+
+
+def test_comparator_failure_is_unresolved_and_parity_is_not_superiority() -> None:
+    target = lambda: _ScriptedBackend(
+        PTCNA_BACKEND, {"one": "phi", "two": "psi"}
+    )
+    comparator_error = lambda: _ErrorBackend(FALLBACK_BACKEND, {})
+    unresolved = evaluate(
+        _plan(), target_factory=target, comparator_factory=comparator_error
+    )
+    assert unresolved.usefulness_status == "UNRESOLVED"
+    assert unresolved.superiority_status == "UNRESOLVED"
+    assert unresolved.failure_reason == "comparator_backend_error:RuntimeError"
+
+    parity = evaluate(
+        _plan(minimum_target_advantage_vs_fallback=0.05),
+        target_factory=target,
+        comparator_factory=lambda: _ScriptedBackend(
+            FALLBACK_BACKEND, {"one": "phi", "two": "psi"}
+        ),
+    )
+    assert parity.usefulness_status == SURVIVED_NOT_PROVED
+    assert parity.superiority_status == FALSIFIED

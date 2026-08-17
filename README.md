@@ -84,18 +84,23 @@ plan = EvaluationPlan(
     plan_id="representative-workload-v1",
     workload=(EvaluationCase("case-1", "input", "phi"),),
     minimum_target_accuracy=0.80,
-    maximum_target_deficit_vs_fallback=0.00,
+    minimum_target_advantage_vs_fallback=0.05,
     training_epochs=3,
     reward_outcome=1.0,
     repetitions=3,
     max_training_steps=9,
     max_case_evaluations=3,
     max_seconds=30.0,
-    backend_error_status="FALSIFIED",
+    target_backend_error_status="FALSIFIED",
 )
 print(plan.digest)  # preserve this with the plan before execution
 receipt = evaluate(plan)
 ```
+
+`receipt.usefulness_status` answers whether the target meets its frozen absolute
+threshold. `receipt.superiority_status` independently answers whether it clears
+the frozen advantage over the fallback. Comparator parity can therefore falsify
+superiority without falsifying usefulness.
 
 The repository does not ship a pretend representative workload. Until one is
 frozen and executed, whether PTCNA works remains `hmmm`.
