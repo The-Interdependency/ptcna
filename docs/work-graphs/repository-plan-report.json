@@ -10,7 +10,7 @@
   },
   "source": {
     "branch": "main",
-    "commit": "d69c94a4a43cf4b5b286af047217c5624a8d4f3f",
+    "commit": "2e7096f7496820a947614c8d77c4028482c77606",
     "generated_at": "2026-08-17",
     "note": "This report describes the executable PTCNA 0.1.1 runtime at the cited main commit plus the current repo-owned plan. The 2026-08-17 policy correction removes an unauthorized evaluation-as-permission gate: intended architecture construction, dependable fallback construction, and evaluation are distinct work streams. Operational-shell and report-only maintenance do not upgrade runtime, mathematical, measurement, or architectural evidence standing."
   },
@@ -49,11 +49,11 @@
     }
   },
   "status": {
-    "state": "active alpha runtime; explicit target, fallback, and frozen-verdict interfaces are implemented under separate evidence identities",
-    "current_claim": "PTCNA implements one four-layer runtime in which reverse-mode gradients are owned by the neural layer while circle, seed, and core remain non-differentiating structural hosts. The exact default 157x7x7x53 initialization consumes and independently verifies a receipt from UCNS merge b7b6f35cce69c273860923489a1c8b5372d14eb0. The hashed-linear fallback remains separately attributed, EDCM remains external, and the critical 'does it work?' verdict remains unearned until a representative plan is frozen and executed.",
+    "state": "active alpha runtime; construction compatibility survives while the frozen critical in-sample usefulness and superiority claims are FALSIFIED",
+    "current_claim": "PTCNA implements one four-layer runtime in which reverse-mode gradients are owned by the neural layer while circle, seed, and core remain non-differentiating structural hosts. The exact default 157x7x7x53 initialization consumes and independently verifies a receipt from UCNS merge b7b6f35cce69c273860923489a1c8b5372d14eb0. Under the preregistered 18-case role-acquisition program, target accuracy was 0.3333333333 versus 0.9444444444 for the separately attributed hashed-linear fallback: absolute usefulness and comparator superiority are both FALSIFIED for that tested scope. EDCM remains external.",
     "latest_main_milestone": {
-      "commit": "4509d33419aa25e6a9cfef415055e378b8f37edc",
-      "description": "merged the reconciled four-layer v0.1.1 runtime with one CircleTensor, neural-only reverse-mode scalar ownership, fail-closed UCNS integration, and external EDCM measurement injection"
+      "commit": "2e7096f7496820a947614c8d77c4028482c77606",
+      "description": "sealed the preregistered critical evaluation result: usefulness FALSIFIED and superiority FALSIFIED for the declared in-sample role-acquisition scope"
     }
   },
   "delivered": [
@@ -89,29 +89,28 @@
     },
     {
       "surface": "frozen evaluation and terminal receipt API",
-      "status": "implemented and contract-tested infrastructure",
-      "boundary": "the API freezes training and scoring criteria and records verdicts but does not supply a representative workload or establish that either backend is useful"
+      "status": "executed with a sealed plan and result receipt",
+      "boundary": "target usefulness and superiority are FALSIFIED for the declared in-sample role-acquisition scope; the result does not revoke construction compatibility or establish generalization"
     }
   ],
   "active_frontier": [
     "keep the operational shell aligned with current skill-lib doctrine and supported GitHub Actions runtimes without changing PTCNA architectural evidence standing",
-    "freeze a representative 'does it work?' EvaluationPlan before outcome inspection, including workload, training epochs and reward, exact thresholds, repetitions, resource bounds, and failure propagation; the comparator identity, post-training metric, aggregation, stopping rule, and receipt schema are now executable",
-    "execute the preserved plan without repair or criterion change and record FALSIFIED, SURVIVED — not proved, or UNRESOLVED",
-    "qualify whether the hashed-linear fallback preserves useful operation on the representative workload rather than inferring utility from deterministic contract tests",
+    "preserve the frozen critical result and both FALSIFIED verdicts before any architectural repair or new hypothesis",
+    "route useful operation through the explicitly attributed hashed-linear fallback for this task surface without reporting it as PTCNA",
     "preserve exact UCNS receipt validation while evaluating the candidate architecture independently",
     "resolve whether the embedded ZetaEngine remains a bounded PTCNA-local measurement-to-learning adapter or should be removed in favor of separate ZFAE authority before further Zeta development",
     "test sustained-load and long-horizon state behavior through the explicit target/fallback runtime boundary"
   ],
   "next_actions": [
     {
-      "action": "preregister the critical 'does it work?' evaluation with EvaluationPlan before outcome inspection",
+      "action": "define a new architectural hypothesis before any repair experiment, without weakening or replacing the sealed critical result",
       "owner": "The-Interdependency/ptcna",
-      "dependency": "requires a representative labeled workload plus externally justified training, reward, accuracy, comparator-deficit, repetition, resource, and backend-error thresholds; construction remains permitted regardless"
+      "dependency": "the existing in-sample usefulness and superiority claims remain FALSIFIED; any successor claim requires a new preregistration and must preserve the fallback control"
     },
     {
-      "action": "record the terminal result before repair or criterion change",
+      "action": "use the separately attributed fallback where this role-acquisition behavior is required",
       "owner": "The-Interdependency/ptcna",
-      "dependency": "FALSIFIED routes useful operation to the fallback; SURVIVED — not proved preserves the architecture for the next bounded test; UNRESOLVED repairs only the failed prerequisite"
+      "dependency": "fallback usefulness survived this local acquisition program, but production utility and generalization remain unestablished"
     },
     {
       "action": "freeze the authority decision for the embedded ZetaEngine before modifying its learning role",
@@ -121,7 +120,7 @@
   ],
   "blocked": [
     "claiming continuous seven-fold UCNS geometry from the candidate initialization receipt remains blocked",
-    "claiming that PTCNA works, learns usefully, or is necessary or superior is blocked until the frozen evaluation earns that standing",
+    "claiming PTCNA usefulness or superiority for the tested role-acquisition scope is blocked by the sealed FALSIFIED results",
     "ZetaEngine ownership migration or expansion is blocked until the PTCNA-local versus separate-ZFAE authority boundary is frozen"
   ],
   "cross_repository_relations": [
@@ -172,9 +171,8 @@
   },
   "hmmm": [
     "continuous seven-fold geometry beyond the exact candidate-state receipt",
-    "whether the constructed PTCNA architecture works under the frozen representative evaluation",
-    "the exact representative workload and externally justified training epochs, reward, target threshold, comparator-deficit allowance, repetitions, resource bounds, and backend-error status for the implemented evaluation API",
-    "whether the implemented hashed-linear fallback preserves useful operation on that representative workload",
+    "whether a materially different, preregistered PTCNA learning hypothesis can survive without weakening the falsified role-acquisition claim",
+    "whether the hashed-linear fallback generalizes beyond the completed in-sample role-acquisition program",
     "whether the current ring sizes, heptagram propagation, prime constants, and fixed ring weights contain irreducible useful structure or historical accident",
     "the authority boundary and migration path between PTCNA's embedded ZetaEngine and The-Interdependency/zfae",
     "sustained-load behavior across the complete four-layer seam",
