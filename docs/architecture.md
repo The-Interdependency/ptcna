@@ -70,11 +70,38 @@ descriptive layer expansions.
 7. Rewire interdependent-lib (`ptcna` key/extra; rewrite stack canon).
 8. Archive `pcna`, `pcta`, `pcsa`.
 
-## Blockers for me
+## Construction and falsifiability contract
 
-- **Confirm I should create `The-Interdependency/ptcna`** (outward action).
-- **Add `pcsa` to session scope** — I need the core-layer source to migrate it.
-  (`pcna`, `pcta` already cloned.)
+Construction of the selected PTCNA architecture is active. It is not conditional
+on upstream validation, baseline superiority, or prior explanation of why its
+structure may work.
+
+Two implementation paths are required:
+
+1. Build the intended PTCNA architecture faithfully under PTCNA-local
+   provenance.
+2. Build and independently verify a dependable simpler fallback behind an
+   explicit interface.
+
+The fallback preserves useful operation if PTCNA fails. It does not replace,
+redefine, or grant permission to construct PTCNA.
+
+The critical falsifiability question is: **Does it work?** Freeze the
+representative workload, comparator, exact metrics and aggregation, thresholds,
+resource bounds, stopping rules, and failure propagation before inspecting
+outcomes. That preregistration governs the verdict, not whether construction may
+begin.
+
+Record `FALSIFIED`, `SURVIVED — not proved`, or `UNRESOLVED` before repair
+or criterion change. PTCNA-local prime and ring structures may be constructed
+now; only a claim that they are UCNS-produced remains suspended until an exact
+pinned UCNS receipt exists.
+
+Semantic authority for discovery-before-recovery remains with
+`The-Interdependency/metapat`; this correction consulted
+`metapat@53315e30c54aba881a5b48cbf395890e83ab05c5`,
+`POSTULATES.md`, Seventh Postulate. The reference is provenance, not copied
+METAPAT canon.
 
 ## Status log
 
