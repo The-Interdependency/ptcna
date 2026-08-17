@@ -24,6 +24,25 @@ Authority and invariants:
   consume an explicitly injected measurement provider; it must not maintain a
   shadow EDCM implementation.
 
+## Construction and evaluation boundary
+
+- Build the selected PTCNA architecture faithfully. Curiosity may select the
+  object of inquiry; neither upstream validation nor a simpler baseline grants
+  permission to construct it.
+- Build and maintain a dependable simpler fallback behind an explicit interface.
+  The fallback preserves useful operation if PTCNA fails; it must not silently
+  replace, redefine, or be reported as PTCNA.
+- "Does it work?" is the critical falsifiability question. Freeze the
+  representative workload, comparator, exact metrics and aggregation,
+  thresholds, resource bounds, stopping rules, and failure propagation before
+  inspecting outcomes. This freeze governs the verdict, not construction.
+- Build PTCNA-local prime and ring structures under local provenance. Claiming
+  those structures are UCNS-produced remains suspended until an exact pinned
+  UCNS receipt exists.
+- Record terminal status before repair: `FALSIFIED`, `SURVIVED — not proved`,
+  or `UNRESOLVED`. A simpler recovery method may supply the fallback; it does
+  not invalidate the architecture that selected the discovery path.
+
 Before changing code, load the applicable repo-local skills under
 `.agents/skills/`. All new or materially revised modules need self-declared
 `MODULE_BUILD`, `CONTRACTS`, and actual runtime `BOUNDARIES` metadata when the
