@@ -1,4 +1,4 @@
-# ratios: loc_comments=31:51 imports_exports=4:1 calls_definitions=1:0
+# ratios: loc_comments=41:51 imports_exports=4:1 calls_definitions=1:0
 """PTCNA — Prime Tensor Circled Neural Architecture.
 
 One architecture, four layers. Each layer's tensors divide into the next; every
@@ -20,9 +20,14 @@ __license__ = "MPL-2.0"
 
 from . import neural, circle, seed, core  # noqa: F401
 from .ucns_integration import (
+    UCNS_PRODUCER_COMMIT,
+    UCNS_RECEIPT_SHA256,
     UCNSIntegrationState,
     UCNSIntegrationStatus,
     UCNSIntegrationSuspended,
+    UCNSReceiptError,
+    consume_ucns_receipt,
+    load_bundled_ucns_receipt,
     require_ucns_integration,
     ucns_integration_status,
 )
@@ -76,9 +81,14 @@ __all__ = [
     "circle",
     "seed",
     "core",
+    "UCNS_PRODUCER_COMMIT",
+    "UCNS_RECEIPT_SHA256",
     "UCNSIntegrationState",
     "UCNSIntegrationStatus",
     "UCNSIntegrationSuspended",
+    "UCNSReceiptError",
+    "consume_ucns_receipt",
+    "load_bundled_ucns_receipt",
     "ucns_integration_status",
     "require_ucns_integration",
     "PTCNAEngine",
@@ -90,4 +100,4 @@ __all__ = [
     "evaluate",
     "__version__",
 ]
-# ratios: loc_comments=31:51 imports_exports=4:1 calls_definitions=1:0
+# ratios: loc_comments=41:51 imports_exports=4:1 calls_definitions=1:0

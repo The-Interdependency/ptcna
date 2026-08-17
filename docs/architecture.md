@@ -93,9 +93,8 @@ outcomes. That preregistration governs the verdict, not whether construction may
 begin.
 
 Record `FALSIFIED`, `SURVIVED — not proved`, or `UNRESOLVED` before repair
-or criterion change. PTCNA-local prime and ring structures may be constructed
-now; only a claim that they are UCNS-produced remains suspended until an exact
-pinned UCNS receipt exists.
+or criterion change. The exact default initialization may carry its pinned UCNS
+candidate provenance; other prime and ring structures remain PTCNA-local.
 
 The executable boundary lives in `ptcna.runtime`: `PTCNAEngine` reports all
 four live layers, `HashedLinearFallback` remains separately identified, and
@@ -104,6 +103,13 @@ enabled. `ptcna.evaluation` accepts only an immutable, digest-bearing
 `EvaluationPlan`, trains before scoring, and records the terminal verdict before repair. No
 representative workload is bundled; selecting one remains evidence work, not a
 construction prerequisite.
+
+The default core shape consumes a bundled receipt produced by exact UCNS merge
+`b7b6f35cce69c273860923489a1c8b5372d14eb0`. UCNS owns the candidate state
+contract and provenance; PTCNA validates that contract and independently checks
+the materialized byte stream. This replaces the former blanket suspension only
+for `157×7×7×53`. Other shapes retain typed suspension, and integration success
+does not transfer proof, efficacy, geometry-selection, or privacy standing.
 
 Semantic authority for discovery-before-recovery remains with
 `The-Interdependency/metapat`; this correction consulted

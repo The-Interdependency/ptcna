@@ -17,7 +17,7 @@
 > - **Current ownership:** `Scalar`, fixed seven-by-seven composition, and the
 >   UCNS carrier claims below are historical. Current code uses
 >   `ptcna.neural.NeuralScalar`, shared `ptcna.circle.CircleTensor`, variable
->   composition counts, local identities, and a typed suspended UCNS boundary.
+>   composition counts, local identities, and an exact-shape UCNS receipt boundary.
 
 # CLAUDE.md — prime_core (PTCA three-stratum core)
 
@@ -97,11 +97,10 @@ guard (5), routing steps (6). Stdlib `unittest` only — no pytest dependency.
 - **Validator resolved.** PTCNA vendors the bounded skill-lib collection and
   collects MODULE_BUILD, CONTRACTS, CHECKS, and BOUNDARIES declarations into
   `ptcna_msdmd.ts`.
-- **UCNS binding remains suspended.** The available UCNS source does not
-  expose the reviewed PTCNA-specific higher-gonol producer profile this layer
-  needs. Current code does not import archived `a0_safe`, `UCNSObject`, or
-  `factor_search` surfaces; it returns typed suspension and uses explicitly
-  local identities.
+- **UCNS binding is candidate scoped.** The default `157x7x7x53` initialization
+  consumes an exact reviewed UCNS receipt. Current code does not import archived
+  `a0_safe`, `UCNSObject`, or `factor_search` surfaces; unmatched shapes return
+  typed suspension and use explicitly local identities.
 - **Packaging resolved.** `prime_core` ships under
   `ptcna.core.prime_core` in the `ptcna` distribution.
 - **Seam under load.** The descend/ascend split is the whole experiment;

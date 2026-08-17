@@ -1,4 +1,4 @@
-# ratios: loc_comments=139:89 imports_exports=10:5 calls_definitions=28:11
+# ratios: loc_comments=145:89 imports_exports=10:5 calls_definitions=28:11
 """Compose fiqs through the shared circle and seed layers into a core.
 
 This module no longer defines duplicate ``Circle`` or ``Seed`` classes.
@@ -56,11 +56,11 @@ from .fiq import Fiq, wrap_tensor_fiq
 #   user_data_boundary: none
 #   admin_only: false
 #   tests: ptcna/core/prime_core/tests/test_ptca_core_stratified.py
-#   rollout: default enabled with UCNS integration explicitly suspended
+#   rollout: exact default shape consumes the pinned UCNS candidate receipt; all other shapes remain locally attributed
 #   rollback: remove prime-core exports; shared circle and seed layers remain available
 #   requires: ptcna_fiq_host, ptcna_circle_composition, ptcna_seed_composition, ptcna_ucns_integration
 #   since: 0.1.1
-#   unresolved: exact PTCNA-specific UCNS higher-gonol producer profile and sustained-load behavior
+#   unresolved: continuous seven-fold geometry, representative efficacy, production privacy, and sustained-load behavior
 # === END MODULE_BUILD ===
 
 # === CONTRACTS ===
@@ -74,10 +74,10 @@ from .fiq import Fiq, wrap_tensor_fiq
 #   then: core, seed, circle, and fiq hosts report requires_grad false and core exposes no backward operation
 #   class: safety
 #
-# id: prime_core_ucns_is_suspended
-#   given: a core is built before a PTCNA-specific UCNS producer profile exists
-#   then: the core carries the typed inactive UCNS status and local identities make no UCNS claim
-#   class: safety
+# id: prime_core_ucns_receipt_scope_is_exact
+#   given: a core is built with the exact 157x7x7x53 receipt-covered shape or a different shape
+#   then: only the exact shape carries active UCNS state provenance while every different shape remains suspended and locally attributed
+#   class: evidence
 #
 # id: prime_core_default_profile_is_stable
 #   given: build_core is called with the default CoreSpec
@@ -195,7 +195,7 @@ def build_core(
     init: float = 1.0,
     payload_factory: Optional[PayloadFactory] = None,
 ) -> Core:
-    """Build a complete local PTCNA core while UCNS remains suspended.
+    """Build a complete PTCNA core with shape-scoped UCNS attribution.
 
     ``payload_factory(seed, circle, tensor, tensor_dim, init)`` may return
     neural-owned objects. When omitted, each fiq hosts plain floats.
@@ -248,7 +248,13 @@ def build_core(
                 identity=f"ptcna-local:seed:{seed_index}",
             )
         )
-    return Core(seeds, spec, ucns_status=ucns_integration_status())
+    state_shape = (
+        spec.seed_count,
+        spec.circles_per_seed,
+        spec.tensors_per_circle,
+        spec.tensor_dim,
+    )
+    return Core(seeds, spec, ucns_status=ucns_integration_status(state_shape))
 
 
 Circle = CircleTensor
@@ -264,4 +270,4 @@ __all__ = [
     "compose_seed",
     "heptagram_order",
 ]
-# ratios: loc_comments=139:89 imports_exports=10:5 calls_definitions=28:11
+# ratios: loc_comments=145:89 imports_exports=10:5 calls_definitions=28:11

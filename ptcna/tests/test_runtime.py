@@ -86,6 +86,9 @@ def test_target_reports_all_four_live_layers() -> None:
     assert result["layers"]["core"]["seed_count"] == 157
     assert result["layers"]["core"]["tensor_leaves"] == 7693
     assert result["layers"]["core"]["param_positions"] == 407729
+    assert result["layers"]["core"]["ucns_state"] == "active"
+    assert result["layers"]["core"]["ucns_adapter_active"] is True
+    assert result["layers"]["core"]["provenance"] == "ucns-candidate-state"
 
 
 def test_fallback_is_deterministic_bounded_and_distinct() -> None:

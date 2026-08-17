@@ -10,7 +10,7 @@
   },
   "source": {
     "branch": "main",
-    "commit": "4509d33419aa25e6a9cfef415055e378b8f37edc",
+    "commit": "d69c94a4a43cf4b5b286af047217c5624a8d4f3f",
     "generated_at": "2026-08-17",
     "note": "This report describes the executable PTCNA 0.1.1 runtime at the cited main commit plus the current repo-owned plan. The 2026-08-17 policy correction removes an unauthorized evaluation-as-permission gate: intended architecture construction, dependable fallback construction, and evaluation are distinct work streams. Operational-shell and report-only maintenance do not upgrade runtime, mathematical, measurement, or architectural evidence standing."
   },
@@ -34,7 +34,7 @@
       "UCNS proof or representation status does not establish PTCNA learning efficacy",
       "EDCM measurement results do not become PTCNA-owned evidence merely because a caller injects them",
       "a functioning four-layer implementation does not establish that prime structure, current ring constants, or current weight topology are necessary or superior",
-      "suspended integration remains suspended until an exact producer contract is independently available and reviewed",
+      "a validated UCNS candidate-state receipt transfers neither proof status nor PTCNA efficacy standing",
       "upstream evidence and simpler-baseline performance inform attribution, evaluation, and fallback routing; they neither grant nor deny permission to construct the selected PTCNA architecture"
     ]
   },
@@ -50,7 +50,7 @@
   },
   "status": {
     "state": "active alpha runtime; explicit target, fallback, and frozen-verdict interfaces are implemented under separate evidence identities",
-    "current_claim": "PTCNA 0.1.1 implements one four-layer runtime in which reverse-mode gradients are owned by the neural layer while circle, seed, and core remain non-differentiating structural hosts. The unreleased package surface adds an attributed four-layer target receipt, an independently test-backed hashed-linear fallback, explicit failover, and immutable evaluation plans. UCNS higher-gonol attribution remains suspended, EDCM remains external, and the critical 'does it work?' verdict remains unearned until a representative plan is frozen and executed.",
+    "current_claim": "PTCNA implements one four-layer runtime in which reverse-mode gradients are owned by the neural layer while circle, seed, and core remain non-differentiating structural hosts. The exact default 157x7x7x53 initialization consumes and independently verifies a receipt from UCNS merge b7b6f35cce69c273860923489a1c8b5372d14eb0. The hashed-linear fallback remains separately attributed, EDCM remains external, and the critical 'does it work?' verdict remains unearned until a representative plan is frozen and executed.",
     "latest_main_milestone": {
       "commit": "4509d33419aa25e6a9cfef415055e378b8f37edc",
       "description": "merged the reconciled four-layer v0.1.1 runtime with one CircleTensor, neural-only reverse-mode scalar ownership, fail-closed UCNS integration, and external EDCM measurement injection"
@@ -69,8 +69,8 @@
     },
     {
       "surface": "UCNS integration boundary",
-      "status": "typed suspended fail-closed adapter",
-      "boundary": "no PTCNA-specific higher-gonol producer profile is currently authorized or consumed"
+      "status": "exact receipt consumer active for 157x7x7x53; all other shapes suspended",
+      "boundary": "candidate construction compatibility does not select geometry or transfer proof, efficacy, or privacy standing"
     },
     {
       "surface": "external measurement boundary",
@@ -98,7 +98,7 @@
     "freeze a representative 'does it work?' EvaluationPlan before outcome inspection, including workload, training epochs and reward, exact thresholds, repetitions, resource bounds, and failure propagation; the comparator identity, post-training metric, aggregation, stopping rule, and receipt schema are now executable",
     "execute the preserved plan without repair or criterion change and record FALSIFIED, SURVIVED — not proved, or UNRESOLVED",
     "qualify whether the hashed-linear fallback preserves useful operation on the representative workload rather than inferring utility from deterministic contract tests",
-    "consume exact UCNS producer receipts when available for UCNS attribution while allowing locally attributed PTCNA prime and ring construction to continue",
+    "preserve exact UCNS receipt validation while evaluating the candidate architecture independently",
     "resolve whether the embedded ZetaEngine remains a bounded PTCNA-local measurement-to-learning adapter or should be removed in favor of separate ZFAE authority before further Zeta development",
     "test sustained-load and long-horizon state behavior through the explicit target/fallback runtime boundary"
   ],
@@ -120,14 +120,14 @@
     }
   ],
   "blocked": [
-    "claiming that PTCNA-local prime or ring construction is UCNS-produced is blocked until an exact reviewed PTCNA-specific UCNS producer receipt exists",
+    "claiming continuous seven-fold UCNS geometry from the candidate initialization receipt remains blocked",
     "claiming that PTCNA works, learns usefully, or is necessary or superior is blocked until the frozen evaluation earns that standing",
     "ZetaEngine ownership migration or expansion is blocked until the PTCNA-local versus separate-ZFAE authority boundary is frozen"
   ],
   "cross_repository_relations": [
     {
       "repository": "The-Interdependency/ucns",
-      "relation": "mathematical and relational producer authority; exact UCNS attribution requires a reviewed producer receipt, while PTCNA-local construction proceeds under local provenance",
+      "relation": "mathematical and relational producer authority for the exact pinned 157x7x7x53 candidate-state receipt; PTCNA owns its consumption and inference",
       "authority_transfer": false,
       "proof_status_transfer": false
     },
@@ -171,7 +171,7 @@
     "quality_workflow": ".github/workflows/quality.yml"
   },
   "hmmm": [
-    "the exact PTCNA-specific UCNS producer profile and receipt for any structure later claimed as UCNS-produced",
+    "continuous seven-fold geometry beyond the exact candidate-state receipt",
     "whether the constructed PTCNA architecture works under the frozen representative evaluation",
     "the exact representative workload and externally justified training epochs, reward, target threshold, comparator-deficit allowance, repetitions, resource bounds, and backend-error status for the implemented evaluation API",
     "whether the implemented hashed-linear fallback preserves useful operation on that representative workload",

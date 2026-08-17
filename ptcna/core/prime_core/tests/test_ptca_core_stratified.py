@@ -33,9 +33,9 @@ from ptcna.ucns_integration import UCNSIntegrationState
 #   mutates: none
 #   cleanup: none
 #
-# id: check_prime_core_suspended_ucns
-#   proves: prime_core_ucns_is_suspended
-#   call: self::test_core_carries_suspended_ucns_status_and_local_ids
+# id: check_prime_core_ucns_scope
+#   proves: prime_core_ucns_receipt_scope_is_exact
+#   call: self::test_ucns_attribution_is_exactly_shape_scoped
 #   requires: python3
 #   timeout: 20
 #   mutates: none
@@ -119,7 +119,10 @@ def test_neural_payload_gradients_remain_neural_owned() -> None:
     assert not hasattr(core, "backward")
 
 
-def test_core_carries_suspended_ucns_status_and_local_ids() -> None:
+def test_ucns_attribution_is_exactly_shape_scoped() -> None:
+    exact = build_core(init=0.0)
+    assert exact.ucns_status.state is UCNSIntegrationState.ACTIVE
+    assert exact.ucns_status.adapter_active is True
     core = build_core(SMALL)
     assert core.ucns_status.state is UCNSIntegrationState.SUSPENDED
     assert core.ucns_status.adapter_active is False

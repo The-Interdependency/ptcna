@@ -1,4 +1,4 @@
-# ratios: loc_comments=33:56 imports_exports=5:3 calls_definitions=14:2
+# ratios: loc_comments=33:57 imports_exports=5:3 calls_definitions=14:2
 """Compose neural payloads into a non-differentiating circle tensor.
 
 Usage:
@@ -8,8 +8,9 @@ Usage:
     circle = compose_circle(["n0", "n1", "n2"], routing_step=2)
     assert circle.at(circle.anchor_order[0]) == "n0"
 
-The routing is local PTCNA structure. It is deliberately not labeled as UCNS
-while the PTCNA-specific UCNS higher-gonol integration is suspended.
+The routing is local PTCNA structure. The exact default aggregate may carry its
+separate UCNS candidate-state receipt; this constructor does not grant that
+provenance to arbitrary circles.
 """
 from __future__ import annotations
 
@@ -106,4 +107,4 @@ def compose_circle(
 
 
 __all__ = ["star_polygon_order", "compose_circle"]
-# ratios: loc_comments=33:56 imports_exports=5:3 calls_definitions=14:2
+# ratios: loc_comments=33:57 imports_exports=5:3 calls_definitions=14:2

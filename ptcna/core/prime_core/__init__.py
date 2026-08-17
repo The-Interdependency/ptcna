@@ -7,7 +7,7 @@ Public surface (handoff §2 MODULE_BUILD):
 Fiqs host payload vectors opaquely. The core, seeds, circles, and fiqs are all
 non-differentiating. Neural-owned payloads may be supplied with
 ``build_core(..., payload_factory=...)`` without moving gradient ownership out
-of ``ptcna.neural``. UCNS integration is explicitly suspended.
+of ``ptcna.neural``. UCNS attribution is exact-shape and receipt scoped.
 """
 from __future__ import annotations
 

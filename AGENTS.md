@@ -17,9 +17,9 @@ Authority and invariants:
   variable.
 - Fiqs gate internal core propagation according to Fickian field motion. That
   is timing, not gradient descent.
-- UCNS integration is suspended until a PTCNA-specific higher-gonol producer
-  profile exists. Do not activate archived surfaces such as `a0_safe`,
-  `UCNSObject`, or `factor_search`.
+- UCNS integration is active only for the exact pinned `157x7x7x53` candidate
+  receipt. Other shapes remain suspended. Do not activate archived surfaces
+  such as `a0_safe`, `UCNSObject`, or `factor_search`.
 - EDCM measurement authority belongs to `The-Interdependency/edcm`. PTCNA may
   consume an explicitly injected measurement provider; it must not maintain a
   shadow EDCM implementation.
@@ -36,9 +36,8 @@ Authority and invariants:
   representative workload, comparator, exact metrics and aggregation,
   thresholds, resource bounds, stopping rules, and failure propagation before
   inspecting outcomes. This freeze governs the verdict, not construction.
-- Build PTCNA-local prime and ring structures under local provenance. Claiming
-  those structures are UCNS-produced remains suspended until an exact pinned
-  UCNS receipt exists.
+- Build non-receipted PTCNA prime and ring structures under local provenance.
+  Only the exact receipt-covered state may carry UCNS candidate provenance.
 - Record terminal status before repair: `FALSIFIED`, `SURVIVED — not proved`,
   or `UNRESOLVED`. A simpler recovery method may supply the fallback; it does
   not invalidate the architecture that selected the discovery path.
@@ -78,6 +77,6 @@ collection check, ratios gate, wheel smoke test, and downstream
 
 ## hmmm
 
-- A PTCNA-specific UCNS higher-gonol producer identity does not yet exist.
+- Continuous seven-fold geometry is not established by the candidate receipt.
 - Training and timing behavior across the complete four-layer seam remains
   unfalsified under sustained load.

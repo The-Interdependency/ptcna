@@ -311,12 +311,12 @@ export default defineMsdmdCollection({
     {
       "block": "CONTRACTS",
       "fields": {
-        "class": "safety",
-        "given": "a core is built before a PTCNA-specific UCNS producer profile exists",
-        "then": "the core carries the typed inactive UCNS status and local identities make no UCNS claim"
+        "class": "evidence",
+        "given": "a core is built with the exact 157x7x7x53 receipt-covered shape or a different shape",
+        "then": "only the exact shape carries active UCNS state provenance while every different shape remains suspended and locally attributed"
       },
       "file": "ptcna/core/prime_core/core.py",
-      "id": "prime_core_ucns_is_suspended"
+      "id": "prime_core_ucns_receipt_scope_is_exact"
     },
     {
       "block": "CONTRACTS",
@@ -341,12 +341,12 @@ export default defineMsdmdCollection({
         "public_surface": "CoreSpec, Core, build_core, compose_circle, compose_seed, heptagram_order",
         "requires": "ptcna_fiq_host, ptcna_circle_composition, ptcna_seed_composition, ptcna_ucns_integration",
         "rollback": "remove prime-core exports; shared circle and seed layers remain available",
-        "rollout": "default enabled with UCNS integration explicitly suspended",
+        "rollout": "exact default shape consumes the pinned UCNS candidate receipt; all other shapes remain locally attributed",
         "since": "0.1.1",
         "storage_boundary": "none",
         "summary": "composes opaque fiqs through the shared circle and seed types into a non-differentiating core",
         "tests": "ptcna/core/prime_core/tests/test_ptca_core_stratified.py",
-        "unresolved": "exact PTCNA-specific UCNS higher-gonol producer profile and sustained-load behavior",
+        "unresolved": "continuous seven-fold geometry, representative efficacy, production privacy, and sustained-load behavior",
         "user_data_boundary": "none"
       },
       "file": "ptcna/core/prime_core/core.py",
@@ -507,15 +507,15 @@ export default defineMsdmdCollection({
     {
       "block": "CHECKS",
       "fields": {
-        "call": "self::test_core_carries_suspended_ucns_status_and_local_ids",
+        "call": "self::test_ucns_attribution_is_exactly_shape_scoped",
         "cleanup": "none",
         "mutates": "none",
-        "proves": "prime_core_ucns_is_suspended",
+        "proves": "prime_core_ucns_receipt_scope_is_exact",
         "requires": "python3",
         "timeout": "20"
       },
       "file": "ptcna/core/prime_core/tests/test_ptca_core_stratified.py",
-      "id": "check_prime_core_suspended_ucns"
+      "id": "check_prime_core_ucns_scope"
     },
     {
       "block": "BOUNDARIES",
@@ -1465,28 +1465,54 @@ export default defineMsdmdCollection({
     {
       "block": "CHECKS",
       "fields": {
-        "call": "self::test_archived_named_package_cannot_activate",
-        "cleanup": "module_restore",
+        "call": "self::test_materialized_state_identity_is_reported",
+        "cleanup": "none",
         "mutates": "none",
-        "proves": "ptcna_ucns_fails_closed_without_profile",
-        "requires": "python3",
+        "proves": "ptcna_ucns_state_is_independently_verified",
+        "requires": "python3, numpy, ucns",
         "timeout": "10"
       },
       "file": "ptcna/tests/test_ucns_integration.py",
-      "id": "check_ptcna_ucns_fails_closed"
+      "id": "check_ptcna_ucns_independent_state"
     },
     {
       "block": "CHECKS",
       "fields": {
-        "call": "self::test_require_raises_typed_status",
+        "call": "self::test_bundled_receipt_activates_exact_pinned_producer",
         "cleanup": "none",
         "mutates": "none",
-        "proves": "ptcna_ucns_suspension_is_typed",
-        "requires": "python3",
+        "proves": "ptcna_ucns_receipt_is_producer_validated",
+        "requires": "python3, numpy, ucns",
         "timeout": "10"
       },
       "file": "ptcna/tests/test_ucns_integration.py",
-      "id": "check_ptcna_ucns_typed_suspension"
+      "id": "check_ptcna_ucns_producer_validation"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_uncovered_shape_is_explicitly_suspended",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_ucns_tampering_fails_closed",
+        "requires": "python3, numpy, ucns",
+        "timeout": "10"
+      },
+      "file": "ptcna/tests/test_ucns_integration.py",
+      "id": "check_ptcna_ucns_shape_suspension"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_tampered_receipt_is_rejected",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_ucns_tampering_fails_closed",
+        "requires": "python3, numpy, ucns",
+        "timeout": "10"
+      },
+      "file": "ptcna/tests/test_ucns_integration.py",
+      "id": "check_ptcna_ucns_tamper_rejection"
     },
     {
       "block": "BOUNDARIES",
@@ -1497,9 +1523,9 @@ export default defineMsdmdCollection({
         "owner": "Erin Spencer",
         "pii": "none",
         "secrets": "none",
-        "since": "0.1.1",
-        "storage_boundary": "none",
-        "summary": "declares an inactive local integration boundary and performs no UCNS import, network, storage, or user-data access",
+        "since": "unreleased",
+        "storage_boundary": "read bundled immutable receipt",
+        "summary": "validates a bundled immutable producer receipt and materializes deterministic in-memory state without network, authentication, user-data, or administrative effects",
         "user_data_boundary": "none"
       },
       "file": "ptcna/ucns_integration.py",
@@ -1508,42 +1534,52 @@ export default defineMsdmdCollection({
     {
       "block": "CONTRACTS",
       "fields": {
-        "class": "safety",
-        "given": "any installed package named ucns, including one exposing archived a0_safe or UCNSObject surfaces",
-        "then": "PTCNA reports a suspended inactive adapter and never activates by package-name discovery"
+        "class": "evidence",
+        "given": "PTCNA consumes a UCNS candidate-state receipt",
+        "then": "the exact pinned UCNS validator accepts every authority-bearing field before PTCNA materializes state"
       },
       "file": "ptcna/ucns_integration.py",
-      "id": "ptcna_ucns_fails_closed_without_profile"
+      "id": "ptcna_ucns_receipt_is_producer_validated"
     },
     {
       "block": "CONTRACTS",
       "fields": {
         "class": "correctness",
-        "given": "a caller requires UCNS integration before a PTCNA-specific producer profile exists",
-        "then": "UCNSIntegrationSuspended is raised with the inspectable suspended status"
+        "given": "the producer receipt passes UCNS validation",
+        "then": "PTCNA independently materializes C-order little-endian float64 positive-zero state and matches its shape, byte count, and digest"
       },
       "file": "ptcna/ucns_integration.py",
-      "id": "ptcna_ucns_suspension_is_typed"
+      "id": "ptcna_ucns_state_is_independently_verified"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "safety",
+        "given": "receipt content or expected state shape differs",
+        "then": "consumption raises or returns an explicit suspended status without substituting PTCNA-local provenance"
+      },
+      "file": "ptcna/ucns_integration.py",
+      "id": "ptcna_ucns_tampering_fails_closed"
     },
     {
       "block": "MODULE_BUILD",
       "fields": {
         "admin_only": "false",
         "auth_boundary": "none",
-        "internal_surface": "_STATUS",
+        "internal_surface": "_receipt_status, _suspended_status",
         "module_kind": "adapter",
         "module_name": "ucns_integration",
         "network_boundary": "none",
         "owner": "Erin Spencer",
-        "public_surface": "UCNSIntegrationState, UCNSIntegrationStatus, UCNSIntegrationSuspended, ucns_integration_status, require_ucns_integration",
-        "requires": "none",
-        "rollback": "remove the integration export; local PTCNA composition remains available",
-        "rollout": "always suspended until an exact reviewed PTCNA producer profile replaces this module",
-        "since": "0.1.1",
-        "storage_boundary": "none",
-        "summary": "exposes a typed suspended UCNS state until a PTCNA-specific higher-gonol producer profile exists",
+        "public_surface": "UCNSIntegrationState, UCNSIntegrationStatus, UCNSReceiptError, consume_ucns_receipt, load_bundled_ucns_receipt, ucns_integration_status, require_ucns_integration",
+        "requires": "ucns_ptcna_candidate_state",
+        "rollback": "restore typed suspension while retaining PTCNA-local composition and fallback",
+        "rollout": "active only for the exact bundled producer receipt and matching state contract",
+        "since": "unreleased",
+        "storage_boundary": "read bundled immutable receipt",
+        "summary": "consumes the exactly pinned UCNS 157x7x7x53 candidate receipt and independently verifies the target state bytes",
         "tests": "ptcna/tests/test_ucns_integration.py",
-        "unresolved": "exact PTCNA-specific UCNS producer profile identity and higher-gonol composition law",
+        "unresolved": "continuous seven-fold geometry, representative efficacy, and production privacy",
         "user_data_boundary": "none"
       },
       "file": "ptcna/ucns_integration.py",
@@ -2103,24 +2139,24 @@ export default defineMsdmdCollection({
       "to": "python3"
     },
     {
-      "from": "check_prime_core_suspended_ucns",
+      "from": "check_prime_core_ucns_scope",
       "kind": "calls",
       "source_block": "CHECKS",
-      "source_id": "check_prime_core_suspended_ucns",
-      "to": "self::test_core_carries_suspended_ucns_status_and_local_ids"
+      "source_id": "check_prime_core_ucns_scope",
+      "to": "self::test_ucns_attribution_is_exactly_shape_scoped"
     },
     {
-      "from": "check_prime_core_suspended_ucns",
+      "from": "check_prime_core_ucns_scope",
       "kind": "claims_proves",
       "source_block": "CHECKS",
-      "source_id": "check_prime_core_suspended_ucns",
-      "to": "prime_core_ucns_is_suspended"
+      "source_id": "check_prime_core_ucns_scope",
+      "to": "prime_core_ucns_receipt_scope_is_exact"
     },
     {
-      "from": "check_prime_core_suspended_ucns",
+      "from": "check_prime_core_ucns_scope",
       "kind": "requires",
       "source_block": "CHECKS",
-      "source_id": "check_prime_core_suspended_ucns",
+      "source_id": "check_prime_core_ucns_scope",
       "to": "python3"
     },
     {
@@ -2348,46 +2384,144 @@ export default defineMsdmdCollection({
       "to": "python3"
     },
     {
-      "from": "check_ptcna_ucns_fails_closed",
+      "from": "check_ptcna_ucns_independent_state",
       "kind": "calls",
       "source_block": "CHECKS",
-      "source_id": "check_ptcna_ucns_fails_closed",
-      "to": "self::test_archived_named_package_cannot_activate"
+      "source_id": "check_ptcna_ucns_independent_state",
+      "to": "self::test_materialized_state_identity_is_reported"
     },
     {
-      "from": "check_ptcna_ucns_fails_closed",
+      "from": "check_ptcna_ucns_independent_state",
       "kind": "claims_proves",
       "source_block": "CHECKS",
-      "source_id": "check_ptcna_ucns_fails_closed",
-      "to": "ptcna_ucns_fails_closed_without_profile"
+      "source_id": "check_ptcna_ucns_independent_state",
+      "to": "ptcna_ucns_state_is_independently_verified"
     },
     {
-      "from": "check_ptcna_ucns_fails_closed",
+      "from": "check_ptcna_ucns_independent_state",
       "kind": "requires",
       "source_block": "CHECKS",
-      "source_id": "check_ptcna_ucns_fails_closed",
+      "source_id": "check_ptcna_ucns_independent_state",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_ucns_independent_state",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_independent_state",
       "to": "python3"
     },
     {
-      "from": "check_ptcna_ucns_typed_suspension",
-      "kind": "calls",
-      "source_block": "CHECKS",
-      "source_id": "check_ptcna_ucns_typed_suspension",
-      "to": "self::test_require_raises_typed_status"
-    },
-    {
-      "from": "check_ptcna_ucns_typed_suspension",
-      "kind": "claims_proves",
-      "source_block": "CHECKS",
-      "source_id": "check_ptcna_ucns_typed_suspension",
-      "to": "ptcna_ucns_suspension_is_typed"
-    },
-    {
-      "from": "check_ptcna_ucns_typed_suspension",
+      "from": "check_ptcna_ucns_independent_state",
       "kind": "requires",
       "source_block": "CHECKS",
-      "source_id": "check_ptcna_ucns_typed_suspension",
+      "source_id": "check_ptcna_ucns_independent_state",
+      "to": "ucns"
+    },
+    {
+      "from": "check_ptcna_ucns_producer_validation",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_producer_validation",
+      "to": "self::test_bundled_receipt_activates_exact_pinned_producer"
+    },
+    {
+      "from": "check_ptcna_ucns_producer_validation",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_producer_validation",
+      "to": "ptcna_ucns_receipt_is_producer_validated"
+    },
+    {
+      "from": "check_ptcna_ucns_producer_validation",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_producer_validation",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_ucns_producer_validation",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_producer_validation",
       "to": "python3"
+    },
+    {
+      "from": "check_ptcna_ucns_producer_validation",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_producer_validation",
+      "to": "ucns"
+    },
+    {
+      "from": "check_ptcna_ucns_shape_suspension",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_shape_suspension",
+      "to": "self::test_uncovered_shape_is_explicitly_suspended"
+    },
+    {
+      "from": "check_ptcna_ucns_shape_suspension",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_shape_suspension",
+      "to": "ptcna_ucns_tampering_fails_closed"
+    },
+    {
+      "from": "check_ptcna_ucns_shape_suspension",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_shape_suspension",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_ucns_shape_suspension",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_shape_suspension",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_ucns_shape_suspension",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_shape_suspension",
+      "to": "ucns"
+    },
+    {
+      "from": "check_ptcna_ucns_tamper_rejection",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_tamper_rejection",
+      "to": "self::test_tampered_receipt_is_rejected"
+    },
+    {
+      "from": "check_ptcna_ucns_tamper_rejection",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_tamper_rejection",
+      "to": "ptcna_ucns_tampering_fails_closed"
+    },
+    {
+      "from": "check_ptcna_ucns_tamper_rejection",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_tamper_rejection",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_ucns_tamper_rejection",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_tamper_rejection",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_ucns_tamper_rejection",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_ucns_tamper_rejection",
+      "to": "ucns"
     },
     {
       "from": "check_seed_non_differentiating",
@@ -2940,7 +3074,7 @@ export default defineMsdmdCollection({
       "kind": "requires",
       "source_block": "MODULE_BUILD",
       "source_id": "ptcna_ucns_integration",
-      "to": "none"
+      "to": "ucns_ptcna_candidate_state"
     },
     {
       "from": "seed_constants",
