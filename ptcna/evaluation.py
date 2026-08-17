@@ -1,4 +1,4 @@
-# ratios: loc_comments=355:71 imports_exports=10:5 calls_definitions=87:11
+# ratios: loc_comments=395:71 imports_exports=10:5 calls_definitions=92:11
 """Frozen target-versus-fallback evaluation and immutable verdict receipt.
 
 Usage:
@@ -9,14 +9,14 @@ Usage:
         plan_id="representative-workload-v1",
         workload=(EvaluationCase("case-1", "input", "phi"),),
         minimum_target_accuracy=0.80,
-        maximum_target_deficit_vs_fallback=0.00,
+        minimum_target_advantage_vs_fallback=0.05,
         training_epochs=3,
         reward_outcome=1.0,
         repetitions=3,
         max_training_steps=9,
         max_case_evaluations=3,
         max_seconds=30.0,
-        backend_error_status="FALSIFIED",
+        target_backend_error_status="FALSIFIED",
     )
     receipt = evaluate(plan)
 
@@ -71,12 +71,12 @@ from .runtime import (
 #
 # id: ptcna_evaluation_verdict_uses_frozen_thresholds
 #   given: target and fallback complete the frozen workload
-#   then: training occurs before scoring and the terminal verdict is FALSIFIED or SURVIVED — not proved using only the plan's post-training accuracy and comparator-deficit thresholds
+#   then: training occurs before scoring and separate usefulness and superiority verdicts use only the frozen target-accuracy and target-advantage thresholds
 #   class: evidence
 #
 # id: ptcna_evaluation_propagates_backend_failure
 #   given: either backend errors before completing the frozen workload
-#   then: evaluation stops and records the plan's preselected backend_error_status before any repair or criterion change
+#   then: evaluation stops and records the plan's preselected target/comparator failure propagation before any repair or criterion change
 #   class: evidence
 # === END CONTRACTS ===
 
@@ -132,14 +132,15 @@ class EvaluationPlan:
     plan_id: str
     workload: tuple[EvaluationCase, ...]
     minimum_target_accuracy: float
-    maximum_target_deficit_vs_fallback: float
+    minimum_target_advantage_vs_fallback: float
     training_epochs: int
     reward_outcome: float
     repetitions: int
     max_training_steps: int
     max_case_evaluations: int
     max_seconds: float
-    backend_error_status: Literal["FALSIFIED", "UNRESOLVED"]
+    target_backend_error_status: Literal["FALSIFIED"]
+    comparator_backend_error_status: Literal["UNRESOLVED"] = UNRESOLVED
     target_backend: str = PTCNA_BACKEND
     comparator_backend: str = FALLBACK_BACKEND
     metric: str = "post_training_winner_accuracy"
@@ -163,7 +164,7 @@ class EvaluationPlan:
             raise ValueError("workload case_id values must be unique")
         for field_name in (
             "minimum_target_accuracy",
-            "maximum_target_deficit_vs_fallback",
+            "minimum_target_advantage_vs_fallback",
         ):
             value = float(getattr(self, field_name))
             if not math.isfinite(value) or not 0.0 <= value <= 1.0:
@@ -202,8 +203,10 @@ class EvaluationPlan:
             )
         if not math.isfinite(self.max_seconds) or self.max_seconds <= 0.0:
             raise ValueError("max_seconds must be finite and positive")
-        if self.backend_error_status not in {FALSIFIED, UNRESOLVED}:
-            raise ValueError("backend_error_status must be FALSIFIED or UNRESOLVED")
+        if self.target_backend_error_status != FALSIFIED:
+            raise ValueError("target_backend_error_status must be FALSIFIED")
+        if self.comparator_backend_error_status != UNRESOLVED:
+            raise ValueError("comparator_backend_error_status must be UNRESOLVED")
         if self.target_backend == self.comparator_backend:
             raise ValueError("target and comparator backend identities must differ")
         if (
@@ -227,8 +230,8 @@ class EvaluationPlan:
             "metric": self.metric,
             "aggregation": self.aggregation,
             "minimum_target_accuracy": self.minimum_target_accuracy,
-            "maximum_target_deficit_vs_fallback": (
-                self.maximum_target_deficit_vs_fallback
+            "minimum_target_advantage_vs_fallback": (
+                self.minimum_target_advantage_vs_fallback
             ),
             "training_epochs": self.training_epochs,
             "reward_outcome": self.reward_outcome,
@@ -237,7 +240,8 @@ class EvaluationPlan:
             "max_case_evaluations": self.max_case_evaluations,
             "max_seconds": self.max_seconds,
             "stopping_rule": self.stopping_rule,
-            "backend_error_status": self.backend_error_status,
+            "target_backend_error_status": self.target_backend_error_status,
+            "comparator_backend_error_status": self.comparator_backend_error_status,
             "resource_limit_status": self.resource_limit_status,
         }
 
@@ -253,12 +257,13 @@ class EvaluationPlan:
 class EvaluationReceipt:
     plan_id: str
     plan_digest: str
-    status: TerminalStatus
+    usefulness_status: TerminalStatus
+    superiority_status: TerminalStatus
     target_backend: str
     comparator_backend: str
     target_accuracy: float | None
     comparator_accuracy: float | None
-    target_deficit_vs_fallback: float | None
+    target_advantage_vs_fallback: float | None
     training_steps: int
     case_evaluations: int
     duration_ms: float
@@ -268,12 +273,13 @@ class EvaluationReceipt:
         return {
             "plan_id": self.plan_id,
             "plan_digest": self.plan_digest,
-            "status": self.status,
+            "usefulness_status": self.usefulness_status,
+            "superiority_status": self.superiority_status,
             "target_backend": self.target_backend,
             "comparator_backend": self.comparator_backend,
             "target_accuracy": self.target_accuracy,
             "comparator_accuracy": self.comparator_accuracy,
-            "target_deficit_vs_fallback": self.target_deficit_vs_fallback,
+            "target_advantage_vs_fallback": self.target_advantage_vs_fallback,
             "training_steps": self.training_steps,
             "case_evaluations": self.case_evaluations,
             "duration_ms": self.duration_ms,
@@ -288,25 +294,27 @@ def _receipt(
     plan: EvaluationPlan,
     started: float,
     *,
-    status: TerminalStatus,
+    usefulness_status: TerminalStatus,
+    superiority_status: TerminalStatus,
     training_steps: int,
     case_evaluations: int,
     target_accuracy: float | None = None,
     comparator_accuracy: float | None = None,
     failure_reason: str | None = None,
 ) -> EvaluationReceipt:
-    deficit = None
+    advantage = None
     if target_accuracy is not None and comparator_accuracy is not None:
-        deficit = comparator_accuracy - target_accuracy
+        advantage = target_accuracy - comparator_accuracy
     return EvaluationReceipt(
         plan_id=plan.plan_id,
         plan_digest=plan.digest,
-        status=status,
+        usefulness_status=usefulness_status,
+        superiority_status=superiority_status,
         target_backend=plan.target_backend,
         comparator_backend=plan.comparator_backend,
         target_accuracy=target_accuracy,
         comparator_accuracy=comparator_accuracy,
-        target_deficit_vs_fallback=deficit,
+        target_advantage_vs_fallback=advantage,
         training_steps=training_steps,
         case_evaluations=case_evaluations,
         duration_ms=round((time.perf_counter() - started) * 1000.0, 3),
@@ -336,7 +344,8 @@ def evaluate(
             return _receipt(
                 plan,
                 started,
-                status=UNRESOLVED,
+                usefulness_status=UNRESOLVED,
+                superiority_status=UNRESOLVED,
                 training_steps=training_steps,
                 case_evaluations=case_evaluations,
                 failure_reason=f"backend_factory:{type(exc).__name__}",
@@ -345,7 +354,8 @@ def evaluate(
             return _receipt(
                 plan,
                 started,
-                status=UNRESOLVED,
+                usefulness_status=UNRESOLVED,
+                superiority_status=UNRESOLVED,
                 training_steps=training_steps,
                 case_evaluations=case_evaluations,
                 failure_reason="target_backend_identity_mismatch",
@@ -354,7 +364,8 @@ def evaluate(
             return _receipt(
                 plan,
                 started,
-                status=UNRESOLVED,
+                usefulness_status=UNRESOLVED,
+                superiority_status=UNRESOLVED,
                 training_steps=training_steps,
                 case_evaluations=case_evaluations,
                 failure_reason="comparator_backend_identity_mismatch",
@@ -366,7 +377,8 @@ def evaluate(
                     return _receipt(
                         plan,
                         started,
-                        status=plan.resource_limit_status,
+                        usefulness_status=plan.resource_limit_status,
+                        superiority_status=plan.resource_limit_status,
                         training_steps=training_steps,
                         case_evaluations=case_evaluations,
                         failure_reason="max_training_steps",
@@ -375,24 +387,37 @@ def evaluate(
                     return _receipt(
                         plan,
                         started,
-                        status=plan.resource_limit_status,
+                        usefulness_status=plan.resource_limit_status,
+                        superiority_status=plan.resource_limit_status,
                         training_steps=training_steps,
                         case_evaluations=case_evaluations,
                         failure_reason="max_seconds",
                     )
                 try:
                     target.infer(case.text)
-                    comparator.infer(case.text)
                     target.reward(case.expected_winner, plan.reward_outcome)
+                except Exception as exc:
+                    return _receipt(
+                        plan,
+                        started,
+                        usefulness_status=plan.target_backend_error_status,
+                        superiority_status=UNRESOLVED,
+                        training_steps=training_steps,
+                        case_evaluations=case_evaluations,
+                        failure_reason=f"target_backend_error:{type(exc).__name__}",
+                    )
+                try:
+                    comparator.infer(case.text)
                     comparator.reward(case.expected_winner, plan.reward_outcome)
                 except Exception as exc:
                     return _receipt(
                         plan,
                         started,
-                        status=plan.backend_error_status,
+                        usefulness_status=UNRESOLVED,
+                        superiority_status=plan.comparator_backend_error_status,
                         training_steps=training_steps,
                         case_evaluations=case_evaluations,
-                        failure_reason=f"backend_error:{type(exc).__name__}",
+                        failure_reason=f"comparator_backend_error:{type(exc).__name__}",
                     )
                 training_steps += 1
 
@@ -401,7 +426,8 @@ def evaluate(
                 return _receipt(
                     plan,
                     started,
-                    status=plan.resource_limit_status,
+                    usefulness_status=plan.resource_limit_status,
+                    superiority_status=plan.resource_limit_status,
                     training_steps=training_steps,
                     case_evaluations=case_evaluations,
                     failure_reason="max_case_evaluations",
@@ -410,24 +436,37 @@ def evaluate(
                 return _receipt(
                     plan,
                     started,
-                    status=plan.resource_limit_status,
+                    usefulness_status=plan.resource_limit_status,
+                    superiority_status=plan.resource_limit_status,
                     training_steps=training_steps,
                     case_evaluations=case_evaluations,
                     failure_reason="max_seconds",
                 )
             try:
                 target_result = target.infer(case.text)
-                comparator_result = comparator.infer(case.text)
                 target_winner = target_result.get("winner")
+            except Exception as exc:
+                return _receipt(
+                    plan,
+                    started,
+                    usefulness_status=plan.target_backend_error_status,
+                    superiority_status=UNRESOLVED,
+                    training_steps=training_steps,
+                    case_evaluations=case_evaluations,
+                    failure_reason=f"target_backend_error:{type(exc).__name__}",
+                )
+            try:
+                comparator_result = comparator.infer(case.text)
                 comparator_winner = comparator_result.get("winner")
             except Exception as exc:
                 return _receipt(
                     plan,
                     started,
-                    status=plan.backend_error_status,
+                    usefulness_status=UNRESOLVED,
+                    superiority_status=plan.comparator_backend_error_status,
                     training_steps=training_steps,
                     case_evaluations=case_evaluations,
-                    failure_reason=f"backend_error:{type(exc).__name__}",
+                    failure_reason=f"comparator_backend_error:{type(exc).__name__}",
                 )
             target_correct += target_winner == case.expected_winner
             comparator_correct += comparator_winner == case.expected_winner
@@ -435,15 +474,16 @@ def evaluate(
 
     target_accuracy = target_correct / case_evaluations
     comparator_accuracy = comparator_correct / case_evaluations
-    survived = (
-        target_accuracy >= plan.minimum_target_accuracy
-        and target_accuracy + plan.maximum_target_deficit_vs_fallback
-        >= comparator_accuracy
+    useful = target_accuracy >= plan.minimum_target_accuracy
+    superior = (
+        target_accuracy - comparator_accuracy
+        >= plan.minimum_target_advantage_vs_fallback
     )
     return _receipt(
         plan,
         started,
-        status=SURVIVED_NOT_PROVED if survived else FALSIFIED,
+        usefulness_status=SURVIVED_NOT_PROVED if useful else FALSIFIED,
+        superiority_status=SURVIVED_NOT_PROVED if superior else FALSIFIED,
         training_steps=training_steps,
         case_evaluations=case_evaluations,
         target_accuracy=target_accuracy,
@@ -460,4 +500,4 @@ __all__ = [
     "EvaluationReceipt",
     "evaluate",
 ]
-# ratios: loc_comments=355:71 imports_exports=10:5 calls_definitions=87:11
+# ratios: loc_comments=395:71 imports_exports=10:5 calls_definitions=92:11

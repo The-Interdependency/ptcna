@@ -100,9 +100,14 @@ The executable boundary lives in `ptcna.runtime`: `PTCNAEngine` reports all
 four live layers, `HashedLinearFallback` remains separately identified, and
 `PTCNARuntime` raises on target failure unless fallback routing is explicitly
 enabled. `ptcna.evaluation` accepts only an immutable, digest-bearing
-`EvaluationPlan`, trains before scoring, and records the terminal verdict before repair. No
-representative workload is bundled; selecting one remains evidence work, not a
-construction prerequisite.
+`EvaluationPlan`, trains before scoring, and records separate usefulness and
+superiority verdicts before repair. The preregistered critical workload lives at
+`ptcna/data/ptcna-critical-plan-v1.json`: 18 balanced cases over the
+declared cognitive, self-model, and autonomy roles, three training epochs, five
+fresh repetitions, a 0.75 post-training target threshold, and a strict 0.05
+advantage threshold over the hashed-linear fallback. It is an in-sample role
+acquisition test, not a generalization test. Its digest was frozen before either
+backend was executed.
 
 The default core shape consumes a bundled receipt produced by exact UCNS merge
 `b7b6f35cce69c273860923489a1c8b5372d14eb0`. UCNS owns the candidate state
