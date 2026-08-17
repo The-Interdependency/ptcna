@@ -41,6 +41,48 @@ pip install -e ".[dev]"      # neural layer needs numpy; seed/core are stdlib-on
 pytest                       # testpaths = ptcna
 ```
 
+## Experimental runtime and dependable fallback
+
+The intended architecture and the simpler fallback share one task interface but
+retain separate identities. PTCNA is selected by default. A target error raises
+unless the caller explicitly enables fallback routing; every receipt records the
+backend actually used.
+
+```python
+from ptcna import PTCNARuntime
+
+runtime = PTCNARuntime()
+target = runtime.infer("question")
+fallback = runtime.infer("question", backend="fallback")
+continued = runtime.infer("question", fallback_on_error=True)
+runtime.reward(continued, outcome=1.0)
+```
+
+Freeze a representative labeled workload before inspecting outcomes:
+
+```python
+from ptcna import EvaluationCase, EvaluationPlan, evaluate
+
+plan = EvaluationPlan(
+    plan_id="representative-workload-v1",
+    workload=(EvaluationCase("case-1", "input", "phi"),),
+    minimum_target_accuracy=0.80,
+    maximum_target_deficit_vs_fallback=0.00,
+    training_epochs=3,
+    reward_outcome=1.0,
+    repetitions=3,
+    max_training_steps=9,
+    max_case_evaluations=3,
+    max_seconds=30.0,
+    backend_error_status="FALSIFIED",
+)
+print(plan.digest)  # preserve this with the plan before execution
+receipt = evaluate(plan)
+```
+
+The repository does not ship a pretend representative workload. Until one is
+frozen and executed, whether PTCNA works remains `hmmm`.
+
 ## Status
 
 Alpha (`0.1.1`). All four layers import and the repository test suite passes.
@@ -54,6 +96,13 @@ The layer boundary is now executable rather than only descriptive:
   reviewed PTCNA-specific higher-gonol producer profile exists.
 - EDCM remains an external authority. `ZetaEngine` accepts an explicitly
   injected measurement provider; PTCNA contains no shadow EDCM module.
+- `PTCNAEngine` joins the live neural engine to the complete local core and
+  reports all four layers. `PTCNARuntime` keeps that experimental path distinct
+  from `HashedLinearFallback`; failover is explicit and attributed.
+- `EvaluationPlan` freezes workload, training schedule, comparator, metric,
+  thresholds, resource limits, stopping, and failure propagation before
+  `evaluate` emits
+  `FALSIFIED`, `SURVIVED — not proved`, or `UNRESOLVED`.
 
 The core layer still intentionally exposes PTCA-named public objects such as
 `PTCATensor` and `PTCAInstance`; those names live in the correct layer.

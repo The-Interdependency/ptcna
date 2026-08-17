@@ -1,4 +1,4 @@
-# ratios: loc_comments=22:12 imports_exports=2:1 calls_definitions=1:0
+# ratios: loc_comments=31:51 imports_exports=4:1 calls_definitions=1:0
 """PTCNA — Prime Tensor Circled Neural Architecture.
 
 One architecture, four layers. Each layer's tensors divide into the next; every
@@ -26,6 +26,50 @@ from .ucns_integration import (
     require_ucns_integration,
     ucns_integration_status,
 )
+from .runtime import HashedLinearFallback, PTCNAEngine, PTCNARuntime
+from .evaluation import EvaluationCase, EvaluationPlan, EvaluationReceipt, evaluate
+
+# === MODULE_BUILD ===
+# id: ptcna_package_surface
+#   module_name: package surface
+#   module_kind: adapter
+#   summary: exposes the four layers, explicit runtime boundary, dependable fallback, and frozen evaluation types from the package root
+#   owner: Erin Spencer
+#   public_surface: neural, circle, seed, core, PTCNAEngine, HashedLinearFallback, PTCNARuntime, EvaluationCase, EvaluationPlan, EvaluationReceipt, evaluate, UCNS integration status types
+#   internal_surface: none
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   tests: ptcna/tests/test_runtime.py
+#   rollout: imported through ptcna
+#   rollback: remove root re-exports while retaining module-qualified imports
+#   requires: ptcna_runtime_boundary, ptcna_frozen_evaluation, ptcna_ucns_integration
+#   since: unreleased
+#   unresolved: none
+# === END MODULE_BUILD ===
+
+# === CONTRACTS ===
+# id: ptcna_root_exports_runtime_boundary
+#   given: a caller imports ptcna
+#   then: the experimental engine, distinct fallback, attributed runtime, frozen evaluation types, and evaluator are available without importing deprecated service surfaces
+#   class: compatibility
+# === END CONTRACTS ===
+
+# === BOUNDARIES ===
+# id: ptcna_package_import_boundary
+#   summary: imports local package definitions without constructing engines or performing persistence, network, authentication, user-data, or administrative effects
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   pii: none
+#   secrets: none
+#   owner: Erin Spencer
+#   since: unreleased
+# === END BOUNDARIES ===
 
 __all__ = [
     "neural",
@@ -37,6 +81,13 @@ __all__ = [
     "UCNSIntegrationSuspended",
     "ucns_integration_status",
     "require_ucns_integration",
+    "PTCNAEngine",
+    "HashedLinearFallback",
+    "PTCNARuntime",
+    "EvaluationCase",
+    "EvaluationPlan",
+    "EvaluationReceipt",
+    "evaluate",
     "__version__",
 ]
-# ratios: loc_comments=22:12 imports_exports=2:1 calls_definitions=1:0
+# ratios: loc_comments=31:51 imports_exports=4:1 calls_definitions=1:0

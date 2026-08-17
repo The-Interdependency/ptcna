@@ -49,8 +49,8 @@
     }
   },
   "status": {
-    "state": "active alpha runtime; intended architecture and dependable fallback construction proceed under separate evidence boundaries",
-    "current_claim": "PTCNA 0.1.1 implements one four-layer runtime in which reverse-mode gradients are owned by the neural layer while circle, seed, and core remain non-differentiating structural hosts. Construction of the intended PTCNA architecture may proceed under PTCNA-local provenance alongside a dependable explicit fallback. UCNS higher-gonol attribution remains suspended, EDCM remains external, and the critical 'does it work?' verdict remains unearned until frozen evaluation.",
+    "state": "active alpha runtime; explicit target, fallback, and frozen-verdict interfaces are implemented under separate evidence identities",
+    "current_claim": "PTCNA 0.1.1 implements one four-layer runtime in which reverse-mode gradients are owned by the neural layer while circle, seed, and core remain non-differentiating structural hosts. The unreleased package surface adds an attributed four-layer target receipt, an independently test-backed hashed-linear fallback, explicit failover, and immutable evaluation plans. UCNS higher-gonol attribution remains suspended, EDCM remains external, and the critical 'does it work?' verdict remains unearned until a representative plan is frozen and executed.",
     "latest_main_milestone": {
       "commit": "4509d33419aa25e6a9cfef415055e378b8f37edc",
       "description": "merged the reconciled four-layer v0.1.1 runtime with one CircleTensor, neural-only reverse-mode scalar ownership, fail-closed UCNS integration, and external EDCM measurement injection"
@@ -81,32 +81,32 @@
       "surface": "0.1.1 cross-repository input manifest",
       "status": "sealed historical coordination record",
       "boundary": "its July producer identities are evidence for the 0.1.1 reconciliation only, not current stack identities"
+    },
+    {
+      "surface": "explicit target/fallback runtime boundary",
+      "status": "implemented and contract-tested on the unreleased package surface",
+      "boundary": "the fallback is separately identified and used after target failure only when the caller explicitly enables attributed failover"
+    },
+    {
+      "surface": "frozen evaluation and terminal receipt API",
+      "status": "implemented and contract-tested infrastructure",
+      "boundary": "the API freezes training and scoring criteria and records verdicts but does not supply a representative workload or establish that either backend is useful"
     }
   ],
   "active_frontier": [
     "keep the operational shell aligned with current skill-lib doctrine and supported GitHub Actions runtimes without changing PTCNA architectural evidence standing",
-    "construct the intended PTCNA architecture faithfully under PTCNA-local provenance without waiting for upstream validation or a simpler baseline to grant permission",
-    "build and independently verify a dependable simpler fallback behind an explicit interface so useful operation survives a PTCNA failure without silently replacing or redefining PTCNA",
-    "freeze the critical 'does it work?' evaluation before outcome inspection, including representative workload, comparator, exact metric and aggregation, threshold, resource bounds, stopping rules, failure propagation, and evidence receipt",
+    "freeze a representative 'does it work?' EvaluationPlan before outcome inspection, including workload, training epochs and reward, exact thresholds, repetitions, resource bounds, and failure propagation; the comparator identity, post-training metric, aggregation, stopping rule, and receipt schema are now executable",
+    "execute the preserved plan without repair or criterion change and record FALSIFIED, SURVIVED — not proved, or UNRESOLVED",
+    "qualify whether the hashed-linear fallback preserves useful operation on the representative workload rather than inferring utility from deterministic contract tests",
     "consume exact UCNS producer receipts when available for UCNS attribution while allowing locally attributed PTCNA prime and ring construction to continue",
     "resolve whether the embedded ZetaEngine remains a bounded PTCNA-local measurement-to-learning adapter or should be removed in favor of separate ZFAE authority before further Zeta development",
-    "test sustained-load and long-horizon state behavior after the architecture and fallback are executable and the evaluation contract is frozen"
+    "test sustained-load and long-horizon state behavior through the explicit target/fallback runtime boundary"
   ],
   "next_actions": [
     {
-      "action": "build the intended PTCNA architecture faithfully under PTCNA-local provenance",
+      "action": "preregister the critical 'does it work?' evaluation with EvaluationPlan before outcome inspection",
       "owner": "The-Interdependency/ptcna",
-      "dependency": "repository-owned implementation contracts only; upstream evidence and simpler baselines do not grant permission to construct"
-    },
-    {
-      "action": "build and independently verify a dependable simpler fallback behind the same explicit task boundary",
-      "owner": "The-Interdependency/ptcna",
-      "dependency": "the fallback must remain separately identified and must not silently replace, redefine, or be reported as PTCNA"
-    },
-    {
-      "action": "preregister the critical 'does it work?' evaluation after the target and fallback are sufficiently executable and before outcome inspection",
-      "owner": "The-Interdependency/ptcna",
-      "dependency": "freeze workload, comparator, metric and aggregation, threshold, resource bounds, stopping rules, failure propagation, and evidence-receipt requirements"
+      "dependency": "requires a representative labeled workload plus externally justified training, reward, accuracy, comparator-deficit, repetition, resource, and backend-error thresholds; construction remains permitted regardless"
     },
     {
       "action": "record the terminal result before repair or criterion change",
@@ -163,6 +163,8 @@
     "historical_stack_manifest": "docs/work-graphs/ptcna-0.1.1-inputs.json",
     "system_overview": "README.md",
     "architecture": "docs/architecture.md",
+    "runtime_boundary": "ptcna/runtime.py",
+    "frozen_evaluation": "ptcna/evaluation.py",
     "neural_runtime": "ptcna/neural/pcna.py",
     "ucns_boundary": "ptcna/ucns_integration.py",
     "external_measurement_adapter": "ptcna/neural/zeta.py",
@@ -171,8 +173,8 @@
   "hmmm": [
     "the exact PTCNA-specific UCNS producer profile and receipt for any structure later claimed as UCNS-produced",
     "whether the constructed PTCNA architecture works under the frozen representative evaluation",
-    "the exact workload, comparator, metric, aggregation, threshold, resource bounds, stopping rules, and failure propagation for that evaluation",
-    "the exact dependable fallback implementation and shared task-interface identity",
+    "the exact representative workload and externally justified training epochs, reward, target threshold, comparator-deficit allowance, repetitions, resource bounds, and backend-error status for the implemented evaluation API",
+    "whether the implemented hashed-linear fallback preserves useful operation on that representative workload",
     "whether the current ring sizes, heptagram propagation, prime constants, and fixed ring weights contain irreducible useful structure or historical accident",
     "the authority boundary and migration path between PTCNA's embedded ZetaEngine and The-Interdependency/zfae",
     "sustained-load behavior across the complete four-layer seam",

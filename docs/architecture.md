@@ -97,6 +97,14 @@ or criterion change. PTCNA-local prime and ring structures may be constructed
 now; only a claim that they are UCNS-produced remains suspended until an exact
 pinned UCNS receipt exists.
 
+The executable boundary lives in `ptcna.runtime`: `PTCNAEngine` reports all
+four live layers, `HashedLinearFallback` remains separately identified, and
+`PTCNARuntime` raises on target failure unless fallback routing is explicitly
+enabled. `ptcna.evaluation` accepts only an immutable, digest-bearing
+`EvaluationPlan`, trains before scoring, and records the terminal verdict before repair. No
+representative workload is bundled; selecting one remains evidence work, not a
+construction prerequisite.
+
 Semantic authority for discovery-before-recovery remains with
 `The-Interdependency/metapat`; this correction consulted
 `metapat@53315e30c54aba881a5b48cbf395890e83ab05c5`,
@@ -104,6 +112,12 @@ Semantic authority for discovery-before-recovery remains with
 METAPAT canon.
 
 ## Status log
+
+- **2026-08-17 — executable construction/evaluation boundary.** Added the
+  four-layer target receipt, independently test-backed hashed-linear fallback,
+  explicit attributed failover, and frozen evaluation/verdict API. Removed the
+  broken deprecated FastAPI seed runner. This establishes runnable separation;
+  it does not establish that PTCNA works on a representative task.
 
 - **2026-07-05 — circle/seed audit extraction (branch `claude/circle-extraction`).**
   Aggregation moved out of the neural engine into the layers that own it:
