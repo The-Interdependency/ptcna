@@ -11,6 +11,57 @@ export default defineMsdmdCollection({
         "owner": "Erin Spencer",
         "pii": "none",
         "secrets": "none",
+        "since": "unreleased",
+        "storage_boundary": "none",
+        "summary": "imports local package definitions without constructing engines or performing persistence, network, authentication, user-data, or administrative effects",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/__init__.py",
+      "id": "ptcna_package_import_boundary"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "compatibility",
+        "given": "a caller imports ptcna",
+        "then": "the experimental engine, distinct fallback, attributed runtime, frozen evaluation types, and evaluator are available without importing deprecated service surfaces"
+      },
+      "file": "ptcna/__init__.py",
+      "id": "ptcna_root_exports_runtime_boundary"
+    },
+    {
+      "block": "MODULE_BUILD",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "internal_surface": "none",
+        "module_kind": "adapter",
+        "module_name": "package surface",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "public_surface": "neural, circle, seed, core, PTCNAEngine, HashedLinearFallback, PTCNARuntime, EvaluationCase, EvaluationPlan, EvaluationReceipt, evaluate, UCNS integration status types",
+        "requires": "ptcna_runtime_boundary, ptcna_frozen_evaluation, ptcna_ucns_integration",
+        "rollback": "remove root re-exports while retaining module-qualified imports",
+        "rollout": "imported through ptcna",
+        "since": "unreleased",
+        "storage_boundary": "none",
+        "summary": "exposes the four layers, explicit runtime boundary, dependable fallback, and frozen evaluation types from the package root",
+        "tests": "ptcna/tests/test_runtime.py",
+        "unresolved": "none",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/__init__.py",
+      "id": "ptcna_package_surface"
+    },
+    {
+      "block": "BOUNDARIES",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "pii": "none",
+        "secrets": "none",
         "since": "0.1.1",
         "storage_boundary": "none",
         "summary": "performs deterministic in-memory structural composition without activating UCNS or touching external state",
@@ -467,6 +518,77 @@ export default defineMsdmdCollection({
       "id": "check_prime_core_suspended_ucns"
     },
     {
+      "block": "BOUNDARIES",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "pii": "none",
+        "secrets": "none",
+        "since": "unreleased",
+        "storage_boundary": "none",
+        "summary": "executes caller-supplied in-process backends and returns an in-memory receipt without persistence, network, authentication, user-data, or administrative effects",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/evaluation.py",
+      "id": "ptcna_evaluation_local_boundary"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "evidence",
+        "given": "an EvaluationPlan is constructed",
+        "then": "workload, training schedule, comparator identities, metric, aggregation, thresholds, resource bounds, stopping rule, and failure propagation are immutable and covered by one deterministic digest"
+      },
+      "file": "ptcna/evaluation.py",
+      "id": "ptcna_evaluation_plan_freezes_verdict_inputs"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "evidence",
+        "given": "either backend errors before completing the frozen workload",
+        "then": "evaluation stops and records the plan's preselected backend_error_status before any repair or criterion change"
+      },
+      "file": "ptcna/evaluation.py",
+      "id": "ptcna_evaluation_propagates_backend_failure"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "evidence",
+        "given": "target and fallback complete the frozen workload",
+        "then": "training occurs before scoring and the terminal verdict is FALSIFIED or SURVIVED \u2014 not proved using only the plan's post-training accuracy and comparator-deficit thresholds"
+      },
+      "file": "ptcna/evaluation.py",
+      "id": "ptcna_evaluation_verdict_uses_frozen_thresholds"
+    },
+    {
+      "block": "MODULE_BUILD",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "internal_surface": "_receipt",
+        "module_kind": "experiment",
+        "module_name": "evaluation",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "public_surface": "EvaluationCase, EvaluationPlan, EvaluationReceipt, evaluate, FALSIFIED, SURVIVED_NOT_PROVED, UNRESOLVED",
+        "requires": "ptcna_runtime_boundary",
+        "rollback": "remove evaluation exports without changing target or fallback runtime behavior",
+        "rollout": "caller supplies a preserved representative EvaluationPlan before execution",
+        "since": "unreleased",
+        "storage_boundary": "none",
+        "summary": "freezes the workload, training schedule, comparator, metric, thresholds, limits, stopping rule, failure propagation, and evidence receipt before target-versus-fallback execution",
+        "tests": "ptcna/tests/test_evaluation.py",
+        "unresolved": "representative workload identity and externally justified thresholds",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/evaluation.py",
+      "id": "ptcna_frozen_evaluation"
+    },
+    {
       "block": "MODULE_BUILD",
       "fields": {
         "admin_only": "false",
@@ -489,30 +611,6 @@ export default defineMsdmdCollection({
       },
       "file": "ptcna/neural/helix_vis.py",
       "id": "pcna_helix_vis"
-    },
-    {
-      "block": "MODULE_BUILD",
-      "fields": {
-        "admin_only": "false",
-        "auth_boundary": "none",
-        "internal_surface": "seed_instance",
-        "module_kind": "service",
-        "module_name": "main",
-        "network_boundary": "external",
-        "owner": "Erin Spencer",
-        "public_surface": "app, PCNASeed, health, topology, receive_delta, startup, shutdown, tick_loop",
-        "requires": "pcna_topology, pcna_tensor_engine",
-        "rollback": "do not launch this process; use root-level main.py seed runner instead",
-        "rollout": "default_enabled",
-        "since": "2026-06-02",
-        "storage_boundary": "none",
-        "summary": "Minimal FastAPI seed-runner process (compute/meta/sentinel/global) exposing health/topology/receive_delta routes with an aiohttp networking placeholder.",
-        "tests": "hmmm",
-        "unresolved": "BROKEN alt entry point \u2014 imports from non-existent src.core.* (do not use per CLAUDE.md)",
-        "user_data_boundary": "none"
-      },
-      "file": "ptcna/neural/main.py",
-      "id": "pcna_core_main"
     },
     {
       "block": "MODULE_BUILD",
@@ -1014,6 +1112,97 @@ export default defineMsdmdCollection({
       "id": "pcna_zeta"
     },
     {
+      "block": "BOUNDARIES",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "pii": "none",
+        "secrets": "none",
+        "since": "unreleased",
+        "storage_boundary": "none",
+        "summary": "performs deterministic in-process inference and learning with no authentication, persistence, network, user-data, or administrative effect",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/runtime.py",
+      "id": "ptcna_runtime_local_boundary"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "safety",
+        "given": "the target raises during inference",
+        "then": "PTCNARuntime raises by default and uses the fallback only when explicitly enabled while recording the target failure and actual backend"
+      },
+      "file": "ptcna/runtime.py",
+      "id": "ptcna_failover_is_explicit_and_attributed"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "correctness",
+        "given": "identical text and fresh HashedLinearFallback instances",
+        "then": "both produce the same bounded prediction under a fallback identity that is never labeled PTCNA"
+      },
+      "file": "ptcna/runtime.py",
+      "id": "ptcna_fallback_is_distinct_and_deterministic"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "correctness",
+        "given": "the fallback infers text and receives a positive bounded reward for the selected winner",
+        "then": "a second inference of the same text gives that winner a strictly greater linear score"
+      },
+      "file": "ptcna/runtime.py",
+      "id": "ptcna_fallback_reward_changes_selected_score"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "safety",
+        "given": "a reward is applied to an inference receipt",
+        "then": "only the backend named by backend_used receives the reward"
+      },
+      "file": "ptcna/runtime.py",
+      "id": "ptcna_reward_follows_backend_receipt"
+    },
+    {
+      "block": "CONTRACTS",
+      "fields": {
+        "class": "correctness",
+        "given": "non-empty text is inferred through PTCNAEngine",
+        "then": "the receipt identifies the experimental PTCNA backend and reports neural, circle, seed, and core layer state without transferring gradients to structural layers"
+      },
+      "file": "ptcna/runtime.py",
+      "id": "ptcna_target_reports_four_live_layers"
+    },
+    {
+      "block": "MODULE_BUILD",
+      "fields": {
+        "admin_only": "false",
+        "auth_boundary": "none",
+        "internal_surface": "_validate_text, _validate_reward, _attach_route",
+        "module_kind": "engine",
+        "module_name": "runtime",
+        "network_boundary": "none",
+        "owner": "Erin Spencer",
+        "public_surface": "PTCNAEngine, HashedLinearFallback, PTCNARuntime, InferenceBackend, PTCNA_BACKEND, FALLBACK_BACKEND",
+        "requires": "pcna_pcna, ptcna_prime_core_composition",
+        "rollback": "remove runtime exports while preserving the existing layer modules and PCNAEngine",
+        "rollout": "explicit public API; target selected by default and fallback selected or enabled by the caller",
+        "since": "unreleased",
+        "storage_boundary": "none",
+        "summary": "exposes the intended four-layer PTCNA path and a distinct dependable fallback behind one attributed task interface",
+        "tests": "ptcna/tests/test_runtime.py",
+        "unresolved": "representative task workload and whether either backend is useful under it",
+        "user_data_boundary": "none"
+      },
+      "file": "ptcna/runtime.py",
+      "id": "ptcna_runtime_boundary"
+    },
+    {
       "block": "CONTRACTS",
       "fields": {
         "given": "opaque payloads including neural scalars",
@@ -1155,6 +1344,123 @@ export default defineMsdmdCollection({
       },
       "file": "ptcna/tests/test_contract_audit.py",
       "id": "check_contract_audit_complete_graph"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_backend_failure_stops_with_preselected_status",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_evaluation_propagates_backend_failure",
+        "requires": "python3",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_evaluation.py",
+      "id": "check_ptcna_failure_propagation"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_frozen_thresholds_produce_survival_and_falsification",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_evaluation_verdict_uses_frozen_thresholds",
+        "requires": "python3",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_evaluation.py",
+      "id": "check_ptcna_frozen_verdicts"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_plan_digest_is_stable_and_criteria_sensitive",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_evaluation_plan_freezes_verdict_inputs",
+        "requires": "python3",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_evaluation.py",
+      "id": "check_ptcna_plan_digest"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_target_failure_requires_explicit_attributed_failover",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_failover_is_explicit_and_attributed",
+        "requires": "python3, numpy",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_runtime.py",
+      "id": "check_ptcna_explicit_failover"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_fallback_is_deterministic_bounded_and_distinct",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_fallback_is_distinct_and_deterministic",
+        "requires": "python3, numpy",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_runtime.py",
+      "id": "check_ptcna_fallback_determinism"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_fallback_positive_reward_increases_selected_score",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_fallback_reward_changes_selected_score",
+        "requires": "python3, numpy",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_runtime.py",
+      "id": "check_ptcna_fallback_reward"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_reward_follows_the_recorded_backend",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_reward_follows_backend_receipt",
+        "requires": "python3, numpy",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_runtime.py",
+      "id": "check_ptcna_reward_route"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_root_exports_runtime_and_evaluation_surface",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_root_exports_runtime_boundary",
+        "requires": "python3",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_runtime.py",
+      "id": "check_ptcna_root_runtime_exports"
+    },
+    {
+      "block": "CHECKS",
+      "fields": {
+        "call": "self::test_target_reports_all_four_live_layers",
+        "cleanup": "none",
+        "mutates": "none",
+        "proves": "ptcna_target_reports_four_live_layers",
+        "requires": "python3, numpy",
+        "timeout": "30"
+      },
+      "file": "ptcna/tests/test_runtime.py",
+      "id": "check_ptcna_target_four_layers"
     },
     {
       "block": "CHECKS",
@@ -1353,6 +1659,27 @@ export default defineMsdmdCollection({
       "kind": "owns",
       "source_block": "BOUNDARIES",
       "source_id": "prime_core_composition_runtime_boundary",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_evaluation_local_boundary",
+      "kind": "owns",
+      "source_block": "BOUNDARIES",
+      "source_id": "ptcna_evaluation_local_boundary",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_package_import_boundary",
+      "kind": "owns",
+      "source_block": "BOUNDARIES",
+      "source_id": "ptcna_package_import_boundary",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_runtime_local_boundary",
+      "kind": "owns",
+      "source_block": "BOUNDARIES",
+      "source_id": "ptcna_runtime_local_boundary",
       "to": "Erin Spencer"
     },
     {
@@ -1797,6 +2124,230 @@ export default defineMsdmdCollection({
       "to": "python3"
     },
     {
+      "from": "check_ptcna_explicit_failover",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_explicit_failover",
+      "to": "self::test_target_failure_requires_explicit_attributed_failover"
+    },
+    {
+      "from": "check_ptcna_explicit_failover",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_explicit_failover",
+      "to": "ptcna_failover_is_explicit_and_attributed"
+    },
+    {
+      "from": "check_ptcna_explicit_failover",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_explicit_failover",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_explicit_failover",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_explicit_failover",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_failure_propagation",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_failure_propagation",
+      "to": "self::test_backend_failure_stops_with_preselected_status"
+    },
+    {
+      "from": "check_ptcna_failure_propagation",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_failure_propagation",
+      "to": "ptcna_evaluation_propagates_backend_failure"
+    },
+    {
+      "from": "check_ptcna_failure_propagation",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_failure_propagation",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_fallback_determinism",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_determinism",
+      "to": "self::test_fallback_is_deterministic_bounded_and_distinct"
+    },
+    {
+      "from": "check_ptcna_fallback_determinism",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_determinism",
+      "to": "ptcna_fallback_is_distinct_and_deterministic"
+    },
+    {
+      "from": "check_ptcna_fallback_determinism",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_determinism",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_fallback_determinism",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_determinism",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_fallback_reward",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_reward",
+      "to": "self::test_fallback_positive_reward_increases_selected_score"
+    },
+    {
+      "from": "check_ptcna_fallback_reward",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_reward",
+      "to": "ptcna_fallback_reward_changes_selected_score"
+    },
+    {
+      "from": "check_ptcna_fallback_reward",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_reward",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_fallback_reward",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_fallback_reward",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_frozen_verdicts",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_frozen_verdicts",
+      "to": "self::test_frozen_thresholds_produce_survival_and_falsification"
+    },
+    {
+      "from": "check_ptcna_frozen_verdicts",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_frozen_verdicts",
+      "to": "ptcna_evaluation_verdict_uses_frozen_thresholds"
+    },
+    {
+      "from": "check_ptcna_frozen_verdicts",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_frozen_verdicts",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_plan_digest",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_plan_digest",
+      "to": "self::test_plan_digest_is_stable_and_criteria_sensitive"
+    },
+    {
+      "from": "check_ptcna_plan_digest",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_plan_digest",
+      "to": "ptcna_evaluation_plan_freezes_verdict_inputs"
+    },
+    {
+      "from": "check_ptcna_plan_digest",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_plan_digest",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_reward_route",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_reward_route",
+      "to": "self::test_reward_follows_the_recorded_backend"
+    },
+    {
+      "from": "check_ptcna_reward_route",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_reward_route",
+      "to": "ptcna_reward_follows_backend_receipt"
+    },
+    {
+      "from": "check_ptcna_reward_route",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_reward_route",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_reward_route",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_reward_route",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_root_runtime_exports",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_root_runtime_exports",
+      "to": "self::test_root_exports_runtime_and_evaluation_surface"
+    },
+    {
+      "from": "check_ptcna_root_runtime_exports",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_root_runtime_exports",
+      "to": "ptcna_root_exports_runtime_boundary"
+    },
+    {
+      "from": "check_ptcna_root_runtime_exports",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_root_runtime_exports",
+      "to": "python3"
+    },
+    {
+      "from": "check_ptcna_target_four_layers",
+      "kind": "calls",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_target_four_layers",
+      "to": "self::test_target_reports_all_four_live_layers"
+    },
+    {
+      "from": "check_ptcna_target_four_layers",
+      "kind": "claims_proves",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_target_four_layers",
+      "to": "ptcna_target_reports_four_live_layers"
+    },
+    {
+      "from": "check_ptcna_target_four_layers",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_target_four_layers",
+      "to": "numpy"
+    },
+    {
+      "from": "check_ptcna_target_four_layers",
+      "kind": "requires",
+      "source_block": "CHECKS",
+      "source_id": "check_ptcna_target_four_layers",
+      "to": "python3"
+    },
+    {
       "from": "check_ptcna_ucns_fails_closed",
       "kind": "calls",
       "source_block": "CHECKS",
@@ -1998,27 +2549,6 @@ export default defineMsdmdCollection({
       "source_block": "CHECKS",
       "source_id": "check_zeta_suspends_without_provider",
       "to": "python3"
-    },
-    {
-      "from": "pcna_core_main",
-      "kind": "owns",
-      "source_block": "MODULE_BUILD",
-      "source_id": "pcna_core_main",
-      "to": "Erin Spencer"
-    },
-    {
-      "from": "pcna_core_main",
-      "kind": "requires",
-      "source_block": "MODULE_BUILD",
-      "source_id": "pcna_core_main",
-      "to": "pcna_tensor_engine"
-    },
-    {
-      "from": "pcna_core_main",
-      "kind": "requires",
-      "source_block": "MODULE_BUILD",
-      "source_id": "pcna_core_main",
-      "to": "pcna_topology"
     },
     {
       "from": "pcna_helix_vis",
@@ -2287,6 +2817,20 @@ export default defineMsdmdCollection({
       "to": "none"
     },
     {
+      "from": "ptcna_frozen_evaluation",
+      "kind": "owns",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_frozen_evaluation",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_frozen_evaluation",
+      "kind": "requires",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_frozen_evaluation",
+      "to": "ptcna_runtime_boundary"
+    },
+    {
       "from": "ptcna_neural_scalar",
       "kind": "owns",
       "source_block": "MODULE_BUILD",
@@ -2299,6 +2843,34 @@ export default defineMsdmdCollection({
       "source_block": "MODULE_BUILD",
       "source_id": "ptcna_neural_scalar",
       "to": "none"
+    },
+    {
+      "from": "ptcna_package_surface",
+      "kind": "owns",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_package_surface",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_package_surface",
+      "kind": "requires",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_package_surface",
+      "to": "ptcna_frozen_evaluation"
+    },
+    {
+      "from": "ptcna_package_surface",
+      "kind": "requires",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_package_surface",
+      "to": "ptcna_runtime_boundary"
+    },
+    {
+      "from": "ptcna_package_surface",
+      "kind": "requires",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_package_surface",
+      "to": "ptcna_ucns_integration"
     },
     {
       "from": "ptcna_prime_core_composition",
@@ -2334,6 +2906,27 @@ export default defineMsdmdCollection({
       "source_block": "MODULE_BUILD",
       "source_id": "ptcna_prime_core_composition",
       "to": "ptcna_ucns_integration"
+    },
+    {
+      "from": "ptcna_runtime_boundary",
+      "kind": "owns",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_runtime_boundary",
+      "to": "Erin Spencer"
+    },
+    {
+      "from": "ptcna_runtime_boundary",
+      "kind": "requires",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_runtime_boundary",
+      "to": "pcna_pcna"
+    },
+    {
+      "from": "ptcna_runtime_boundary",
+      "kind": "requires",
+      "source_block": "MODULE_BUILD",
+      "source_id": "ptcna_runtime_boundary",
+      "to": "ptcna_prime_core_composition"
     },
     {
       "from": "ptcna_ucns_integration",

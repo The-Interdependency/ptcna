@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- Added a public `PTCNAEngine` receipt spanning neural, circle, seed, and core.
+- Added a deterministic hashed-linear fallback behind the same task interface.
+- Added explicit, attributed fallback routing; target failures still raise by
+  default.
+- Added immutable evaluation plans and terminal evidence receipts that freeze
+  workload, training schedule, comparator, post-training metric, thresholds,
+  resource limits, stopping, and failure propagation before execution.
+- Removed the broken deprecated FastAPI seed runner that imported nonexistent
+  `src.core` modules; `PTCNARuntime` is its supported replacement.
+
 ## 0.1.1 — 2026-07-29
 
 - Added the shared `ptcna.circle.CircleTensor` and one structural composition
