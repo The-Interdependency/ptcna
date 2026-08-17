@@ -124,6 +124,13 @@ METAPAT canon.
 
 ## Status log
 
+- **2026-08-17 — critical role-acquisition evaluation FALSIFIED.** The frozen
+  18-case, five-repetition program produced target accuracy `0.3333333333`
+  against fallback accuracy `0.9444444444`. The target failed its absolute
+  `0.75` usefulness threshold and its `0.05` superiority-margin threshold.
+  Construction compatibility remains established; usefulness and superiority
+  are falsified only for this declared in-sample scope.
+
 - **2026-08-17 — executable construction/evaluation boundary.** Added the
   four-layer target receipt, independently test-backed hashed-linear fallback,
   explicit attributed failover, and frozen evaluation/verdict API. Removed the
