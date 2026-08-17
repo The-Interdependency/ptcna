@@ -1,4 +1,4 @@
-# ratios: loc_comments=234:78 imports_exports=8:5 calls_definitions=57:23
+# ratios: loc_comments=243:78 imports_exports=8:5 calls_definitions=58:23
 """Explicit runtime boundary for the experimental PTCNA path and fallback.
 
 Usage:
@@ -126,7 +126,9 @@ class PTCNAEngine:
 
     def __init__(self, phases: int = 7, core_spec: CoreSpec | None = None) -> None:
         self.neural = PCNAEngine(phases=phases)
-        self.core: Core = build_core(core_spec if core_spec is not None else CoreSpec())
+        self.core: Core = build_core(
+            core_spec if core_spec is not None else CoreSpec(), init=0.0
+        )
         self._core_state = {
             "requires_grad": self.core.requires_grad,
             "seed_count": self.core.spec.seed_count,
@@ -136,7 +138,14 @@ class PTCNAEngine:
             "tensor_leaves": self.core.spec.tensor_leaves,
             "param_positions": self.core.spec.param_count,
             "ucns_state": self.core.ucns_status.state.value,
-            "provenance": "ptcna-local",
+            "ucns_adapter_active": self.core.ucns_status.adapter_active,
+            "ucns_producer_profile": self.core.ucns_status.producer_profile,
+            "ucns_state_sha256": self.core.ucns_status.state_sha256,
+            "provenance": (
+                "ucns-candidate-state"
+                if self.core.ucns_status.adapter_active
+                else "ptcna-local"
+            ),
         }
 
     def infer(self, text: str) -> dict[str, Any]:
@@ -360,4 +369,4 @@ __all__ = [
     "HashedLinearFallback",
     "PTCNARuntime",
 ]
-# ratios: loc_comments=234:78 imports_exports=8:5 calls_definitions=57:23
+# ratios: loc_comments=243:78 imports_exports=8:5 calls_definitions=58:23

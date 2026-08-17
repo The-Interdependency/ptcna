@@ -140,6 +140,6 @@ class names in the core layer remain a standing compatibility choice — right
 layer, published API, revisitable, and recorded so that revisiting it starts
 from evidence rather than surprise.
 
-**hmmm — a reviewed PTCNA-specific UCNS higher-gonol producer profile does not
-yet exist, so UCNS integration remains typed and suspended; sustained-load
-behavior across the complete four-layer seam is still unfalsified.**
+**hmmm — the exact default initialization now has a reviewed UCNS candidate
+receipt, but continuous seven-fold geometry and sustained-load behavior across
+the complete four-layer seam remain unfalsified.**

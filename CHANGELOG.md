@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Consumed the exact UCNS `157×7×7×53` candidate-state receipt from merged
+  producer commit `b7b6f35cce69c273860923489a1c8b5372d14eb0`.
+- Added independent state materialization verification and fail-closed receipt
+  tamper rejection; shapes outside the receipt remain locally attributed.
 - Added a public `PTCNAEngine` receipt spanning neural, circle, seed, and core.
 - Added a deterministic hashed-linear fallback behind the same task interface.
 - Added explicit, attributed fallback routing; target failures still raise by

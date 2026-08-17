@@ -58,6 +58,23 @@ continued = runtime.infer("question", fallback_on_error=True)
 runtime.reward(continued, outcome=1.0)
 ```
 
+The default target consumes the bundled UCNS candidate receipt pinned to
+`The-Interdependency/ucns@b7b6f35cce69c273860923489a1c8b5372d14eb0`.
+It independently materializes and verifies the exact `157×7×7×53` positive-zero
+state before inference. Inspect or validate a persisted receipt explicitly:
+
+```python
+import json
+from pathlib import Path
+from ptcna import consume_ucns_receipt
+
+status = consume_ucns_receipt(json.loads(Path("ucns-receipt.json").read_text()))
+assert status.adapter_active
+```
+
+Receipt success establishes compatible construction only. It does not select
+continuous seven-fold geometry or establish efficacy or production privacy.
+
 Freeze a representative labeled workload before inspecting outcomes:
 
 ```python
@@ -86,14 +103,16 @@ frozen and executed, whether PTCNA works remains `hmmm`.
 ## Status
 
 Alpha (`0.1.1`). All four layers import and the repository test suite passes.
+The exact default state now carries producer-validated UCNS candidate
+provenance; nonmatching shapes remain explicitly suspended and PTCNA-local.
 The layer boundary is now executable rather than only descriptive:
 
 - `ptcna.circle.CircleTensor` is the one circle type used by circle, seed, and
   core composition.
 - `ptcna.neural.NeuralScalar` is the only PTCNA type that owns reverse-mode
   gradients; structural hosts carry it opaquely.
-- UCNS integration reports a typed `suspended` state and fails closed until a
-  reviewed PTCNA-specific higher-gonol producer profile exists.
+- UCNS integration validates the exact candidate receipt for the default shape;
+  mismatched shapes report typed `suspended` state and remain locally attributed.
 - EDCM remains an external authority. `ZetaEngine` accepts an explicitly
   injected measurement provider; PTCNA contains no shadow EDCM module.
 - `PTCNAEngine` joins the live neural engine to the complete local core and
