@@ -1,14 +1,43 @@
 # PTCNA — Prime Tensor Circled Neural Architecture
 
-One architecture, four layers. Not four repos — four **layers of one thing**.
-PTCNA consolidates the former The-Interdependency repos `pcna`, `pcta`, and
-`pcsa` into a single package and is the single upstream that feeds
-[`interdependent-lib`](https://github.com/The-Interdependency/interdependent-lib).
+## 2026-08-17 construction correction
 
-## The four layers
+The **intended PTCNA has not yet been built**.
 
-Each layer's tensors divide into the next; every circle, seed, and core **is
-itself a tensor**.
+PTCNA is supposed to be derived from UCNS auditing a functioning conventional
+neural network:
+
+```text
+functioning conventional neural network
+        ↓
+UCNS audit
+        ↓
+source-bound relational evidence
+        ↓
+PTCNA construction derived from that evidence
+```
+
+Until that audit evidence exists, intended PTCNA construction is **BLOCKED**.
+The executable four-layer system currently in this repository predates recovery
+of that prerequisite and is retained as a **historical pre-audit experimental
+scaffold**. Its layer/ring/weight choices are not evidence that the intended
+architecture has been derived.
+
+For the intended language path, the primitive input object is a **UCNS Unicode-
+character gonol**. Conventional tokenizer ids, subword ids, whole-string hashes,
+and opaque external embedding vectors are not substitutes for that primitive.
+The exact route through the future audit-derived architecture remains `hmmm`.
+
+See [`docs/INTENDED_CONSTRUCTION_GATE.md`](docs/INTENDED_CONSTRUCTION_GATE.md).
+
+## Historical scaffold
+
+The repository currently implements one architecture with four layers. The
+material below documents that executable scaffold and its provenance; where it
+conflicts with the construction correction above, the correction governs.
+
+Each scaffold layer's tensors divide into the next; every circle, seed, and core
+is itself a tensor.
 
 | Module | Layer | Divides… → … | Tensor kind | Back-propagation |
 |---|---|---|---|---|
@@ -17,13 +46,13 @@ itself a tensor**.
 | `ptcna.seed` | seed | circles → seeds | auditing / timing | no |
 | `ptcna.core` | core | seeds → cores | auditing / timing | no |
 
-- **Back-propagation lives only in the neural layer.** Circle, seed, and core
-  tensors are **auditing and timing tensors** — they do not differentiate.
-- **fiqs** gate *when cores propagate internally*, per Fick's first law
-  `J = −D ∇φ` (structure diffusing down its field gradient). Timing, not
-  gradient descent. The fiq substrate lives in `ptcna.core.prime_core`.
-- **PCEA** (Prime Circular Encryption Algorithm) is **not** a layer — it stays a
-  separate, orthogonal repo (the guardian: "last state as key" at every layer).
+- **Back-propagation lives only in the neural layer** in this scaffold.
+- **fiqs** gate when scaffold cores propagate internally, per the existing
+  Fick-inspired timing implementation.
+- **PCEA** remains a separate orthogonal repository, not a PTCNA layer.
+
+None of those scaffold choices is promoted into the intended PTCNA merely by
+being executable.
 
 ## Provenance
 
@@ -34,19 +63,24 @@ itself a tensor**.
 | core | `The-Interdependency/pcsa` (`ptca/` + `prime_core/`) | Prime Tensor Core Architecture (was `PTCA`) |
 | circle | *new* (audit extracted from the neural engine — see `docs/architecture.md`) | previously unnamed |
 
+This provenance explains the scaffold's construction history. It does not
+satisfy the required UCNS audit of an independently functioning conventional
+neural network.
+
 ## Install & test
 
 ```bash
-pip install -e ".[dev]"      # neural layer needs numpy; seed/core are stdlib-only
-pytest                       # testpaths = ptcna
+pip install -e ".[dev]"
+pytest
 ```
 
-## Experimental runtime and dependable fallback
+These commands exercise the historical scaffold and its repository contracts.
+They do not construct the intended PTCNA.
 
-The intended architecture and the simpler fallback share one task interface but
-retain separate identities. PTCNA is selected by default. A target error raises
-unless the caller explicitly enables fallback routing; every receipt records the
-backend actually used.
+## Historical target and fallback runtime
+
+The scaffold and a simpler fallback share one task interface but retain separate
+identities. Existing callers can still inspect/replay that research surface.
 
 ```python
 from ptcna import PTCNARuntime
@@ -58,78 +92,45 @@ continued = runtime.infer("question", fallback_on_error=True)
 runtime.reward(continued, outcome=1.0)
 ```
 
-The default target consumes the bundled UCNS candidate receipt pinned to
-`The-Interdependency/ucns@b7b6f35cce69c273860923489a1c8b5372d14eb0`.
-It independently materializes and verifies the exact `157×7×7×53` positive-zero
-state before inference. Inspect or validate a persisted receipt explicitly:
+The scaffold target consumes the bundled UCNS candidate receipt pinned to
+`The-Interdependency/ucns@b7b6f35cce69c273860923489a1c8b5372d14eb0`
+and independently verifies the exact `157×7×7×53` positive-zero state.
+That receipt established compatible construction for the scaffold only. It is
+not the prerequisite neural-audit evidence from which intended PTCNA is to be
+derived.
 
-```python
-import json
-from pathlib import Path
-from ptcna import consume_ucns_receipt
+The scaffold also uses a whole-string SHA-derived input projection. That input
+representation is historical and **not** the intended Unicode-character-gonol
+language input.
 
-status = consume_ucns_receipt(json.loads(Path("ucns-receipt.json").read_text()))
-assert status.adapter_active
-```
+## Frozen historical evaluation
 
-Receipt success establishes compatible construction only. It does not select
-continuous seven-fold geometry or establish efficacy or production privacy.
+The preregistered critical role-acquisition program remains sealed evidence for
+the exact scaffold that was tested:
 
-Freeze a representative labeled workload before inspecting outcomes:
+- target `ptcna.experimental.v1`: `0.3333333333` accuracy;
+- hashed-linear fallback: `0.9444444444` accuracy;
+- absolute usefulness: **FALSIFIED** for the declared in-sample scope;
+- superiority over the fallback: **FALSIFIED** for the declared in-sample
+  scope.
 
-```python
-from ptcna import EvaluationCase, EvaluationPlan, evaluate
+Do not rewrite or erase that result. It does **not** evaluate the intended PTCNA,
+because the intended PTCNA could not yet have been constructed under the
+restored audit prerequisite.
 
-plan = EvaluationPlan(
-    plan_id="representative-workload-v1",
-    workload=(EvaluationCase("case-1", "input", "phi"),),
-    minimum_target_accuracy=0.80,
-    minimum_target_advantage_vs_fallback=0.05,
-    training_epochs=3,
-    reward_outcome=1.0,
-    repetitions=3,
-    max_training_steps=9,
-    max_case_evaluations=3,
-    max_seconds=30.0,
-    target_backend_error_status="FALSIFIED",
-)
-print(plan.digest)  # preserve this with the plan before execution
-receipt = evaluate(plan)
-```
+## Current status
 
-`receipt.usefulness_status` answers whether the target meets its frozen absolute
-threshold. `receipt.superiority_status` independently answers whether it clears
-the frozen advantage over the fallback. Comparator parity can therefore falsify
-superiority without falsifying usefulness.
+- **Intended PTCNA:** BLOCKED on UCNS audit of a functioning conventional neural
+  network.
+- **Historical four-layer scaffold:** implemented and preserved.
+- **Historical scaffold evaluation:** sealed; both declared role-acquisition
+  claims FALSIFIED for that exact scope.
+- **Intended language primitive:** UCNS Unicode-character gonol; no tokenizer or
+  whole-string-hash substitution.
+- **Next PTCNA work:** preserve evidence and define the future consumer boundary;
+  do not repair or elaborate architecture before the UCNS audit-derived contract
+  exists.
 
-The repository does not ship a pretend representative workload. Until one is
-frozen and executed, whether PTCNA works remains `hmmm`.
-
-## Status
-
-Alpha (`0.1.1`). All four layers import and the repository test suite passes.
-The exact default state now carries producer-validated UCNS candidate
-provenance; nonmatching shapes remain explicitly suspended and PTCNA-local.
-The layer boundary is now executable rather than only descriptive:
-
-- `ptcna.circle.CircleTensor` is the one circle type used by circle, seed, and
-  core composition.
-- `ptcna.neural.NeuralScalar` is the only PTCNA type that owns reverse-mode
-  gradients; structural hosts carry it opaquely.
-- UCNS integration validates the exact candidate receipt for the default shape;
-  mismatched shapes report typed `suspended` state and remain locally attributed.
-- EDCM remains an external authority. `ZetaEngine` accepts an explicitly
-  injected measurement provider; PTCNA contains no shadow EDCM module.
-- `PTCNAEngine` joins the live neural engine to the complete local core and
-  reports all four layers. `PTCNARuntime` keeps that experimental path distinct
-  from `HashedLinearFallback`; failover is explicit and attributed.
-- `EvaluationPlan` freezes workload, training schedule, comparator, metric,
-  thresholds, resource limits, stopping, and failure propagation before
-  `evaluate` emits
-  `FALSIFIED`, `SURVIVED — not proved`, or `UNRESOLVED`.
-
-The core layer still intentionally exposes PTCA-named public objects such as
-`PTCATensor` and `PTCAInstance`; those names live in the correct layer.
-History and unresolved evidence boundaries live in `docs/architecture.md`.
+History and the detailed scaffold record live in `docs/architecture.md`.
 
 License: MPL-2.0.
