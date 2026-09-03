@@ -25,7 +25,7 @@ import json
 from typing import Any, Mapping
 
 import numpy as np
-from ucns.ptcna_state import validate_ptcna_state_receipt
+from ptcna.ptcna_state import validate_ptcna_state_receipt
 
 # === MODULE_BUILD ===
 # id: ptcna_ucns_integration
