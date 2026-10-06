@@ -19,8 +19,16 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24.15.0"
+
       - name: Install
-        run: python -m pip install -e ".[dev]"
+        run: |
+          python -m pip install -e ".[dev]"
+          # msdmd native reader runtimes; without them the collector exits 3.
+          python -m pip install -r .agents/skills/msdmd/requirements.txt
+          npm ci --ignore-scripts --prefix .agents/skills/msdmd
 
       - name: Test runtime
         run: python -m pytest -q
@@ -34,7 +42,7 @@ jobs:
       - name: Verify metadata collection
         run: |
           PYTHONPATH=.agents/skills python .agents/skills/msdmd/collect.py \
-            --root . --repo ptcna --out /tmp/ptcna_msdmd.ts
+            --root . --repo ptcna --snapshot-identity --out /tmp/ptcna_msdmd.ts
           cmp /tmp/ptcna_msdmd.ts ptcna_msdmd.ts
 
       - name: Build and inspect distributions
