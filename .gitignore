@@ -7,3 +7,6 @@ dist/
 
 # Local secrets
 .env
+
+# msdmd TypeScript reader runtime; install with npm ci --ignore-scripts --prefix .agents/skills/msdmd
+.agents/skills/msdmd/node_modules/
