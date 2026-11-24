@@ -3,19 +3,19 @@
 This directory contains repo-local copies of canonical skills from
 `The-Interdependency/skill-lib`.
 
-Source commit: `38c64332b840b2bbe1c07e53aeee8996644548e9`
+Source commit: `33d2abe8748dd96aec3068e2997d9f73240c7c48`
 
 Repo-local copies are not the source of truth. Edit `skill-lib` first,
 then propagate from the canonical source.
 
 Skills refreshed from the source commit above:
 
-- `canon/`
-- `interdependent-work-graph/`
-- `meta-module-build/`
 - `msdmd/`
-- `ratios/`
-- `risk-boundary-build/`
-- `skill-usage/`
 - `test-build/`
+- `meta-module-build/`
+- `risk-boundary-build/`
+- `ratios/`
+- `canon/`
 - `the-interdependency/`
+- `interdependent-work-graph/`
+- `skill-usage/`
